@@ -1,0 +1,49 @@
+{
+  "level": 4,
+  "pv": "32",
+  "pvTemp": "0",
+  "cd": false,
+  "notes": "",
+  "hpRolls": [
+    0,
+    8,
+    6,
+    6,
+    6,
+    4,
+    8,
+    7,
+    6,
+    4,
+    7
+  ],
+  "customSpells": {
+    "1": [],
+    "2": [],
+    "3": [],
+    "4": [],
+    "5": []
+  },
+  "customEquipment": [],
+  "customAttacks": [],
+  "slots": {
+    "slot-1-0": false,
+    "slot-1-1": false,
+    "slot-1-2": false,
+    "slot-1-3": false,
+    "slot-2-0": false,
+    "slot-2-1": false,
+    "slot-2-2": false
+  },
+  "checks": {
+    "sc-d1-0": false,
+    "sc-d1-1": false,
+    "sc-bane": false,
+    "sc-hw": false,
+    "sc-d2-0": false,
+    "sc-d2-1": false,
+    "sc-hp": false,
+    "sc-bd": false,
+    "sc-sw": false
+  }
+}
