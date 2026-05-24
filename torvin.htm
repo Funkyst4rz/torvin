@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="fr"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Torvin "Trois-Parchemins" — Fiche de Personnage</title>
+<link href="torvin_files/css2_X1lZ.css" rel="stylesheet">
+<style>
+  :root {
+    --parchment:#f5ead6;--parchment-dark:#e8d5a8;--ink:#1a0e00;--ink-mid:#3d2b1f;
+    --ink-light:#6b4c35;--red:#8b1a1a;--gold:#7a5c1e;--gold-light:#c4922a;
+    --border:#5c3d1e;--green:#1a5c2a;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{background:#2a1f14;font-family:'Crimson Text',Georgia,serif;color:var(--ink);min-height:100vh;padding:20px;
+    background-image:radial-gradient(ellipse at 20% 20%,rgba(90,60,20,.3) 0%,transparent 60%),radial-gradient(ellipse at 80% 80%,rgba(60,30,10,.4) 0%,transparent 60%);}
+  .page{max-width:960px;margin:0 auto;background:var(--parchment);border:2px solid var(--border);
+    box-shadow:0 0 0 6px #2a1f14,0 0 0 8px var(--border),0 20px 60px rgba(0,0,0,.7);position:relative;overflow:hidden;}
+  .page::before{content:'';position:absolute;inset:0;pointer-events:none;z-index:1;opacity:.5;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='.05'/%3E%3C/svg%3E");}
+  .corner{position:absolute;width:60px;height:60px;z-index:3;}
+  .corner svg{width:100%;height:100%;}
+  .corner-tl{top:6px;left:6px;}.corner-tr{top:6px;right:6px;transform:scaleX(-1);}
+  .corner-bl{bottom:6px;left:6px;transform:scaleY(-1);}.corner-br{bottom:6px;right:6px;transform:scale(-1,-1);}
+  .content{position:relative;z-index:2;padding:50px 45px 45px;}
+
+  /* LEVEL BAR */
+  .level-bar{display:flex;align-items:center;gap:12px;background:rgba(92,61,30,.1);border:1.5px solid var(--border);padding:10px 14px;margin-bottom:14px;flex-wrap:wrap;}
+  .level-bar-title{font-family:'Cinzel',serif;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--gold);}
+  .level-bubbles{display:flex;gap:6px;flex-wrap:wrap;}
+  .lvl-btn{font-family:'Cinzel',serif;font-size:10px;font-weight:700;width:30px;height:30px;border-radius:50%;border:1.5px solid var(--border);background:var(--parchment-dark);color:var(--ink-light);cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;}
+  .lvl-btn:hover{border-color:var(--gold);color:var(--gold);}
+  .lvl-btn.active{background:var(--gold);border-color:var(--gold);color:white;}
+  .level-info{font-family:'Crimson Text',serif;font-size:12px;color:var(--ink-light);font-style:italic;margin-left:auto;}
+
+  /* SAVE BAR */
+  .save-bar{display:flex;align-items:center;gap:10px;background:rgba(92,61,30,.08);border:1px solid var(--border);padding:8px 12px;margin-bottom:14px;flex-wrap:wrap;}
+  .save-btn{font-family:'Cinzel',serif;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1px;padding:6px 14px;border:1.5px solid var(--border);background:var(--parchment-dark);color:var(--ink);cursor:pointer;transition:all .2s;}
+  .save-btn:hover{background:var(--border);color:var(--parchment);}
+  .save-btn.primary{background:var(--gold);color:white;border-color:var(--gold);}
+  .save-btn.primary:hover{background:var(--gold-light);}
+  .save-status{font-family:'Cinzel',serif;font-size:9px;color:var(--ink-light);flex:1;}
+  .save-status.ok{color:var(--green);}.save-status.err{color:var(--red);}
+  .config-panel{background:rgba(26,14,0,.05);border:1.5px solid var(--border);padding:14px 16px;margin-bottom:14px;display:none;}
+  .config-panel.open{display:block;}
+  .config-title{font-family:'Cinzel',serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--gold);margin-bottom:10px;}
+  .config-row{display:flex;gap:10px;align-items:center;margin-bottom:8px;flex-wrap:wrap;}
+  .config-label{font-family:'Cinzel',serif;font-size:8.5px;font-weight:700;text-transform:uppercase;color:var(--ink-light);min-width:80px;}
+  .config-input{flex:1;min-width:200px;font-family:'Crimson Text',serif;font-size:13px;background:var(--parchment);border:1px solid var(--border);padding:5px 10px;color:var(--ink);outline:none;}
+  .config-input:focus{border-color:var(--gold-light);}
+  .config-note{font-family:'Crimson Text',serif;font-size:11px;color:var(--ink-light);font-style:italic;margin-top:6px;}
+
+  /* HEADER */
+  .header{text-align:center;margin-bottom:20px;padding-bottom:16px;border-bottom:2px solid var(--border);position:relative;}
+  .header::after{content:'❧';position:absolute;bottom:-12px;left:50%;transform:translateX(-50%);background:var(--parchment);padding:0 10px;color:var(--gold);font-size:18px;}
+  .char-name{font-family:'Cinzel',serif;font-size:30px;font-weight:900;color:var(--ink);letter-spacing:2px;line-height:1.1;}
+  .char-subtitle{font-family:'IM Fell English',serif;font-size:14px;color:var(--ink-light);margin-top:4px;font-style:italic;}
+  .info-bar{display:grid;grid-template-columns:repeat(5,1fr);border:1px solid var(--border);margin:22px 0 18px;}
+  .info-cell{padding:8px 10px;border-right:1px solid var(--border);text-align:center;}
+  .info-cell:last-child{border-right:none;}
+  .info-label{font-family:'Cinzel',serif;font-size:7.5px;font-weight:700;color:var(--ink-light);text-transform:uppercase;letter-spacing:.8px;display:block;margin-bottom:3px;}
+  .info-value{font-family:'Crimson Text',serif;font-size:12px;font-weight:600;color:var(--ink);}
+
+  /* TABS */
+  .tabs{display:flex;margin-bottom:18px;border-bottom:2px solid var(--border);}
+  .tab{font-family:'Cinzel',serif;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1px;padding:8px 16px;cursor:pointer;color:var(--ink-light);border:1.5px solid transparent;border-bottom:none;background:transparent;transition:all .2s;margin-bottom:-2px;}
+  .tab.active{color:var(--ink);background:var(--parchment);border-color:var(--border);border-bottom-color:var(--parchment);}
+  .tab-content{display:none;}.tab-content.active{display:block;}
+
+  /* LAYOUT */
+  .main-grid{display:grid;grid-template-columns:155px 1fr 200px;gap:16px;margin-bottom:16px;}
+  .stat-block{display:flex;flex-direction:column;gap:8px;}
+  .stat-box{border:1.5px solid var(--border);background:var(--parchment-dark);text-align:center;padding:8px 6px 6px;}
+  .stat-name{font-family:'Cinzel',serif;font-size:7px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--ink-light);display:block;margin-bottom:4px;}
+  .stat-score{font-family:'Cinzel',serif;font-size:28px;font-weight:900;color:var(--ink);line-height:1;display:block;}
+  .stat-mod{font-family:'Cinzel',serif;font-size:13px;font-weight:700;color:var(--ink-mid);display:inline-block;border:1.5px solid var(--border);border-radius:50%;width:32px;height:32px;line-height:28px;background:var(--parchment);margin-top:4px;}
+  .stat-main .stat-score{color:var(--red);}
+  .combat-row{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:12px;}
+  .combat-box{border:1.5px solid var(--border);background:var(--parchment-dark);text-align:center;padding:8px 6px;}
+  .combat-label{font-family:'Cinzel',serif;font-size:7px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--ink-light);display:block;margin-bottom:4px;}
+  .combat-val{font-family:'Cinzel',serif;font-size:18px;font-weight:900;color:var(--ink);}
+  .pv-section{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;}
+  .pv-box{border:1.5px solid var(--border);padding:8px 10px;background:var(--parchment-dark);}
+  .pv-label{font-family:'Cinzel',serif;font-size:7.5px;font-weight:700;text-transform:uppercase;color:var(--ink-light);display:block;margin-bottom:4px;}
+  .pv-input{width:100%;background:transparent;border:none;border-bottom:1.5px solid var(--border);font-family:'Cinzel',serif;font-size:20px;font-weight:700;color:var(--red);text-align:center;outline:none;padding:2px 0;}
+  .pv-input:focus{border-bottom-color:var(--gold-light);}
+  .pv-max{font-family:'Crimson Text',serif;font-size:11px;color:var(--ink-light);text-align:center;margin-top:3px;}
+  .section-title{font-family:'Cinzel',serif;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--ink-light);border-bottom:1px solid var(--border);padding-bottom:4px;margin-bottom:8px;}
+  .section-box{border:1.5px solid var(--border);padding:10px 12px;background:rgba(245,234,214,.5);margin-bottom:12px;}
+  .skills-list{display:flex;flex-direction:column;gap:2px;}
+  .skill-row{display:grid;grid-template-columns:22px 1fr 28px;align-items:center;gap:4px;padding:2px 4px;font-size:11px;}
+  .skill-row:nth-child(even){background:rgba(92,61,30,.06);}
+  .skill-prof{width:12px;height:12px;border:1.5px solid var(--border);border-radius:50%;display:inline-block;background:transparent;}
+  .skill-prof.filled{background:var(--ink-mid);}.skill-prof.double{background:var(--gold);border-color:var(--gold);}
+  .skill-name{font-family:'Crimson Text',serif;color:var(--ink);}
+  .skill-bonus{font-family:'Cinzel',serif;font-size:10px;font-weight:700;color:var(--ink-mid);text-align:right;}
+  .skill-bonus.high{color:var(--gold);}
+  .attacks-table{width:100%;border-collapse:collapse;font-size:11px;}
+  .attacks-table th{font-family:'Cinzel',serif;font-size:7.5px;font-weight:700;text-transform:uppercase;color:var(--ink-light);padding:4px 6px;text-align:left;border-bottom:1px solid var(--border);}
+  .attacks-table td{padding:5px 6px;border-bottom:1px dashed rgba(92,61,30,.2);font-family:'Crimson Text',serif;}
+  .trait-block{border:1px solid var(--border);background:var(--parchment-dark);padding:8px 10px;margin-bottom:6px;}
+  .trait-label{font-family:'Cinzel',serif;font-size:7.5px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--gold);display:block;margin-bottom:4px;}
+  .trait-text{font-family:'IM Fell English',serif;font-size:12px;font-style:italic;color:var(--ink-mid);line-height:1.5;}
+  .feature-block{border:1px solid var(--border);padding:8px 10px;margin-bottom:6px;background:rgba(92,61,30,.04);}
+  .feature-name{font-family:'Cinzel',serif;font-size:9px;font-weight:700;color:var(--ink);display:block;margin-bottom:3px;}
+  .feature-desc{font-family:'Crimson Text',serif;font-size:11.5px;color:var(--ink-mid);line-height:1.5;}
+  .equip-list{list-style:none;}
+  .equip-list li{font-family:'Crimson Text',serif;font-size:12px;color:var(--ink);padding:3px 0;border-bottom:1px dashed rgba(92,61,30,.2);display:flex;gap:6px;}
+  .equip-list li::before{content:'•';color:var(--gold);font-size:16px;line-height:1;flex-shrink:0;}
+  .divider{display:flex;align-items:center;gap:10px;margin:14px 0;color:var(--gold);}
+  .divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border);}
+  .passive-box{display:flex;align-items:center;gap:8px;margin-top:8px;}
+  .passive-label{font-family:'Cinzel',serif;font-size:7.5px;font-weight:700;text-transform:uppercase;color:var(--ink-light);}
+  .passive-val{font-family:'Cinzel',serif;font-size:14px;font-weight:700;color:var(--ink);border:1.5px solid var(--border);border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;}
+  .saves-list{display:flex;flex-direction:column;gap:2px;margin-bottom:10px;}
+  .save-row{display:grid;grid-template-columns:16px 1fr 28px;align-items:center;gap:4px;padding:2px 4px;font-size:11px;}
+
+  /* SORTS */
+  .spell-level-block{margin-bottom:10px;}
+  .spell-level-header{display:flex;justify-content:space-between;align-items:center;background:var(--parchment-dark);border:1px solid var(--border);padding:4px 8px;margin-bottom:4px;}
+  .spell-level-num{font-family:'Cinzel',serif;font-size:10px;font-weight:700;color:var(--ink-mid);}
+  .spell-slots{display:flex;gap:4px;align-items:center;}
+  .slot-bubble{width:16px;height:16px;border:1.5px solid var(--border);border-radius:50%;cursor:pointer;background:var(--parchment);transition:background .2s;}
+  .slot-bubble.used{background:var(--ink-mid);}
+  .spell-row{display:grid;grid-template-columns:14px 1fr 60px 50px;align-items:center;gap:6px;padding:3px 6px;font-size:11px;}
+  .spell-row:nth-child(even){background:rgba(92,61,30,.05);}
+  .spell-check{width:10px;height:10px;border:1.5px solid var(--border);cursor:pointer;background:transparent;transition:background .15s;}
+  .spell-check.checked{background:var(--ink-mid);}
+  .spell-name{font-family:'Crimson Text',serif;color:var(--ink);}
+  .spell-tag{font-family:'Cinzel',serif;font-size:7px;font-weight:700;color:var(--ink-light);}
+  .spell-conc{font-family:'Cinzel',serif;font-size:7px;color:var(--red);font-weight:700;text-align:center;}
+  .spell-name.domain{font-style:italic;color:var(--ink-light);}
+  .spell-locked{opacity:.4;font-style:italic;}
+
+  /* NIVEAU BADGE */
+  .new-badge{font-family:'Cinzel',serif;font-size:7px;font-weight:700;color:white;background:var(--green);padding:1px 5px;border-radius:2px;margin-left:6px;text-transform:uppercase;letter-spacing:.5px;}
+
+  /* ROLEPLAY */
+  .combo-box{background:rgba(139,26,26,.06);border:1.5px solid var(--red);padding:10px 12px;margin-bottom:8px;}
+  .combo-title{font-family:'Cinzel',serif;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--red);margin-bottom:6px;}
+  .combo-steps{list-style:none;counter-reset:step;}
+  .combo-steps li{font-family:'Crimson Text',serif;font-size:12px;color:var(--ink);padding:3px 0 3px 24px;position:relative;border-bottom:1px dashed rgba(92,61,30,.15);}
+  .combo-steps li:last-child{border-bottom:none;}
+  .combo-steps li::before{counter-increment:step;content:counter(step);position:absolute;left:0;font-family:'Cinzel',serif;font-size:9px;font-weight:700;color:var(--red);background:rgba(139,26,26,.1);width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center;top:4px;}
+  .phrase-block{border-left:3px solid var(--gold);padding:6px 10px;margin-bottom:6px;background:rgba(122,92,30,.05);}
+  .phrase-situation{font-family:'Cinzel',serif;font-size:8px;font-weight:700;text-transform:uppercase;color:var(--gold);margin-bottom:3px;}
+  .phrase-text{font-family:'IM Fell English',serif;font-size:12px;font-style:italic;color:var(--ink-mid);line-height:1.5;}
+  .footer{text-align:center;padding-top:14px;border-top:1px solid var(--border);margin-top:14px;}
+  .footer p{font-family:'Cinzel',serif;font-size:8px;color:var(--ink-light);letter-spacing:1px;text-transform:uppercase;}
+
+  /* LEVEL UP NOTIFICATION */
+  .levelup-toast{position:fixed;top:20px;left:50%;transform:translateX(-50%);background:var(--gold);color:white;font-family:'Cinzel',serif;font-size:11px;font-weight:700;padding:10px 24px;border-radius:2px;box-shadow:0 4px 20px rgba(0,0,0,.4);z-index:100;opacity:0;transition:opacity .3s;pointer-events:none;letter-spacing:1px;}
+  .levelup-toast.show{opacity:1;}
+
+  @media(max-width:680px){
+    .content{padding:30px 18px 24px;}
+    .main-grid{grid-template-columns:120px 1fr;}
+    .main-grid>*:last-child{grid-column:1/-1;}
+    .combat-row{grid-template-columns:repeat(3,1fr);}
+    .info-bar{grid-template-columns:repeat(3,1fr);}
+    .char-name{font-size:22px;}
+    .level-bubbles{gap:4px;}
+    .lvl-btn{width:26px;height:26px;font-size:9px;}
+  }
+</style>
+<script type="text/javascript" src="torvin_files/fixHeadlessAudio_X1lZ.js"></script></head>
+<body>
+<div class="levelup-toast" id="toast"></div>
+<div class="page">
+  <div class="corner corner-tl"><svg viewBox="0 0 60 60" fill="none"><path d="M5 55L5 5L55 5" stroke="#5c3d1e" stroke-width="2"></path><circle cx="5" cy="5" r="3" fill="#7a5c1e"></circle><path d="M8 20Q12 16 16 20Q20 24 16 28" stroke="#7a5c1e" stroke-width="1" fill="none"></path><path d="M20 8Q24 12 20 16Q16 20 20 24" stroke="#7a5c1e" stroke-width="1" fill="none"></path></svg></div>
+  <div class="corner corner-tr"><svg viewBox="0 0 60 60" fill="none"><path d="M5 55L5 5L55 5" stroke="#5c3d1e" stroke-width="2"></path><circle cx="5" cy="5" r="3" fill="#7a5c1e"></circle><path d="M8 20Q12 16 16 20Q20 24 16 28" stroke="#7a5c1e" stroke-width="1" fill="none"></path><path d="M20 8Q24 12 20 16Q16 20 20 24" stroke="#7a5c1e" stroke-width="1" fill="none"></path></svg></div>
+  <div class="corner corner-bl"><svg viewBox="0 0 60 60" fill="none"><path d="M5 55L5 5L55 5" stroke="#5c3d1e" stroke-width="2"></path><circle cx="5" cy="5" r="3" fill="#7a5c1e"></circle><path d="M8 20Q12 16 16 20Q20 24 16 28" stroke="#7a5c1e" stroke-width="1" fill="none"></path><path d="M20 8Q24 12 20 16Q16 20 20 24" stroke="#7a5c1e" stroke-width="1" fill="none"></path></svg></div>
+  <div class="corner corner-br"><svg viewBox="0 0 60 60" fill="none"><path d="M5 55L5 5L55 5" stroke="#5c3d1e" stroke-width="2"></path><circle cx="5" cy="5" r="3" fill="#7a5c1e"></circle><path d="M8 20Q12 16 16 20Q20 24 16 28" stroke="#7a5c1e" stroke-width="1" fill="none"></path><path d="M20 8Q24 12 20 16Q16 20 20 24" stroke="#7a5c1e" stroke-width="1" fill="none"></path></svg></div>
+
+  <div class="content">
+
+    <!-- LEVEL BAR -->
+    <div class="level-bar">
+      <span class="level-bar-title">⬆ Niveau</span>
+      <div class="level-bubbles" id="level-bubbles"><div class="lvl-btn">1</div><div class="lvl-btn">2</div><div class="lvl-btn active">3</div><div class="lvl-btn">4</div><div class="lvl-btn">5</div><div class="lvl-btn">6</div><div class="lvl-btn">7</div><div class="lvl-btn">8</div><div class="lvl-btn">9</div><div class="lvl-btn">10</div></div>
+      <span class="level-info" id="level-info">Sorts de domaine niv.2 débloqués</span>
+    </div>
+
+    <!-- SAVE BAR -->
+    <div class="save-bar">
+      <button class="save-btn primary" onclick="saveToGitHub()">💾 Sauvegarder</button>
+      <button class="save-btn" onclick="loadFromGitHub()">↓ Charger</button>
+      <button class="save-btn" onclick="toggleConfig()">⚙ Config</button>
+      <span class="save-status" id="save-status">Non configuré — cliquez sur ⚙ Config pour activer la sauvegarde GitHub</span>
+    </div>
+    <div class="config-panel" id="config-panel">
+      <div class="config-title">⚙ Configuration GitHub</div>
+      <div class="config-row">
+        <span class="config-label">Token GitHub</span>
+        <input class="config-input" type="password" id="gh-token" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
+      </div>
+      <div class="config-row">
+        <button class="save-btn primary" onclick="saveConfig()">Enregistrer</button>
+        <button class="save-btn" onclick="clearConfig()">Effacer</button>
+      </div>
+      <div class="config-note">⚠ Votre token est stocké uniquement dans votre navigateur. Il n'est jamais publié sur GitHub.</div>
+    </div>
+
+    <!-- HEADER -->
+    <div class="header">
+      <div class="char-name">Torvin « Trois-Parchemins »</div>
+      <div class="char-subtitle" id="char-subtitle">Gnome des Roches · Clerc Domaine Arcane, Niveau 3 · Serviteur involontaire d'Azouth</div>
+    </div>
+    <div class="info-bar">
+      <div class="info-cell"><span class="info-label">Classe &amp; Niveau</span><span class="info-value" id="info-class">Clerc 3 — Arcane</span></div>
+      <div class="info-cell"><span class="info-label">Race</span><span class="info-value">Gnome des Roches</span></div>
+      <div class="info-cell"><span class="info-label">Historique</span><span class="info-value">Artisan de Guilde</span></div>
+      <div class="info-cell"><span class="info-label">Divinité</span><span class="info-value">Azouth</span></div>
+      <div class="info-cell"><span class="info-label">Alignement</span><span class="info-value">Neutre Bon</span></div>
+    </div>
+
+    <!-- TABS -->
+    <div class="tabs">
+      <div class="tab active" onclick="switchTab('main')">Personnage</div>
+      <div class="tab" onclick="switchTab('spells')">Sorts</div>
+      <div class="tab" onclick="switchTab('roleplay')">Roleplay</div>
+    </div>
+
+    <!-- TAB PERSONNAGE -->
+    <div class="tab-content active" id="tab-main">
+      <div class="main-grid">
+        <div class="stat-block">
+          <div class="section-title">Caractéristiques</div>
+          <div class="stat-box stat-main"><span class="stat-name">Sagesse ★</span><span class="stat-score">15</span><span class="stat-mod">+2</span></div>
+          <div class="stat-box stat-main"><span class="stat-name">Intelligence</span><span class="stat-score">16</span><span class="stat-mod">+3</span></div>
+          <div class="stat-box"><span class="stat-name">Constitution</span><span class="stat-score">14</span><span class="stat-mod">+2</span></div>
+          <div class="stat-box"><span class="stat-name">Dextérité</span><span class="stat-score">12</span><span class="stat-mod">+1</span></div>
+          <div class="stat-box"><span class="stat-name">Charisme</span><span class="stat-score">10</span><span class="stat-mod">+0</span></div>
+          <div class="stat-box"><span class="stat-name">Force</span><span class="stat-score">8</span><span class="stat-mod">−1</span></div>
+          <div class="passive-box"><div class="passive-val" id="passive-wis">12</div><span class="passive-label">Sagesse passive</span></div>
+        </div>
+        <div>
+          <div class="section-title">Combat</div>
+          <div class="combat-row">
+            <div class="combat-box"><span class="combat-label">CA</span><span class="combat-val">15</span></div>
+            <div class="combat-box"><span class="combat-label">Initiative</span><span class="combat-val">+1</span></div>
+            <div class="combat-box"><span class="combat-label">Vitesse</span><span class="combat-val">9 m</span></div>
+            <div class="combat-box"><span class="combat-label">Bonus Maîtrise</span><span class="combat-val" id="prof-bonus">+2</span></div>
+            <div class="combat-box"><span class="combat-label">Dés de vie</span><span class="combat-val" id="hit-dice">3d8</span></div>
+          </div>
+          <div class="pv-section">
+            <div class="pv-box">
+              <span class="pv-label">❤ Points de vie actuels</span>
+              <input class="pv-input" type="number" id="pv-current" value="26" min="0">
+              <div class="pv-max">Maximum : <span id="pv-max-display">20</span></div>
+            </div>
+            <div class="pv-box">
+              <span class="pv-label">✦ PV temporaires</span>
+              <input class="pv-input" type="number" id="pv-temp" value="0" min="0" style="color:var(--ink-mid)">
+              <div class="pv-max">Canalisation divine : <span id="cd-status" style="cursor: pointer; color: var(--gold);" onclick="toggleCD()">☐ disponible</span></div>
+            </div>
+          </div>
+          <div class="section-box">
+            <div class="section-title">Jets de sauvegarde</div>
+            <div class="saves-list">
+              <div class="save-row"><span class="skill-prof filled"></span><span class="skill-name">Sagesse ✓</span><span class="skill-bonus high" id="st-wis">+4</span></div>
+              <div class="save-row"><span class="skill-prof"></span><span class="skill-name">Intelligence</span><span class="skill-bonus" id="st-int">+3</span></div>
+              <div class="save-row"><span class="skill-prof"></span><span class="skill-name">Constitution</span><span class="skill-bonus" id="st-con">+2</span></div>
+              <div class="save-row"><span class="skill-prof"></span><span class="skill-name">Dextérité</span><span class="skill-bonus" id="st-dex">+1</span></div>
+              <div class="save-row"><span class="skill-prof"></span><span class="skill-name">Charisme</span><span class="skill-bonus" id="st-cha">+0</span></div>
+              <div class="save-row"><span class="skill-prof"></span><span class="skill-name">Force</span><span class="skill-bonus" id="st-str">-1</span></div>
+            </div>
+          </div>
+          <div class="section-box">
+            <div class="section-title">Attaques</div>
+            <table class="attacks-table">
+              <thead><tr><th>Nom</th><th>Bonus att.</th><th>Dégâts / Type</th></tr></thead>
+              <tbody>
+                <tr><td>Masse d'armes</td><td>+1</td><td>1d6−1 contondant</td></tr>
+                <tr><td>Glas des trépassés</td><td id="atk-toll">DD 12 Sag</td><td>1d8 / 1d12 nécrotique</td></tr>
+                <tr><td>Projectile magique</td><td>automatique</td><td>3×1d4+1 force</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="section-box">
+            <div class="section-title">Équipement</div>
+            <ul class="equip-list">
+              <li><strong>La Relique d'Azouth</strong> — focaliseur d'incantation &amp; lien divin</li>
+              <li>Masse d'armes</li><li>Armure de cuir + Bouclier (CA 15)</li>
+              <li>Outils de bricoleur</li><li>Pack d'explorateur</li>
+              <li>Lettre de guilde · 15 pièces d'or</li>
+            </ul>
+          </div>
+        </div>
+        <div>
+          <div class="section-box">
+            <div class="section-title">Compétences</div>
+            <div class="skills-list">
+              <div class="skill-row"><span class="skill-prof double"></span><span class="skill-name">Arcanes (Int)</span><span class="skill-bonus high" id="sk-arcana">+7</span></div>
+              <div class="skill-row"><span class="skill-prof double"></span><span class="skill-name">Histoire (Int)</span><span class="skill-bonus high" id="sk-history">+7</span></div>
+              <div class="skill-row"><span class="skill-prof filled"></span><span class="skill-name">Religion (Int)</span><span class="skill-bonus" id="sk-religion">+5</span></div>
+              <div class="skill-row"><span class="skill-prof filled"></span><span class="skill-name">Médecine (Sag)</span><span class="skill-bonus" id="sk-medicine">+4</span></div>
+              <div class="skill-row"><span class="skill-prof"></span><span class="skill-name">Investigation (Int)</span><span class="skill-bonus" id="sk-investigation">+3</span></div>
+              <div class="skill-row"><span class="skill-prof"></span><span class="skill-name">Nature (Int)</span><span class="skill-bonus" id="sk-nature">+3</span></div>
+              <div class="skill-row"><span class="skill-prof"></span><span class="skill-name">Perception (Sag)</span><span class="skill-bonus" id="sk-perception">+2</span></div>
+              <div class="skill-row"><span class="skill-prof"></span><span class="skill-name">Intuition (Sag)</span><span class="skill-bonus" id="sk-insight">+2</span></div>
+              <div class="skill-row"><span class="skill-prof"></span><span class="skill-name">Dressage (Sag)</span><span class="skill-bonus" id="sk-animal">+2</span></div>
+              <div class="skill-row"><span class="skill-prof"></span><span class="skill-name">Survie (Sag)</span><span class="skill-bonus" id="sk-survival">+2</span></div>
+              <div class="skill-row"><span class="skill-prof"></span><span class="skill-name">Acrobaties (Dex)</span><span class="skill-bonus" id="sk-acrobatics">+1</span></div>
+              <div class="skill-row"><span class="skill-prof"></span><span class="skill-name">Discrétion (Dex)</span><span class="skill-bonus" id="sk-stealth">+1</span></div>
+              <div class="skill-row"><span class="skill-prof"></span><span class="skill-name">Escamotage (Dex)</span><span class="skill-bonus" id="sk-sleight">+1</span></div>
+              <div class="skill-row"><span class="skill-prof"></span><span class="skill-name">Tromperie (Cha)</span><span class="skill-bonus" id="sk-deception">+0</span></div>
+              <div class="skill-row"><span class="skill-prof"></span><span class="skill-name">Persuasion (Cha)</span><span class="skill-bonus" id="sk-persuasion">+0</span></div>
+              <div class="skill-row"><span class="skill-prof"></span><span class="skill-name">Intimidation (Cha)</span><span class="skill-bonus" id="sk-intimidation">+0</span></div>
+              <div class="skill-row"><span class="skill-prof"></span><span class="skill-name">Représentation (Cha)</span><span class="skill-bonus" id="sk-performance">+0</span></div>
+              <div class="skill-row"><span class="skill-prof"></span><span class="skill-name">Athlétisme (For)</span><span class="skill-bonus" id="sk-athletics" style="color:var(--red)">-1</span></div>
+            </div>
+          </div>
+          <div class="section-title" style="margin-top:10px">Personnalité</div>
+          <div class="trait-block"><span class="trait-label">Traits</span><div class="trait-text">«&nbsp;J'explique tout ce que je fais, même en combat. Surtout en plein combat.&nbsp;»<br><br>«&nbsp;La magie n'est qu'un mécanisme qu'on ne comprend pas encore.&nbsp;»</div></div>
+          <div class="trait-block"><span class="trait-label">Idéal</span><div class="trait-text">«&nbsp;La connaissance doit circuler librement.&nbsp;»</div></div>
+          <div class="trait-block"><span class="trait-label">Lien</span><div class="trait-text">«&nbsp;La relique d'Azouth est en ma possession. Je ne sais pas ce qu'elle fait vraiment.&nbsp;»</div></div>
+          <div class="trait-block"><span class="trait-label">Défaut</span><div class="trait-text">«&nbsp;Incapable de jeter quoi que ce soit. Mon sac est un désastre.&nbsp;»</div></div>
+        </div>
+      </div>
+      <div class="divider"><span>✦</span></div>
+      <div class="section-title">Capacités &amp; Traits</div>
+      <div id="features-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px"><div class="feature-block"><span class="feature-name">Bénédictions du Savoir</span><div class="feature-desc">Maîtrise doublée en Arcanes et Histoire.</div></div><div class="feature-block"><span class="feature-name">Sorts mineurs bonus (magicien)</span><div class="feature-desc">Deux sorts mineurs supplémentaires issus de la liste du magicien.</div></div><div class="feature-block"><span class="feature-name">Ruse gnome</span><div class="feature-desc">Avantage sur tous les JS d'Intelligence, Sagesse et Charisme contre la magie.</div></div><div class="feature-block"><span class="feature-name">Bricoleur · Vision 18m</span><div class="feature-desc">Construire des automates mécaniques. Vision dans le noir 18 m.</div></div><div class="feature-block"><span class="feature-name">Canalisation divine</span><div class="feature-desc">Renvoi des morts-vivants ou Renvoi des créatures arcaniques. Utilisations selon niveau.</div></div><div class="feature-block" style="background: rgba(122, 92, 30, 0.08); border-color: var(--gold);"><span class="feature-name" style="color:var(--gold)">Objectif niveau 4</span><div class="feature-desc">Amélioration de caractéristiques (+2 Sag → 17)</div></div></div>
+    </div>
+
+    <!-- TAB SORTS -->
+    <div class="tab-content" id="tab-spells">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:12px">
+        <div class="combat-box" style="padding:10px"><span class="combat-label">Caractéristique</span><span class="combat-val">Sagesse</span></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          <div class="combat-box" style="padding:10px"><span class="combat-label">DD Sauvegarde</span><span class="combat-val" id="spell-dc">12</span></div>
+          <div class="combat-box" style="padding:10px"><span class="combat-label">Bonus Attaque Sort</span><span class="combat-val" id="spell-atk">+4</span></div>
+        </div>
+      </div>
+      <div class="section-box" style="margin-bottom:12px">
+        <div class="section-title">Sorts mineurs</div>
+        <div class="spell-row"><div></div><span class="spell-name">Glas des trépassés</span><span class="spell-tag" id="toll-tag">DD 12 Sag</span><span class="spell-tag">1d8/1d12</span></div>
+        <div class="spell-row"><div></div><span class="spell-name">Main du mage</span><span class="spell-tag">utilitaire</span><span class="spell-tag">—</span></div>
+        <div class="spell-row"><div></div><span class="spell-name">Illusion mineure</span><span class="spell-tag">utilitaire</span><span class="spell-tag">—</span></div>
+      </div>
+      <div id="spell-slots-container"><div class="spell-level-block"><div class="spell-level-header">
+      <span class="spell-level-num">Niveau 1 — 4 emplacements</span>
+      <div class="spell-slots"><span class="slot-bubble" onclick="toggleSlot(this,'slot-1-0')"></span><span class="slot-bubble" onclick="toggleSlot(this,'slot-1-1')"></span><span class="slot-bubble" onclick="toggleSlot(this,'slot-1-2')"></span><span class="slot-bubble" onclick="toggleSlot(this,'slot-1-3')"></span></div>
+    </div><div class="spell-row"><span class="spell-check" id="sc-d1-0" onclick="toggleCheck(this,'sc-d1-0')"></span><span class="spell-name domain">Identification <em style="font-size:10px">[domaine]</em></span><span class="spell-tag">rituel</span><span class="spell-conc">—</span></div><div class="spell-row" style="background: rgba(92, 61, 30, 0.05);"><span class="spell-check" id="sc-d1-1" onclick="toggleCheck(this,'sc-d1-1')"></span><span class="spell-name domain">Projectile magique <em style="font-size:10px">[domaine]</em></span><span class="spell-tag">auto</span><span class="spell-conc">—</span></div><div class="spell-row" style="background: rgba(139, 26, 26, 0.06);"><span class="spell-check" id="sc-bane" onclick="toggleCheck(this,'sc-bane')"></span><span class="spell-name"><strong>Fléau (Bane) ⭐</strong></span><span class="spell-tag">DD Cha</span><span class="spell-conc" style="color:var(--red)">CONC.</span></div><div class="spell-row"><span class="spell-check" id="sc-hw" onclick="toggleCheck(this,'sc-hw')"></span><span class="spell-name"><strong>Mot de guérison</strong></span><span class="spell-tag">1d4+2</span><span class="spell-conc" style="color:var(--gold)">BON.</span></div></div><div class="spell-level-block"><div class="spell-level-header">
+      <span class="spell-level-num">Niveau 2 — 2 emplacements</span>
+      <div class="spell-slots"><span class="slot-bubble" onclick="toggleSlot(this,'slot-2-0')"></span><span class="slot-bubble" onclick="toggleSlot(this,'slot-2-1')"></span></div>
+    </div><div class="spell-row"><span class="spell-check" id="sc-d2-0" onclick="toggleCheck(this,'sc-d2-0')"></span><span class="spell-name domain">Arme magique <em style="font-size:10px">[domaine]</em></span><span class="spell-tag">buff</span><span class="spell-conc">CONC.</span></div><div class="spell-row" style="background: rgba(92, 61, 30, 0.05);"><span class="spell-check" id="sc-d2-1" onclick="toggleCheck(this,'sc-d2-1')"></span><span class="spell-name domain">Flèche acide de Melf <em style="font-size:10px">[domaine]</em></span><span class="spell-tag">4d4 acide</span><span class="spell-conc">—</span></div><div class="spell-row" style="background: rgba(139, 26, 26, 0.06);"><span class="spell-check" id="sc-hp" onclick="toggleCheck(this,'sc-hp')"></span><span class="spell-name"><strong>Immobilisation (Hold Person)</strong></span><span class="spell-tag">DD Sag</span><span class="spell-conc" style="color:var(--red)">CONC.</span></div><div class="spell-row"><span class="spell-check" id="sc-bd" onclick="toggleCheck(this,'sc-bd')"></span><span class="spell-name"><strong>Cécité / Surdité</strong></span><span class="spell-tag">DD Con</span><span class="spell-conc" style="color:var(--gold)">NON ✓</span></div><div class="spell-row"><span class="spell-check" id="sc-sw" onclick="toggleCheck(this,'sc-sw')"></span><span class="spell-name"><strong>Arme spirituelle</strong></span><span class="spell-tag">+4/1d8+2</span><span class="spell-conc" style="color:var(--gold)">BON.</span></div></div></div>
+      <div style="margin-top:12px;padding:10px;background:rgba(139,26,26,.07);border:1px solid var(--red)">
+        <div style="font-family:'Cinzel',serif;font-size:8px;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">⚠ Concentration</div>
+        <div style="font-family:'Crimson Text',serif;font-size:12px;color:var(--ink-mid)">Un seul sort à concentration. <strong>Fléau</strong> OU <strong>Immobilisation</strong>, jamais les deux. <strong>Cécité/Surdité</strong> et <strong>Arme spirituelle</strong> se cumulent avec tout.</div>
+      </div>
+      <div class="divider"><span>✦</span></div>
+      <div class="section-title">Sorts de domaine futurs</div>
+      <div id="future-spells" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px"><div class="feature-block" style="opacity: 0.4;"><span class="feature-name">Niveau 3</span><div class="feature-desc">Boule de feu · Contresort</div></div><div class="feature-block" style="opacity: 0.4;"><span class="feature-name">Niveau 5</span><div class="feature-desc">Œil d'Arcane · Amélioration de caract.</div></div><div class="feature-block" style="opacity: 0.4;"><span class="feature-name">Niveau 7</span><div class="feature-desc">Télékinésie · Mur de force</div></div></div>
+    </div>
+
+    <!-- TAB ROLEPLAY -->
+    <div class="tab-content" id="tab-roleplay">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+        <div>
+          <div class="section-title">Combos de combat</div>
+          <div class="combo-box"><div class="combo-title">⚔ Round d'ouverture</div><ul class="combo-steps"><li><strong>Action :</strong> Fléau sur 3 ennemis — DD Charisme</li><li><strong>Action bonus :</strong> Arme spirituelle (invoquer)</li><li>3 ennemis à −1d4, dégâts passifs chaque round</li></ul></div>
+          <div class="combo-box" style="border-color:var(--gold);background:rgba(122,92,30,.06)"><div class="combo-title" style="color:var(--gold)">✦ Double debuff</div><ul class="combo-steps"><li><strong>Bane actif</strong> (concentration)</li><li><strong>Action :</strong> Cécité/Surdité (pas de conc. !)</li><li><strong>Action bonus :</strong> Arme spirituelle (+4, 1d8+2)</li></ul></div>
+          <div class="combo-box"><div class="combo-title">🎯 Contre un boss</div><ul class="combo-steps"><li><strong>Action :</strong> Immobilisation — DD Sagesse</li><li><strong>Action bonus :</strong> Arme spirituelle</li><li>Alliés : avantage + critiques automatiques !</li></ul></div>
+          <div style="padding:10px;border:1px solid var(--border);background:rgba(92,61,30,.05)"><div class="section-title">Urgence soins</div><div style="font-family:'Crimson Text',serif;font-size:13px;color:var(--ink-mid)"><strong>Allié à 0 PV ?</strong> → <span style="color:var(--red);font-weight:600">Action BONUS</span> : Mot de guérison (1d4+2)</div></div>
+        </div>
+        <div>
+          <div class="section-title">Phrases situationnelles</div>
+          <div class="phrase-block"><div class="phrase-situation">En lançant Fléau</div><div class="phrase-text">«&nbsp;Fascinant — réduire votre efficacité combat augmente les probabilités de survie de mes collègues. Je procède.&nbsp;»</div></div>
+          <div class="phrase-block"><div class="phrase-situation">En soignant</div><div class="phrase-text">«&nbsp;Vous saignez à un rythme préoccupant. J'ai documenté ce type de blessure — le protocole est clair.&nbsp;»</div></div>
+          <div class="phrase-block"><div class="phrase-situation">En ratant un sort</div><div class="phrase-text">«&nbsp;Hm. Résultat inattendu. Ce n'était pas une erreur, c'était... une donnée supplémentaire.&nbsp;»</div></div>
+          <div class="phrase-block"><div class="phrase-situation">Découverte magique</div><div class="phrase-text">«&nbsp;Passez-moi ça. Non — je ne vais pas le casser. Enfin... probablement pas.&nbsp;»</div></div>
+          <div class="phrase-block"><div class="phrase-situation">Quelqu'un conteste</div><div class="phrase-text">«&nbsp;C'est... une perspective. Incorrecte, mais une perspective tout de même.&nbsp;»</div></div>
+          <div class="phrase-block"><div class="phrase-situation">Situation désespérée</div><div class="phrase-text">«&nbsp;Ce n'est pas idéal. Ce n'est vraiment, vraiment pas idéal. Je recalcule.&nbsp;»</div></div>
+          <div style="margin-top:10px;padding:10px;border:1px solid var(--border)"><div class="section-title">Réflexes universels</div><div style="font-family:'IM Fell English',serif;font-size:12px;color:var(--ink-mid);font-style:italic;line-height:1.9">«&nbsp;Intéressant... j'avais lu quelque chose à ce sujet.&nbsp;»<br>«&nbsp;Si vous me permettez une observation non sollicitée...&nbsp;»<br>«&nbsp;Techniquement parlant...&nbsp;»<br>«&nbsp;Ce n'est pas ce que j'aurais anticipé, mais bon.&nbsp;»</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <p id="footer-text">Torvin « Trois-Parchemins » · Domaine Arcane · Azouth · Niveau 3</p>
+      <p style="margin-top:3px;opacity:.6" id="footer-next">Prochain niveau : Amélioration de caractéristiques (+2 Sag → 17)</p>
+    </div>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════
+// DONNÉES PAR NIVEAU
+// ══════════════════════════════════════════
+const WIS=15,INT=16,CON=14,DEX=12,CHA=10,STR=8;
+const mod=s=>Math.floor((s-10)/2);
+const sign=n=>(n>=0?'+':'')+n;
+
+const LEVELS = {
+  1:{prof:2,hp:8,cd:1,slots:{1:2},info:'Sorts de domaine niv.1 débloqués'},
+  2:{prof:2,hp:14,cd:2,slots:{1:3},info:'Canalisation divine débloquée'},
+  3:{prof:2,hp:20,cd:2,slots:{1:4,2:2},info:'Sorts de domaine niv.2 débloqués'},
+  4:{prof:2,hp:26,cd:2,slots:{1:4,2:3},info:'Amélioration de caractéristiques (+2 Sag → 17)'},
+  5:{prof:3,hp:32,cd:2,slots:{1:4,2:3,3:2},info:'Sorts de domaine niv.3 + Destruction des morts-vivants'},
+  6:{prof:3,hp:38,cd:2,slots:{1:4,2:3,3:3},info:'Potent Spellcasting : +mod Sag aux dégâts des sorts mineurs'},
+  7:{prof:3,hp:44,cd:2,slots:{1:4,2:3,3:3,4:1},info:'Sorts de domaine niv.4 débloqués'},
+  8:{prof:3,hp:50,cd:2,slots:{1:4,2:3,3:3,4:2},info:'Amélioration de caractéristiques'},
+  9:{prof:4,hp:56,cd:2,slots:{1:4,2:3,3:3,4:3,5:1},info:'Sorts de domaine niv.5 débloqués'},
+  10:{prof:4,hp:62,cd:3,slots:{1:4,2:3,3:3,4:3,5:2},info:'Intervention divine débloquée'},
+};
+
+// Sorts de domaine par niveau de sort
+const DOMAIN_SPELLS = {
+  1:[
+    {name:'Identification',tag:'rituel',conc:'—'},
+    {name:'Projectile magique',tag:'auto',conc:'—'},
+  ],
+  3:[
+    {name:'Arme magique',tag:'buff',conc:'CONC.'},
+    {name:'Flèche acide de Melf',tag:'4d4 acide',conc:'—'},
+  ],
+  5:[
+    {name:'Boule de feu',tag:'+atk',conc:'—'},
+    {name:'Contresort',tag:'réaction',conc:'—'},
+  ],
+  7:[
+    {name:"Œil d'Arcane",tag:'divination',conc:'CONC.'},
+    {name:'Amélioration de caract.',tag:'buff',conc:'CONC.'},
+  ],
+  9:[
+    {name:'Télékinésie',tag:'contrôle',conc:'CONC.'},
+    {name:'Mur de force',tag:'défense',conc:'CONC.'},
+  ],
+};
+
+// Sorts préparés principaux
+const PREPARED_SPELLS = {
+  1:[
+    {id:'sc-bane',name:'Fléau (Bane) ⭐',tag:'DD Cha',conc:'CONC.',bg:'rgba(139,26,26,.06)'},
+    {id:'sc-hw',name:'Mot de guérison',tag:'1d4+2',conc:'BON.',concColor:'var(--gold)'},
+  ],
+  2:[
+    {id:'sc-hp',name:'Immobilisation (Hold Person)',tag:'DD Sag',conc:'CONC.',bg:'rgba(139,26,26,.06)'},
+    {id:'sc-bd',name:'Cécité / Surdité',tag:'DD Con',conc:'NON ✓',concColor:'var(--gold)'},
+    {id:'sc-sw',name:'Arme spirituelle',tag:'+4/1d8+2',conc:'BON.',concColor:'var(--gold)'},
+  ],
+  3:[
+    {id:'sc-ss',name:'Silence',tag:'zone',conc:'CONC.'},
+    {id:'sc-sb',name:'Lumière du jour',tag:'60ft',conc:'—'},
+  ],
+  4:[
+    {id:'sc-bg',name:'Gardien de la foi',tag:'zone',conc:'—'},
+    {id:'sc-fof',name:'Liberté de mouvement',tag:'buff',conc:'—'},
+  ],
+  5:[
+    {id:'sc-con',name:'Contagion',tag:'DD Con',conc:'—'},
+    {id:'sc-flf',name:'Colonne de flamme',tag:'+atk',conc:'—'},
+  ],
+};
+
+// Capacités par niveau
+const FEATURES_BY_LEVEL = [
+  {minLvl:1,name:'Bénédictions du Savoir',desc:'Maîtrise doublée en Arcanes et Histoire.',isNew:false},
+  {minLvl:1,name:'Sorts mineurs bonus (magicien)',desc:'Deux sorts mineurs supplémentaires issus de la liste du magicien.',isNew:false},
+  {minLvl:1,name:'Ruse gnome',desc:'Avantage sur tous les JS d\'Intelligence, Sagesse et Charisme contre la magie.',isNew:false},
+  {minLvl:1,name:'Bricoleur · Vision 18m',desc:'Construire des automates mécaniques. Vision dans le noir 18 m.',isNew:false},
+  {minLvl:2,name:'Canalisation divine',desc:'Renvoi des morts-vivants ou Renvoi des créatures arcaniques. Utilisations selon niveau.',isNew:false},
+  {minLvl:4,name:'Amélioration de caractéristiques',desc:'+2 Sagesse → 17 (+3). Tous les DCs et soins progressent.',isNew:false},
+  {minLvl:5,name:'Destruction des morts-vivants',desc:'Renvoi détruit les morts-vivants de FP ≤ 1/2 (niv.5), puis s\'améliore.',isNew:false},
+  {minLvl:6,name:'Incantation Puissante',desc:'Ajoutez votre modificateur de Sagesse aux dégâts des sorts mineurs.',isNew:false},
+  {minLvl:8,name:'Amélioration de caractéristiques',desc:'+2 à une caractéristique de votre choix.',isNew:false},
+  {minLvl:10,name:'Intervention divine',desc:'Appel à Azouth pour une aide miraculeuse. Succès automatique à 20.',isNew:false},
+];
+
+// ══════════════════════════════════════════
+// ÉTAT COURANT
+// ══════════════════════════════════════════
+let currentLevel = 3;
+let wisMod = mod(WIS); // peut changer au niv.4
+
+function getProfBonus(lvl){ return LEVELS[lvl].prof; }
+function getSpellDC(lvl){ return 8+getProfBonus(lvl)+wisMod; }
+function getSpellAtk(lvl){ return getProfBonus(lvl)+wisMod; }
+function getHPMax(lvl){ return LEVELS[lvl].hp; }
+
+// ══════════════════════════════════════════
+// RENDER LEVEL
+// ══════════════════════════════════════════
+function renderLevel(lvl, isLevelUp){
+  const prev = currentLevel;
+  currentLevel = lvl;
+  const data = LEVELS[lvl];
+
+  // Niv.4 : Sagesse monte à 17
+  wisMod = lvl >= 4 ? mod(17) : mod(WIS);
+
+  // Level bubbles
+  document.querySelectorAll('.lvl-btn').forEach((b,i)=>b.classList.toggle('active',i+1===lvl));
+  document.getElementById('level-info').textContent = data.info;
+
+  // Header
+  document.getElementById('char-subtitle').textContent =
+    `Gnome des Roches · Clerc Domaine Arcane, Niveau ${lvl} · Serviteur involontaire d'Azouth`;
+  document.getElementById('info-class').textContent = `Clerc ${lvl} — Arcane`;
+
+  // Stats de combat
+  const prof = getProfBonus(lvl);
+  document.getElementById('prof-bonus').textContent = sign(prof);
+  document.getElementById('hit-dice').textContent = `${lvl}d8`;
+  document.getElementById('spell-dc').textContent = getSpellDC(lvl);
+  document.getElementById('spell-atk').textContent = sign(getSpellAtk(lvl));
+  document.getElementById('atk-toll').textContent = `DD ${getSpellDC(lvl)} Sag`;
+  document.getElementById('toll-tag').textContent = `DD ${getSpellDC(lvl)} Sag`;
+  if(lvl>=6){ // Potent Spellcasting
+    const dmg = `1d8+${wisMod}/1d12+${wisMod}`;
+    document.querySelector('[id="toll-tag"]') && (document.getElementById('toll-tag').textContent = `DD ${getSpellDC(lvl)}`);
+  }
+
+  // PV
+  const hpMax = getHPMax(lvl);
+  document.getElementById('pv-max-display').textContent = hpMax;
+  if(isLevelUp && lvl > prev){
+    const gain = hpMax - getHPMax(prev);
+    const cur = parseInt(document.getElementById('pv-current').value)||0;
+    document.getElementById('pv-current').value = cur + gain;
+  }
+
+  // Sagesse passive
+  document.getElementById('passive-wis').textContent = 10+wisMod;
+
+  // Jets de sauvegarde
+  document.getElementById('st-wis').textContent = sign(wisMod+prof);
+  document.getElementById('st-int').textContent = sign(mod(INT));
+  document.getElementById('st-con').textContent = sign(mod(CON));
+  document.getElementById('st-dex').textContent = sign(mod(DEX));
+  document.getElementById('st-cha').textContent = sign(mod(CHA));
+  document.getElementById('st-str').textContent = sign(mod(STR));
+
+  // Compétences
+  const dbl = prof*2;
+  document.getElementById('sk-arcana').textContent   = sign(mod(INT)+dbl);
+  document.getElementById('sk-history').textContent  = sign(mod(INT)+dbl);
+  document.getElementById('sk-religion').textContent = sign(mod(INT)+prof);
+  document.getElementById('sk-medicine').textContent = sign(wisMod+prof);
+  document.getElementById('sk-investigation').textContent = sign(mod(INT));
+  document.getElementById('sk-nature').textContent   = sign(mod(INT));
+  document.getElementById('sk-perception').textContent = sign(wisMod);
+  document.getElementById('sk-insight').textContent  = sign(wisMod);
+  document.getElementById('sk-animal').textContent   = sign(wisMod);
+  document.getElementById('sk-survival').textContent = sign(wisMod);
+  document.getElementById('sk-acrobatics').textContent = sign(mod(DEX));
+  document.getElementById('sk-stealth').textContent  = sign(mod(DEX));
+  document.getElementById('sk-sleight').textContent  = sign(mod(DEX));
+  document.getElementById('sk-deception').textContent = sign(mod(CHA));
+  document.getElementById('sk-persuasion').textContent = sign(mod(CHA));
+  document.getElementById('sk-intimidation').textContent = sign(mod(CHA));
+  document.getElementById('sk-performance').textContent = sign(mod(CHA));
+  document.getElementById('sk-athletics').textContent = sign(mod(STR));
+
+  // Capacités
+  renderFeatures(lvl, isLevelUp && lvl > prev ? lvl : null);
+
+  // Sorts
+  renderSpells(lvl, isLevelUp && lvl > prev ? lvl : null);
+
+  // Footer
+  document.getElementById('footer-text').textContent =
+    `Torvin « Trois-Parchemins » · Domaine Arcane · Azouth · Niveau ${lvl}`;
+  const nextLvl = LEVELS[lvl+1];
+  document.getElementById('footer-next').textContent = nextLvl
+    ? `Prochain niveau : ${nextLvl.info}` : 'Niveau maximum atteint — Torvin est légendaire.';
+
+  // Toast
+  if(isLevelUp && lvl > prev) showToast(`✦ Niveau ${lvl} atteint ! ${data.info}`);
+
+  autoSaveLocal();
+}
+
+function renderFeatures(lvl, newLvl){
+  const grid = document.getElementById('features-grid');
+  grid.innerHTML = '';
+  FEATURES_BY_LEVEL.filter(f=>f.minLvl<=lvl).forEach(f=>{
+    const isNew = newLvl && f.minLvl===newLvl;
+    const div = document.createElement('div');
+    div.className = 'feature-block';
+    if(f.minLvl===4 && lvl>=4) div.style.borderColor='var(--gold)';
+    if(f.minLvl===10) div.style.borderColor='var(--red)';
+    div.innerHTML = `<span class="feature-name">${f.name}${isNew?'<span class="new-badge">Nouveau</span>':''}</span><div class="feature-desc">${f.desc}</div>`;
+    grid.appendChild(div);
+  });
+  // Objectif prochain niveau
+  if(LEVELS[lvl+1]){
+    const div = document.createElement('div');
+    div.className = 'feature-block';
+    div.style.cssText = 'background:rgba(122,92,30,.08);border-color:var(--gold)';
+    div.innerHTML = `<span class="feature-name" style="color:var(--gold)">Objectif niveau ${lvl+1}</span><div class="feature-desc">${LEVELS[lvl+1].info}</div>`;
+    grid.appendChild(div);
+  }
+}
+
+function renderSpells(lvl, newLvl){
+  const container = document.getElementById('spell-slots-container');
+  container.innerHTML = '';
+  const slots = LEVELS[lvl].slots;
+
+  // Sorts de domaine disponibles (selon niv de sort accessible)
+  const maxSpellLvl = Math.max(...Object.keys(slots).map(Number));
+
+  Object.keys(slots).sort((a,b)=>a-b).forEach(slotLvl=>{
+    slotLvl = parseInt(slotLvl);
+    const total = slots[slotLvl];
+    const block = document.createElement('div');
+    block.className = 'spell-level-block';
+
+    // Header avec emplacements
+    const isNewSlot = newLvl && !LEVELS[newLvl-1]?.slots?.[slotLvl];
+    let bubblesHtml = '';
+    for(let i=0;i<total;i++){
+      const key=`slot-${slotLvl}-${i}`;
+      const used = (savedSlots[key]||false);
+      bubblesHtml+=`<span class="slot-bubble${used?' used':''}" onclick="toggleSlot(this,'${key}')"></span>`;
+    }
+    block.innerHTML=`<div class="spell-level-header">
+      <span class="spell-level-num">Niveau ${slotLvl} — ${total} emplacement${total>1?'s':''}${isNewSlot?'<span class="new-badge" style="margin-left:8px">Nouveau</span>':''}</span>
+      <div class="spell-slots">${bubblesHtml}</div>
+    </div>`;
+
+    // Sorts de domaine pour ce niveau de sort
+    const domainKey = slotLvl===1?1:slotLvl===2?3:slotLvl===3?5:slotLvl===4?7:slotLvl===5?9:null;
+    if(domainKey && DOMAIN_SPELLS[domainKey]){
+      DOMAIN_SPELLS[domainKey].forEach((s,idx)=>{
+        const row = document.createElement('div');
+        row.className = 'spell-row';
+        if(idx%2===1) row.style.background='rgba(92,61,30,.05)';
+        const id=`sc-d${slotLvl}-${idx}`;
+        const checked=savedChecks[id]||false;
+        row.innerHTML=`<span class="spell-check${checked?' checked':''}" id="${id}" onclick="toggleCheck(this,'${id}')"></span><span class="spell-name domain">${s.name} <em style="font-size:10px">[domaine]</em></span><span class="spell-tag">${s.tag}</span><span class="spell-conc">${s.conc}</span>`;
+        block.appendChild(row);
+      });
+    }
+
+    // Sorts préparés pour ce niveau
+    if(PREPARED_SPELLS[slotLvl]){
+      PREPARED_SPELLS[slotLvl].forEach((s,idx)=>{
+        const row = document.createElement('div');
+        row.className = 'spell-row';
+        if(s.bg) row.style.background=s.bg;
+        const checked=savedChecks[s.id]||false;
+        const concColor=s.concColor||'var(--red)';
+        row.innerHTML=`<span class="spell-check${checked?' checked':''}" id="${s.id}" onclick="toggleCheck(this,'${s.id}')"></span><span class="spell-name"><strong>${s.name}</strong></span><span class="spell-tag">${s.tag}</span><span class="spell-conc" style="color:${concColor}">${s.conc}</span>`;
+        block.appendChild(row);
+      });
+    }
+    container.appendChild(block);
+  });
+
+  // Sorts futurs
+  const futureDiv = document.getElementById('future-spells');
+  futureDiv.innerHTML='';
+  [[5,'Boule de feu · Contresort'],[7,"Œil d'Arcane · Amélioration de caract."],[9,'Télékinésie · Mur de force']].forEach(([reqLvl,txt])=>{
+    const div=document.createElement('div');
+    div.className='feature-block';
+    const unlocked=lvl>=reqLvl;
+    div.style.opacity=unlocked?'1':'0.4';
+    div.innerHTML=`<span class="feature-name">Niveau ${reqLvl-2}${unlocked?'<span class="new-badge">Débloqué</span>':''}</span><div class="feature-desc">${txt}</div>`;
+    futureDiv.appendChild(div);
+  });
+}
+
+// ══════════════════════════════════════════
+// ÉTAT & PERSISTENCE
+// ══════════════════════════════════════════
+let savedSlots={}, savedChecks={};
+
+function getState(){
+  const slots={}, checks={};
+  document.querySelectorAll('.slot-bubble[onclick]').forEach(b=>{
+    const m=b.getAttribute('onclick').match(/'([^']+)'/);
+    if(m) slots[m[1]]=b.classList.contains('used');
+  });
+  document.querySelectorAll('.spell-check[id]').forEach(c=>{
+    checks[c.id]=c.classList.contains('checked');
+  });
+  return {
+    level:currentLevel,
+    pv:document.getElementById('pv-current').value,
+    pvTemp:document.getElementById('pv-temp').value,
+    cd:localStorage.getItem('torvin-cd')==='true',
+    slots, checks
+  };
+}
+
+function applyState(s){
+  if(!s) return;
+  savedSlots=s.slots||{};
+  savedChecks=s.checks||{};
+  if(s.level) renderLevel(parseInt(s.level),false);
+  if(s.pv!==undefined) document.getElementById('pv-current').value=s.pv;
+  if(s.pvTemp!==undefined) document.getElementById('pv-temp').value=s.pvTemp;
+  if(s.cd!==undefined){localStorage.setItem('torvin-cd',s.cd);updateCD();}
+}
+
+function autoSaveLocal(){
+  localStorage.setItem('torvin-state',JSON.stringify(getState()));
+}
+
+// ══════════════════════════════════════════
+// GITHUB
+// ══════════════════════════════════════════
+const REPO='Funkyst4rz/torvin', FILE='save.json';
+const API=`https://api.github.com/repos/${REPO}/contents/${FILE}`;
+
+function toggleConfig(){
+  const p=document.getElementById('config-panel');
+  p.classList.toggle('open');
+  if(p.classList.contains('open')){const t=localStorage.getItem('gh-token');if(t)document.getElementById('gh-token').value=t;}
+}
+function saveConfig(){
+  const t=document.getElementById('gh-token').value.trim();
+  if(!t) return setStatus('Token vide','err');
+  localStorage.setItem('gh-token',t);
+  document.getElementById('config-panel').classList.remove('open');
+  setStatus('Token enregistré — prêt à sauvegarder','ok');
+}
+function clearConfig(){localStorage.removeItem('gh-token');document.getElementById('gh-token').value='';setStatus('Token effacé','');}
+function getToken(){return localStorage.getItem('gh-token');}
+function setStatus(msg,type){const el=document.getElementById('save-status');el.textContent=msg;el.className='save-status'+(type?' '+type:'');}
+
+async function saveToGitHub(){
+  const token=getToken();
+  if(!token){toggleConfig();return setStatus('Configurez votre token d\'abord','err');}
+  setStatus('Sauvegarde en cours...','');
+  try{
+    const state=getState();
+    const content=btoa(unescape(encodeURIComponent(JSON.stringify(state,null,2))));
+    let sha=null;
+    try{const r=await fetch(API,{headers:{Authorization:`token ${token}`,Accept:'application/vnd.github.v3+json'}});if(r.ok){const d=await r.json();sha=d.sha;}}catch(e){}
+    const body={message:`Sauvegarde Torvin niv.${currentLevel} — ${new Date().toLocaleString('fr-FR')}`,content};
+    if(sha)body.sha=sha;
+    const res=await fetch(API,{method:'PUT',headers:{Authorization:`token ${token}`,Accept:'application/vnd.github.v3+json','Content-Type':'application/json'},body:JSON.stringify(body)});
+    if(res.ok){autoSaveLocal();setStatus(`✓ Sauvegardé sur GitHub — ${new Date().toLocaleTimeString('fr-FR')}`,'ok');}
+    else{const err=await res.json();setStatus('Erreur : '+(err.message||res.status),'err');}
+  }catch(e){setStatus('Erreur réseau : '+e.message,'err');}
+}
+
+async function loadFromGitHub(){
+  const token=getToken();
+  if(!token){toggleConfig();return setStatus('Configurez votre token d\'abord','err');}
+  setStatus('Chargement...','');
+  try{
+    const res=await fetch(API,{headers:{Authorization:`token ${token}`,Accept:'application/vnd.github.v3+json'}});
+    if(res.ok){
+      const data=await res.json();
+      const state=JSON.parse(decodeURIComponent(escape(atob(data.content))));
+      applyState(state);
+      localStorage.setItem('torvin-state',JSON.stringify(state));
+      setStatus('✓ Données chargées depuis GitHub','ok');
+    }else if(res.status===404){setStatus('Aucune sauvegarde trouvée sur GitHub','');}
+    else{setStatus('Erreur '+res.status,'err');}
+  }catch(e){setStatus('Erreur : '+e.message,'err');}
+}
+
+// ══════════════════════════════════════════
+// UI HELPERS
+// ══════════════════════════════════════════
+function switchTab(name){
+  const names=['main','spells','roleplay'];
+  document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',names[i]===name));
+  document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+}
+
+function toggleSlot(el,key){el.classList.toggle('used');savedSlots[key]=el.classList.contains('used');autoSaveLocal();}
+function toggleCheck(el,id){el.classList.toggle('checked');savedChecks[id]=el.classList.contains('checked');autoSaveLocal();}
+
+let cdUsed=localStorage.getItem('torvin-cd')==='true';
+function toggleCD(){cdUsed=!cdUsed;localStorage.setItem('torvin-cd',cdUsed);updateCD();autoSaveLocal();}
+function updateCD(){
+  const el=document.getElementById('cd-status');
+  el.textContent=cdUsed?'☑ utilisée':'☐ disponible';
+  el.style.color=cdUsed?'var(--red)':'var(--gold)';
+}
+
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3500);
+}
+
+// ══════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════
+window.addEventListener('load',()=>{
+  // Générer les boutons de niveau
+  const bubbles=document.getElementById('level-bubbles');
+  for(let i=1;i<=10;i++){
+    const btn=document.createElement('div');
+    btn.className='lvl-btn'+(i===3?' active':'');
+    btn.textContent=i;
+    btn.onclick=(()=>{const lvl=i;return()=>renderLevel(lvl,true);})();
+    bubbles.appendChild(btn);
+  }
+
+  // Charger état sauvegardé
+  const local=localStorage.getItem('torvin-state');
+  if(local){try{const s=JSON.parse(local);savedSlots=s.slots||{};savedChecks=s.checks||{};applyState(s);}catch(e){renderLevel(3,false);}}
+  else{renderLevel(3,false);}
+
+  updateCD();
+  const token=getToken();
+  if(token){setStatus('Token configuré — prêt','ok');}
+  else{setStatus('Non configuré — cliquez sur ⚙ Config pour activer la sauvegarde GitHub');}
+});
+
+document.getElementById('pv-current').addEventListener('input',autoSaveLocal);
+document.getElementById('pv-temp').addEventListener('input',autoSaveLocal);
+</script>
+
+
+</body></html>
