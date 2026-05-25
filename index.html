@@ -684,7 +684,7 @@
 
           <!-- Concentration -->
           <div class="section-box conc-section">
-            <div class="section-title">◆ Concentration <span class="info-btn" @click="openInfo('Concentration — Comment elle se rompt', 'Un seul sort de concentration à la fois.<br><br><strong>⚔ Dégâts reçus</strong><br>JS Constitution DD = max(10, ½ des dégâts reçus en un coup).<br>Torvin : <strong>' + S(concentrationSaveBonus) + '</strong>' + (concentrationHasAdvantage ? ' avec avantage (War Caster)' : '') + '<br><br><strong>Ruptures automatiques</strong><br>• Lancer un autre sort de concentration<br>• Être <em>incapacité</em>, pétrifié ou tué<br>• Choisir de la rompre volontairement (action gratuite)<br><br><strong>Astuce :</strong> War Caster donne l\'avantage au JS. Résistant (Con) ajoute la maîtrise.')">ⓘ</span></div>
+            <div class="section-title">◆ Concentration <span class="info-btn" @click="openInfo('Concentration — Comment elle se rompt', 'Un seul sort de concentration à la fois.<br><br><strong>⚔ Dégâts reçus</strong><br>Lancer 1d20 + mod. CON contre DD = max(10, ½ dégâts reçus en un coup).<br>Torvin : 1d20 <strong>' + S(concentrationSaveBonus) + '</strong>' + (concentrationHasAdvantage ? ' avec avantage (War Caster)' : '') + '<br><br><strong>Ruptures automatiques</strong><br>• Lancer un autre sort de concentration<br>• Être <em>incapacité</em>, pétrifié ou tué<br>• Choisir de la rompre volontairement (action gratuite)<br><br><strong>Astuce :</strong> War Caster donne l\'avantage au JS. Résistant (Con) ajoute la maîtrise.')">ⓘ</span></div>
             <div v-if="char.concentration" class="conc-active-area">
               <div class="conc-spell-name">{{ char.concentration }}</div>
               <div class="conc-dc-info">
