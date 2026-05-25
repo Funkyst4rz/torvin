@@ -116,7 +116,7 @@
       "damage": "1d6"
     }
   ],
-  "attunedItems": [],
+  "attunedItems": ["La Relique d'Azouth"],
   "currency": {
     "pp": 0,
     "gp": 15,
