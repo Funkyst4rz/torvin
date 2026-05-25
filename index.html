@@ -226,19 +226,12 @@
             <div class="combat-row">
               <div class="combat-box">
                 <span class="combat-label">CA</span>
-                <span class="combat-val">{{ ca }}</span>
-                <div style="font-size:0.47rem;font-family:'Cinzel',serif;color:var(--ink-light);margin-top:2px">
-                  base:<input class="combat-base-input" type="number" v-model.number="char.armorBase" min="0" max="25" title="CA de base de l'armure">
-                  <label><input type="checkbox" v-model="char.useShield"> Bouclier</label>
-                </div>
-                <div style="font-size:0.44rem;font-family:'Cinzel',serif;margin-top:2px">
-                  <select class="armor-type-select" v-model="char.armorType">
-                    <option value="light">Légère (+ Dex)</option>
-                    <option value="medium">Interméd. (+ min(Dex,2))</option>
-                    <option value="heavy">Lourde (sans Dex)</option>
-                    <option value="unarmored">Sans armure</option>
-                    <option value="mage-armor">Armure du mage</option>
-                  </select>
+                <div style="display:flex;align-items:center">
+                  <input class="combat-input" type="number" v-model.number="char.caManual" min="0" max="30" title="Classe d'Armure — saisir manuellement">
+                  <div class="pv-spinners">
+                    <button class="pv-spin" @click="char.caManual = Math.min(30, char.caManual + 1)" tabindex="-1">▴</button>
+                    <button class="pv-spin" @click="char.caManual = Math.max(0, char.caManual - 1)" tabindex="-1">▾</button>
+                  </div>
                 </div>
               </div>
               <div class="combat-box">
@@ -415,13 +408,18 @@
           <!-- Col 3 : Compétences + Langues + Outils -->
           <div>
             <div class="section-box">
-              <div class="section-title">Compétences</div>
+              <div class="section-title">Compétences <span style="font-size:0.5rem;font-family:'Crimson Text',serif;color:var(--ink-light);font-weight:400;text-transform:none">— clic = maîtrise</span></div>
               <div class="skills-list">
-                <div class="skill-row" v-for="sk in skillList" :key="sk.name">
-                  <span class="skill-prof" :class="sk.prof"></span>
-                  <span class="skill-name">{{ sk.name }}</span>
-                  <span class="skill-bonus" :class="{ high: sk.high }">{{ S(sk.bonus) }}</span>
-                </div>
+                <template v-for="group in skillGroups" :key="group.stat">
+                  <div class="skill-group-label">{{ group.label }}</div>
+                  <div class="skill-row" v-for="sk in group.skills" :key="sk.key"
+                       @click="toggleSkillProf(sk.key)"
+                       :title="sk.prof ? 'Retirer la maîtrise' : 'Ajouter la maîtrise'">
+                    <span class="skill-prof" :class="sk.prof"></span>
+                    <span class="skill-name">{{ sk.name }}</span>
+                    <span class="skill-bonus" :class="{ high: !!sk.prof }">{{ S(sk.bonus) }}</span>
+                  </div>
+                </template>
               </div>
             </div>
 

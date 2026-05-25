@@ -5,16 +5,16 @@
 
 // Emplacements de sorts, prof bonus, CD par niveau de personnage (Clerc)
 const LEVELS = {
-  1:  { prof:2, slots:{1:2},                  cd:1, info:'Sorts de domaine niv.1 débloqués' },
-  2:  { prof:2, slots:{1:3},                  cd:2, info:'Canalisation divine (2×/repos court)' },
-  3:  { prof:2, slots:{1:4,2:2},              cd:2, info:'Sorts de domaine niv.2 débloqués' },
-  4:  { prof:2, slots:{1:4,2:3},              cd:2, info:'Amélioration de caractéristiques' },
-  5:  { prof:3, slots:{1:4,2:3,3:2},          cd:2, info:'Sorts de domaine niv.3 · Destruction des morts-vivants (FP ½)' },
-  6:  { prof:3, slots:{1:4,2:3,3:3},          cd:2, info:'Incantation Puissante : +mod Sag aux dégâts des sorts mineurs' },
+  1:  { prof:2, slots:{1:2},                  cd:0, info:'Sorts de domaine niv.1 débloqués' },
+  2:  { prof:2, slots:{1:3},                  cd:1, info:'Canalisation divine (1×/repos court)' },
+  3:  { prof:2, slots:{1:4,2:2},              cd:1, info:'Sorts de domaine niv.2 débloqués' },
+  4:  { prof:2, slots:{1:4,2:3},              cd:1, info:'Amélioration de caractéristiques' },
+  5:  { prof:3, slots:{1:4,2:3,3:2},          cd:1, info:'Sorts de domaine niv.3 · Destruction des morts-vivants (FP ½)' },
+  6:  { prof:3, slots:{1:4,2:3,3:3},          cd:2, info:'Briseur de sorts · Canalisation divine 2×/repos court' },
   7:  { prof:3, slots:{1:4,2:3,3:3,4:1},     cd:2, info:'Sorts de domaine niv.4 débloqués' },
-  8:  { prof:3, slots:{1:4,2:3,3:3,4:2},     cd:2, info:'Amélioration de caractéristiques · Destruction (FP 1)' },
+  8:  { prof:3, slots:{1:4,2:3,3:3,4:2},     cd:2, info:'Incantation Puissante · Amélioration de caractéristiques · Destruction (FP 1)' },
   9:  { prof:4, slots:{1:4,2:3,3:3,4:3,5:1}, cd:2, info:'Sorts de domaine niv.5 débloqués' },
-  10: { prof:4, slots:{1:4,2:3,3:3,4:3,5:2}, cd:3, info:'Intervention divine · Canalisation divine 3×/repos court' },
+  10: { prof:4, slots:{1:4,2:3,3:3,4:3,5:2}, cd:2, info:'Intervention divine · Canalisation divine 2×/repos court' },
 };
 
 // Niveaux d'ASI pour le Clerc (dans la plage niv.1–10)
@@ -140,13 +140,13 @@ const CLERIC_SPELLS = {
 
 // Capacités débloquées par niveau
 const FEATURES_BY_LEVEL = [
-  { minLvl:1,  name:'Bénédictions du Savoir',         desc:'Maîtrise doublée en Arcanes et Histoire. Maîtrise de deux langues ou compétences supplémentaires au choix.' },
-  { minLvl:1,  name:'Sorts mineurs bonus (magicien)',  desc:'2 sorts mineurs de magicien : Glas des trépassés, Main du mage, Illusion mineure.' },
+  { minLvl:1,  name:'Arcane Initiate',                desc:"Maîtrise de la compétence Arcanes. 2 sorts mineurs de magicien de votre choix qui comptent comme des sorts mineurs de clerc (Torvin : Main du mage, Illusion mineure)." },
   { minLvl:1,  name:'Ruse gnome',                     desc:"Avantage sur tous les JS d'Intelligence, Sagesse et Charisme contre la magie." },
   { minLvl:1,  name:'Bricoleur · Vision 18 m',        desc:"Fabriquer des automates mécaniques (30 min + 10 po matériaux). Vision dans le noir 18 m." },
-  { minLvl:2,  name:'Canalisation divine',             desc:'Renvoi des morts-vivants ou Renvoi des aberrations. 1× niv.1 · 2× niv.2-9 · 3× niv.10.' },
+  { minLvl:2,  name:'Canalisation divine',             desc:"Renvoi des morts-vivants (base) ou Abjuration Arcanique (célestes, élémentaires, fées, fiélons, morts-vivants). 1× niv.2–5 · 2× niv.6–17." },
   { minLvl:5,  name:'Destruction des morts-vivants',  desc:'Renvoi = destruction si FP ≤ ½ (niv.5-7) · FP ≤ 1 (niv.8-10).' },
-  { minLvl:6,  name:'Incantation Puissante',           desc:'Modificateur de Sagesse ajouté aux dégâts des sorts mineurs de Clerc.' },
+  { minLvl:6,  name:'Briseur de sorts',               desc:"Quand vous restaurez des PV à un allié avec un sort de niv.1+, vous pouvez aussi dissiper un sort sur lui dont le niveau ≤ l'emplacement utilisé." },
+  { minLvl:8,  name:'Incantation Puissante',           desc:'Modificateur de Sagesse ajouté aux dégâts des sorts mineurs de Clerc.' },
   { minLvl:10, name:'Intervention divine',             desc:"Appel à Azouth pour aide miraculeuse. Succès auto si le jet ≤ niveau. 1× par repos long." },
 ];
 
@@ -237,6 +237,28 @@ const STAT_LABELS = {
   int: 'Intelligence', wis: 'Sagesse', cha: 'Charisme',
 };
 
+// Liste complète des compétences, groupées par caractéristique
+const SKILLS = [
+  { key:'athletisme',     name:'Athlétisme',     stat:'str' },
+  { key:'acrobaties',     name:'Acrobaties',     stat:'dex' },
+  { key:'escamotage',     name:'Escamotage',     stat:'dex' },
+  { key:'discretion',     name:'Discrétion',     stat:'dex' },
+  { key:'arcanes',        name:'Arcanes',        stat:'int' },
+  { key:'histoire',       name:'Histoire',       stat:'int' },
+  { key:'investigation',  name:'Investigation',  stat:'int' },
+  { key:'nature',         name:'Nature',         stat:'int' },
+  { key:'religion',       name:'Religion',       stat:'int' },
+  { key:'dressage',       name:'Dressage',       stat:'wis' },
+  { key:'intuition',      name:'Intuition',      stat:'wis' },
+  { key:'medecine',       name:'Médecine',       stat:'wis' },
+  { key:'perception',     name:'Perception',     stat:'wis' },
+  { key:'survie',         name:'Survie',         stat:'wis' },
+  { key:'tromperie',      name:'Tromperie',      stat:'cha' },
+  { key:'intimidation',   name:'Intimidation',   stat:'cha' },
+  { key:'representation', name:'Représentation', stat:'cha' },
+  { key:'persuasion',     name:'Persuasion',     stat:'cha' },
+];
+
 // Bonus raciaux par défaut — Gnome des Roches
 const DEFAULT_RACIAL = { str:0, dex:0, con:1, int:2, wis:0, cha:0 };
 
@@ -261,10 +283,11 @@ const DEFAULT_CHAR = {
   },
 
   // ── Combat ────────────────────────────────────────────────────
-  armorBase: 11,    // Armure de cuir (CA de base)
-  armorType: 'light', // light | medium | heavy | unarmored | mage-armor
+  caManual: 14,     // CA saisie manuellement (armure de cuir 11 + Dex +1 + bouclier +2)
+  armorBase: 11,    // Conservé pour calcul futur éventuel (armure de cuir)
+  armorType: 'light',
   useShield: true,
-  speed: 9,
+  speed: 7.5,       // Gnome des Roches : 25 pieds = 7,5 m
 
   // ── Points de vie ─────────────────────────────────────────────
   hpRolls: [0, 8, 6, 6, 0, 0, 0, 0, 0, 0, 0],
@@ -277,6 +300,11 @@ const DEFAULT_CHAR = {
   cdUsed:       0,
   customSpells:  { 1:[], 2:[], 3:[], 4:[], 5:[] },
   removedSpells: [],  // IDs des sorts suggérés masqués par l'utilisateur
+
+  // ── Compétences maîtrisées ────────────────────────────────────
+  // Arcanes : Arcane Initiate · Religion + Médecine : choix de classe
+  // Intuition + Persuasion : background Artisan de Guilde
+  skillProfs: ['arcanes', 'religion', 'medecine', 'intuition', 'persuasion'],
 
   // ── Concentration ─────────────────────────────────────────────
   concentration: null,   // null | nom du sort

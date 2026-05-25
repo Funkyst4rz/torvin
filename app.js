@@ -58,6 +58,9 @@ function _loadInitialState() {
     if (!Array.isArray(merged.attunedItems))   merged.attunedItems = [];
     if (!Array.isArray(merged.phrases))        merged.phrases      = JSON.parse(JSON.stringify(DEFAULT_CHAR.phrases));
     if (!Array.isArray(merged.removedSpells))  merged.removedSpells = [];
+    if (typeof merged.caManual !== 'number')   merged.caManual = 14;
+    if (!Array.isArray(merged.skillProfs))
+      merged.skillProfs = ['arcanes', 'religion', 'medecine', 'intuition', 'persuasion'];
 
     return merged;
   } catch(e) {
@@ -168,19 +171,8 @@ createApp({
     spellDC()  { return 8 + this.prof + this.mods.wis; },
     spellAtk() { return this.prof + this.mods.wis; },
 
-    // CA selon le type d'armure (RAW D&D 5e)
-    ca() {
-      const d = this.mods.dex;
-      let base;
-      switch (this.char.armorType || 'light') {
-        case 'unarmored':  base = 10 + d; break;
-        case 'mage-armor': base = 13 + d; break;
-        case 'medium':     base = this.char.armorBase + Math.min(d, 2); break;
-        case 'heavy':      base = this.char.armorBase; break;
-        default:           base = this.char.armorBase + d; break; // light / natural
-      }
-      return base + (this.char.useShield ? 2 : 0);
-    },
+    // CA saisie manuellement par le joueur
+    ca() { return this.char.caManual; },
 
     // PV maximum (intègre l'exhaustion niveau 4 et le don Robuste)
     hpMax() {
@@ -350,28 +342,24 @@ createApp({
     },
 
     skillList() {
-      const { str, dex, int, wis, cha } = this.mods;
-      const p = this.prof, d = p * 2;
-      return [
-        { name:'Arcanes (Int)',       bonus:int+d, prof:'double', high:true  },
-        { name:'Histoire (Int)',      bonus:int+d, prof:'double', high:true  },
-        { name:'Religion (Int)',      bonus:int+p, prof:'filled'             },
-        { name:'Médecine (Sag)',      bonus:wis+p, prof:'filled'             },
-        { name:'Investigation (Int)', bonus:int,   prof:''                   },
-        { name:'Nature (Int)',        bonus:int,   prof:''                   },
-        { name:'Perception (Sag)',    bonus:wis,   prof:''                   },
-        { name:'Intuition (Sag)',     bonus:wis,   prof:''                   },
-        { name:'Dressage (Sag)',      bonus:wis,   prof:''                   },
-        { name:'Survie (Sag)',        bonus:wis,   prof:''                   },
-        { name:'Acrobaties (Dex)',    bonus:dex,   prof:''                   },
-        { name:'Discrétion (Dex)',    bonus:dex,   prof:''                   },
-        { name:'Escamotage (Dex)',    bonus:dex,   prof:''                   },
-        { name:'Tromperie (Cha)',     bonus:cha,   prof:''                   },
-        { name:'Persuasion (Cha)',    bonus:cha,   prof:''                   },
-        { name:'Intimidation (Cha)',  bonus:cha,   prof:''                   },
-        { name:'Représentation (Cha)',bonus:cha,   prof:''                   },
-        { name:'Athlétisme (For)',    bonus:str,   prof:''                   },
-      ];
+      const abbrev = { str:'For', dex:'Dex', con:'Con', int:'Int', wis:'Sag', cha:'Cha' };
+      const profs = new Set(this.char.skillProfs || []);
+      return SKILLS.map(sk => ({
+        key:   sk.key,
+        name:  `${sk.name} (${abbrev[sk.stat]})`,
+        stat:  sk.stat,
+        bonus: this.mods[sk.stat] + (profs.has(sk.key) ? this.prof : 0),
+        prof:  profs.has(sk.key) ? 'filled' : '',
+      }));
+    },
+
+    skillGroups() {
+      const labels = { str:'Force', dex:'Dextérité', int:'Intelligence', wis:'Sagesse', cha:'Charisme' };
+      return ['str','dex','int','wis','cha'].map(stat => ({
+        stat,
+        label: labels[stat],
+        skills: this.skillList.filter(sk => sk.stat === stat),
+      }));
     },
 
     domainKeyForSlot() {
@@ -692,6 +680,15 @@ createApp({
     removeCustomAttack(i) {
       const list = [...this.char.customAttacks]; list.splice(i, 1);
       this.char.customAttacks = list;
+    },
+
+    // ── Skill proficiencies ──────────────────────────────────────
+    toggleSkillProf(key) {
+      const profs = [...(this.char.skillProfs || [])];
+      const idx = profs.indexOf(key);
+      if (idx === -1) profs.push(key);
+      else profs.splice(idx, 1);
+      this.char.skillProfs = profs;
     },
 
     // ── Languages ────────────────────────────
