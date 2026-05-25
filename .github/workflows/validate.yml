@@ -27,10 +27,16 @@ jobs:
       - name: Check JS syntax — data.js
         run: node --check data.js
 
+      - name: Check JS syntax — engine.js
+        run: node --check engine.js
+
+      - name: Check JS syntax — characters/torvin.js
+        run: node --check characters/torvin.js
+
       # ── Required files presence ────────────────────────────────
       - name: Check required files exist
         run: |
-          for f in index.html style.css app.js data.js; do
+          for f in index.html style.css app.js data.js engine.js characters/torvin.js; do
             if [ ! -f "$f" ]; then
               echo "ERROR: Missing required file: $f"
               exit 1
@@ -42,7 +48,7 @@ jobs:
       - name: Check for accidental token exposure
         run: |
           # Match real GitHub tokens: ghp_ followed by 30+ alphanumeric chars (not placeholders)
-          if grep -rEn "ghp_[A-Za-z0-9]{30,}" index.html app.js data.js style.css 2>/dev/null; then
+          if grep -rEn "ghp_[A-Za-z0-9]{30,}" index.html app.js data.js engine.js style.css characters/ 2>/dev/null; then
             echo "ERROR: Real GitHub token found in source files!"
             exit 1
           fi
@@ -71,11 +77,11 @@ jobs:
       - name: Verify DEFAULT_CHAR has required fields
         run: |
           for field in name level base racial asi hpRolls hpCurrent currency languages phrases concentration; do
-            if ! grep -q "$field" data.js; then
+            if ! grep -q "$field" characters/torvin.js; then
               echo "ERROR: DEFAULT_CHAR missing field: $field"
               exit 1
             fi
-            echo "OK: field '$field' in data.js"
+            echo "OK: field '$field' in characters/torvin.js"
           done
 
       - name: Verify security function (token deletion before save)
