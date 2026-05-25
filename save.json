@@ -64,9 +64,54 @@
     "4": 0,
     "5": 0
   },
-  "spellChecks": {},
+  "spellChecks": {
+    "cs-spweapon": false,
+    "sc-bd": false,
+    "sc-hp": false,
+    "sc-d2-0": false,
+    "sc-d2-1": false
+  },
   "cdUsed": 0,
   "customSpells": {
+    "0": [
+      {
+        "id": "tollDead",
+        "name": "Glas des trépassés",
+        "tag": "DD Sag",
+        "conc": false
+      },
+      {
+        "id": "mageHand",
+        "name": "Main du mage",
+        "tag": "utilitaire",
+        "conc": false
+      },
+      {
+        "id": "minorIllusion",
+        "name": "Illusion mineure",
+        "tag": "utilitaire",
+        "conc": false,
+        "racial": true
+      },
+      {
+        "id": "rayFrost",
+        "name": "Rayon de givre",
+        "tag": "+atk/1d8",
+        "conc": false
+      },
+      {
+        "id": "guidance",
+        "name": "Guidance",
+        "tag": "utilitaire",
+        "conc": true
+      },
+      {
+        "id": "resistance",
+        "name": "Résistance",
+        "tag": "buff",
+        "conc": true
+      }
+    ],
     "1": [
       {
         "id": "bane",
@@ -75,7 +120,14 @@
         "conc": true
       }
     ],
-    "2": [],
+    "2": [
+      {
+        "id": "spweapon",
+        "name": "Arme spirituelle",
+        "tag": "bon./1d8",
+        "conc": false
+      }
+    ],
     "3": [],
     "4": [],
     "5": []
