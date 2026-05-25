@@ -28,7 +28,7 @@
         <span class="spell-tag">{{ spellModal.tag }}</span>
         <span v-if="spellModal.conc" class="spell-conc" style="margin-left:6px">CONC.</span>
         <span v-if="spellModal.bonus" class="spell-conc bonus" style="margin-left:6px">BON.</span>
-        <span v-if="spellModal.level" style="margin-left:auto;font-family:'Cinzel',serif;font-size:8px;color:var(--ink-light)">Niveau {{ spellModal.level }}</span>
+        <span v-if="spellModal.level" style="margin-left:auto;font-family:'Cinzel',serif;font-size:0.5rem;color:var(--ink-light)">Niveau {{ spellModal.level }}</span>
       </div>
       <p class="spell-modal-desc">{{ spellModal.desc || 'Pas de description disponible pour ce sort.' }}</p>
     </div>
@@ -41,7 +41,7 @@
     <div class="asi-modal">
       <div class="asi-modal-header">
         <span class="asi-modal-title">⬆ Amélioration — Niveau {{ asiModalLevel }}</span>
-        <button class="save-btn" style="padding:3px 10px;font-size:8px" @click="dismissASI">✕ Plus tard</button>
+        <button class="save-btn" style="padding:3px 10px;font-size:0.5rem" @click="dismissASI">✕ Plus tard</button>
       </div>
       <div class="asi-modal-body">
         <p class="asi-desc">À ce niveau, Torvin gagne une amélioration. Choisissez comment utiliser cette progression.</p>
@@ -227,11 +227,11 @@
               <div class="combat-box">
                 <span class="combat-label">CA</span>
                 <span class="combat-val">{{ ca }}</span>
-                <div style="font-size:7.5px;font-family:'Cinzel',serif;color:var(--ink-light);margin-top:2px">
+                <div style="font-size:0.47rem;font-family:'Cinzel',serif;color:var(--ink-light);margin-top:2px">
                   base:<input class="combat-base-input" type="number" v-model.number="char.armorBase" min="0" max="25" title="CA de base de l'armure">
                   <label><input type="checkbox" v-model="char.useShield"> Bouclier</label>
                 </div>
-                <div style="font-size:7px;font-family:'Cinzel',serif;margin-top:2px">
+                <div style="font-size:0.44rem;font-family:'Cinzel',serif;margin-top:2px">
                   <select class="armor-type-select" v-model="char.armorType">
                     <option value="light">Légère (+ Dex)</option>
                     <option value="medium">Interméd. (+ min(Dex,2))</option>
@@ -254,8 +254,8 @@
                     <button class="pv-spin" @click="char.speed = Math.max(0, char.speed - 1)" tabindex="-1">▾</button>
                   </div>
                 </div>
-                <span style="font-family:'Cinzel',serif;font-size:8px;color:var(--ink-light)">m</span>
-                <div v-if="effectiveSpeed !== char.speed" style="font-size:7px;color:var(--red);font-family:'Cinzel',serif">
+                <span style="font-family:'Cinzel',serif;font-size:0.5rem;color:var(--ink-light)">m</span>
+                <div v-if="effectiveSpeed !== char.speed" style="font-size:0.44rem;color:var(--red);font-family:'Cinzel',serif">
                   eff: {{ effectiveSpeed }}m
                 </div>
               </div>
@@ -414,7 +414,7 @@
               <div class="section-title">Langues</div>
               <ul class="equip-list">
                 <li v-for="(lang, i) in char.languages" :key="'lang-'+i">
-                  <span style="flex:1;font-size:12px">{{ lang }}</span>
+                  <span style="flex:1;font-size:0.75rem">{{ lang }}</span>
                   <button class="equip-delete" @click="removeLanguage(i)" title="Supprimer">✕</button>
                 </li>
               </ul>
@@ -428,7 +428,7 @@
               <div class="section-title">Maîtrises d'outils</div>
               <ul class="equip-list">
                 <li v-for="(tool, i) in char.toolProfs" :key="'tool-'+i">
-                  <span style="flex:1;font-size:12px">{{ tool }}</span>
+                  <span style="flex:1;font-size:0.75rem">{{ tool }}</span>
                   <button class="equip-delete" @click="removeToolProf(i)" title="Supprimer">✕</button>
                 </li>
               </ul>
@@ -487,7 +487,7 @@
         <div v-if="char.concentration" class="conc-banner">
           ◆ Concentration active :
           <strong>{{ char.concentration }}</strong>
-          <span style="margin-left:10px;font-size:9px">
+          <span style="margin-left:10px;font-size:0.56rem">
             JS Con : {{ S(concentrationSaveBonus) }}{{ concentrationHasAdvantage ? ' + avantage (War Caster)' : '' }}
           </span>
           <button class="conc-clear" @click="clearConcentration">✕</button>
@@ -500,7 +500,7 @@
           <span class="spell-stat-item">Sorts mineurs : <strong class="spell-stat-val">3 (×{{ cantripDice }} dés)</strong></span>
           <span class="spell-prepared-bar">
             Sorts préparés : <span class="spell-prepared-count">—/{{ preparedMax }}</span>
-            <span style="font-size:8px;color:var(--ink-light)"> (niv.{{ char.level }} + mod Sag)</span>
+            <span style="font-size:0.5rem;color:var(--ink-light)"> (niv.{{ char.level }} + mod Sag)</span>
           </span>
         </div>
 
@@ -536,7 +536,7 @@
             <div v-for="(ds, di) in domainSpells[domainKeyForSlot(slotLvl)]" :key="'dom-'+slotLvl+'-'+di"
                  class="spell-row" :style="di%2===1 ? 'background:rgba(92,61,30,.05)' : ''">
               <span class="spell-check" :class="{checked:isChecked('sc-d'+slotLvl+'-'+di)}" @click="toggleCheck('sc-d'+slotLvl+'-'+di)"></span>
-              <span class="spell-name domain spell-name-link" @click="openSpellModal(ds, domainKeyForSlot(slotLvl))">{{ ds.name }} <em style="font-size:9px">[domaine]</em></span>
+              <span class="spell-name domain spell-name-link" @click="openSpellModal(ds, domainKeyForSlot(slotLvl))">{{ ds.name }} <em style="font-size:0.56rem">[domaine]</em></span>
               <span class="spell-tag">{{ ds.tag }}</span>
               <span class="spell-conc"
                     :class="{ 'conc-active-badge': char.concentration===ds.name }"
@@ -617,10 +617,10 @@
                 JS Constitution si blessé : max(10, dégâts ÷ 2)
                 <span class="conc-save-bonus">{{ S(concentrationSaveBonus) }}{{ concentrationHasAdvantage ? ' · avantage (War Caster)' : '' }}</span>
               </div>
-              <button class="save-btn" style="margin-top:6px;font-size:8px" @click="clearConcentration">✕ Rompre la concentration</button>
+              <button class="save-btn" style="margin-top:6px;font-size:0.5rem" @click="clearConcentration">✕ Rompre la concentration</button>
             </div>
             <div v-else class="conc-empty">
-              <div style="font-family:'Crimson Text',serif;font-size:12px;color:var(--ink-light);font-style:italic;margin-bottom:8px">Aucun sort en concentration.</div>
+              <div style="font-family:'Crimson Text',serif;font-size:0.75rem;color:var(--ink-light);font-style:italic;margin-bottom:8px">Aucun sort en concentration.</div>
               <div class="add-form">
                 <input class="add-input" type="text" v-model="newConcentration" placeholder="Nom du sort…" @keyup.enter="setConcentration">
                 <button class="add-btn" @click="setConcentration">▶</button>
@@ -635,7 +635,7 @@
                     @click="char.inspiration = !char.inspiration">
               {{ char.inspiration ? '✦ Inspiré !' : '◇ Aucune' }}
             </button>
-            <div style="font-size:9px;font-family:'Crimson Text',serif;color:var(--ink-light);margin-top:6px;font-style:italic">
+            <div style="font-size:0.56rem;font-family:'Crimson Text',serif;color:var(--ink-light);margin-top:6px;font-style:italic">
               Avantage à un jet de caract.
             </div>
           </div>
@@ -657,10 +657,10 @@
         <div class="section-box">
           <div class="section-title">
             Jets de mort
-            <span v-if="char.hpCurrent > 0" style="font-weight:400;color:var(--green);font-family:'Crimson Text',serif;font-size:11px;margin-left:8px;text-transform:none">
+            <span v-if="char.hpCurrent > 0" style="font-weight:400;color:var(--green);font-family:'Crimson Text',serif;font-size:0.69rem;margin-left:8px;text-transform:none">
               Conscient ({{ char.hpCurrent }} PV)
             </span>
-            <span v-else style="font-weight:700;color:var(--red);font-family:'Crimson Text',serif;font-size:11px;margin-left:8px;text-transform:none">
+            <span v-else style="font-weight:700;color:var(--red);font-family:'Crimson Text',serif;font-size:0.69rem;margin-left:8px;text-transform:none">
               ☠ À 0 PV — Lancer le dé !
             </span>
           </div>
@@ -782,11 +782,11 @@
             </div>
             <div style="padding:10px;border:1px solid var(--border);background:rgba(92,61,30,.05)">
               <div class="section-title">Urgence soins</div>
-              <div style="font-family:'Crimson Text',serif;font-size:13px;color:var(--ink-mid)">
+              <div style="font-family:'Crimson Text',serif;font-size:0.81rem;color:var(--ink-mid)">
                 <strong>Allié à 0 PV ?</strong> → <span style="color:var(--red);font-weight:600">Action BONUS</span> :
                 Mot de guérison (1d4{{ mods.wis >= 0 ? '+'+mods.wis : mods.wis }} PV)
               </div>
-              <div style="font-family:'Crimson Text',serif;font-size:12px;color:var(--ink-light);margin-top:6px;font-style:italic">
+              <div style="font-family:'Crimson Text',serif;font-size:0.75rem;color:var(--ink-light);margin-top:6px;font-style:italic">
                 Cantrip Glas des trépassés : {{ tollDamage }}
                 <br>Sorts mineurs : {{ cantripDice }} dé{{ cantripDice > 1 ? 's' : '' }} par sort mineur
               </div>
@@ -826,7 +826,7 @@
           <div>
             <div class="section-title" style="display:flex;justify-content:space-between;align-items:center">
               Phrases situationnelles
-              <button class="save-btn" style="font-size:7px;padding:2px 8px;margin-bottom:4px" @click="addPhrase">+ Ajouter</button>
+              <button class="save-btn" style="font-size:0.44rem;padding:2px 8px;margin-bottom:4px" @click="addPhrase">+ Ajouter</button>
             </div>
             <div v-for="(phrase, i) in char.phrases" :key="'phrase-'+i" class="phrase-block">
               <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px">
@@ -839,7 +839,7 @@
             <!-- Réflexes universels -->
             <div style="margin-top:10px;padding:10px;border:1px solid var(--border);background:rgba(92,61,30,.04)">
               <div class="section-title" style="margin-bottom:6px">Réflexes universels</div>
-              <div style="font-family:'IM Fell English',serif;font-size:12px;color:var(--ink-mid);font-style:italic;line-height:1.9">
+              <div style="font-family:'IM Fell English',serif;font-size:0.75rem;color:var(--ink-mid);font-style:italic;line-height:1.9">
                 « Intéressant... j'avais lu quelque chose à ce sujet. »<br>
                 « Si vous me permettez une observation non sollicitée... »<br>
                 « Techniquement parlant... »<br>
