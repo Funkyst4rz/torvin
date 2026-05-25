@@ -549,7 +549,13 @@
               <em v-if="c.racial" style="font-size:0.56rem;margin-left:4px">[racial]</em>
             </span>
             <span class="spell-tag">{{ c.tag }}</span>
-            <span class="spell-conc">{{ c.conc ? 'CONC.' : '—' }}</span>
+            <span class="spell-conc"
+                  :class="{ 'conc-active-badge': char.concentration===c.name }"
+                  :style="c.conc ? 'cursor:pointer' : ''"
+                  @click="c.conc && toggleConcentration(c.name)"
+                  :title="c.conc ? (char.concentration===c.name ? 'Rompre la concentration' : 'Activer la concentration') : ''">
+              {{ c.conc ? (char.concentration===c.name ? '◆ACT' : 'CONC.') : '—' }}
+            </span>
             <button class="delete-btn" @click="removeCustomSpell(0, c.id)" title="Retirer ce sort mineur">×</button>
           </div>
           <button class="spell-add-btn" :class="{active:openPickers[0]}" @click="togglePicker(0)">
