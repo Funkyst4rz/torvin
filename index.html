@@ -225,6 +225,15 @@
   .notes-area:focus{border-color:var(--gold-light);}
   .notes-hint{font-family:'Cinzel',serif;font-size:8px;color:var(--ink-light);margin-top:6px;text-align:right;text-transform:uppercase;letter-spacing:.5px;}
 
+  /* LORE / BACKGROUND NARRATIF */
+  .lore-section{margin-top:8px;border:1.5px solid var(--border);background:rgba(92,61,30,.04);padding:22px 28px 24px;}
+  .lore-body{display:grid;grid-template-columns:1fr 1fr;gap:0 36px;margin-top:14px;}
+  .lore-col{display:flex;flex-direction:column;gap:12px;}
+  .lore-text{font-family:'IM Fell English',serif;font-size:13.5px;color:var(--ink-mid);line-height:1.85;text-align:justify;}
+  .lore-dropcap{font-family:'Cinzel',serif;font-size:52px;font-weight:900;color:var(--red);float:left;line-height:.78;padding-right:6px;padding-top:5px;}
+  .lore-quote{font-family:'IM Fell English',serif;font-size:13px;font-style:italic;color:var(--gold);border-left:3px solid var(--gold-light);padding:8px 14px;background:rgba(122,92,30,.07);line-height:1.7;}
+  .lore-epigraph{font-family:'Cinzel',serif;font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--ink-light);text-align:center;margin-top:18px;padding-top:14px;border-top:1px solid var(--border);grid-column:1/-1;}
+
   @media(max-width:680px){
     .content{padding:30px 18px 24px;}
     .main-grid{grid-template-columns:120px 1fr;}
@@ -234,6 +243,7 @@
     .char-name{font-size:22px;}
     .level-bubbles{gap:4px;}
     .lvl-btn{width:26px;height:26px;font-size:9px;}
+    .lore-body{grid-template-columns:1fr;}
   }
 </style>
 </head>
@@ -497,6 +507,26 @@
       <div class="section-title">Notes de session</div>
       <textarea class="notes-area" id="notes-text" placeholder="Notes de session, observations de Torvin, événements importants, noms de PNJ..."></textarea>
       <div class="notes-hint">Sauvegardé automatiquement · inclus dans la sauvegarde GitHub</div>
+    </div>
+
+    <!-- BACKGROUND NARRATIF -->
+    <div class="divider"><span>✦</span></div>
+    <div class="lore-section">
+      <div class="section-title">Histoire — L'Origine de Torvin</div>
+      <div class="lore-body">
+        <div class="lore-col">
+          <p class="lore-text"><span class="lore-dropcap">T</span>orvin était artisan dans une guilde de bricoleurs gnomes — réparateur de mécanismes, démonteur de curiosités, restaurateur d'objets oubliés que d'autres auraient jetés. Quand un client lui apporta un boîtier de bronze cabossé dont les engrenages refusaient obstinément de tourner, il ne vit d'abord qu'un puzzle mécanique de plus.</p>
+          <p class="lore-text">En l'ouvrant, il découvrit des inscriptions arcanes azouthiennes nichées dans les rouages — des glyphes que personne n'avait dû lire depuis des générations. Par pure curiosité intellectuelle, il les activa.</p>
+          <p class="lore-text">Azouth le choisit. Involontairement.</p>
+          <blockquote class="lore-quote">«&nbsp;Je n'ai pas demandé à devenir clerc. J'ai juste posé une question à un mécanisme. Et il a répondu d'une façon que je n'avais pas anticipée.&nbsp;»</blockquote>
+        </div>
+        <div class="lore-col">
+          <p class="lore-text">Depuis, Torvin traite ses pouvoirs divins comme un mécanisme qu'il n'a pas encore entièrement démonté. Il prie Azouth comme il consulterait un manuel technique — méthodiquement, sans ferveur excessive, avec l'espoir sincère d'y trouver des instructions claires.</p>
+          <p class="lore-text">Jusqu'à présent, les instructions restent singulièrement cryptiques. La Relique d'Azouth demeure en sa possession — l'objet même qui a déclenché tout cela, son focaliseur d'incantation, son lien divin involontaire. Il ne sait pas encore ce qu'elle fait vraiment. Il prend des notes.</p>
+          <blockquote class="lore-quote">«&nbsp;La connaissance doit circuler librement. La garder pour soi est un crime contre l'humanité. Et contre la méthode scientifique.&nbsp;»</blockquote>
+          <p class="lore-epigraph">Gnome des Roches · Artisan de Guilde · Serviteur involontaire d'Azouth, Dieu des Magiciens</p>
+        </div>
+      </div>
     </div>
 
     <div class="footer">
