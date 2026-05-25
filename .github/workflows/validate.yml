@@ -41,11 +41,12 @@ jobs:
       # ── Security check: token must NOT be in any source file ───
       - name: Check for accidental token exposure
         run: |
-          if grep -rn "ghp_" index.html app.js data.js style.css 2>/dev/null; then
-            echo "ERROR: GitHub token pattern found in source files!"
+          # Match real GitHub tokens: ghp_ followed by 30+ alphanumeric chars (not placeholders)
+          if grep -rEn "ghp_[A-Za-z0-9]{30,}" index.html app.js data.js style.css 2>/dev/null; then
+            echo "ERROR: Real GitHub token found in source files!"
             exit 1
           fi
-          echo "OK: No token found in source files"
+          echo "OK: No real token found in source files"
 
       # ── HTML structure checks ──────────────────────────────────
       - name: Install htmlhint
