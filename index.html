@@ -245,11 +245,7 @@
               <div class="pv-box">
                 <span class="pv-label">❤ Points de vie actuels</span>
                 <div class="pv-controls">
-                  <button class="pv-adj neg" @click="adjustHP(-5)">−5</button>
-                  <button class="pv-adj neg" @click="adjustHP(-1)">−1</button>
                   <input class="pv-input" type="number" v-model.number="char.hpCurrent" :min="0" :max="hpMax">
-                  <button class="pv-adj pos" @click="adjustHP(+1)">+1</button>
-                  <button class="pv-adj pos" @click="adjustHP(+5)">+5</button>
                 </div>
                 <div class="pv-max">Maximum : <strong>{{ hpMax }}</strong>
                   <span v-if="isDeathsDoor" style="color:var(--red);font-weight:700"> ☠ Jets de mort !</span>
@@ -706,6 +702,51 @@
             </div>
           </div>
         </div>
+
+        <!-- Combos de combat -->
+        <div class="divider"><span>✦</span></div>
+        <div class="section-title">Combos de combat</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
+          <div>
+            <div class="combo-box">
+              <div class="combo-title">⚔ Round d'ouverture</div>
+              <ul class="combo-steps">
+                <li><strong>Action :</strong> Fléau sur 3 ennemis — DD Charisme {{ S(mods.cha+prof) }}</li>
+                <li><strong>Action bonus :</strong> Arme spirituelle (invoquer) — {{ S(spellAtk) }} / 1d8{{ S(mods.wis) }}</li>
+                <li>3 ennemis à −1d4, dégâts passifs chaque round</li>
+              </ul>
+            </div>
+            <div class="combo-box" style="border-color:var(--gold);background:rgba(122,92,30,.06)">
+              <div class="combo-title" style="color:var(--gold)">✦ Double debuff</div>
+              <ul class="combo-steps">
+                <li><strong>Bane actif</strong> (concentration, DD {{ S(mods.cha+prof) }})</li>
+                <li><strong>Action :</strong> Cécité/Surdité — sans concentration !</li>
+                <li><strong>Action bonus :</strong> Arme spirituelle ({{ S(spellAtk) }}, 1d8{{ S(mods.wis) }})</li>
+              </ul>
+            </div>
+          </div>
+          <div>
+            <div class="combo-box">
+              <div class="combo-title">🎯 Contre un boss</div>
+              <ul class="combo-steps">
+                <li><strong>Action :</strong> Immobilisation — DD {{ spellDC }} Sagesse</li>
+                <li><strong>Action bonus :</strong> Arme spirituelle</li>
+                <li>Alliés : avantage + critiques automatiques !</li>
+              </ul>
+            </div>
+            <div style="padding:10px;border:1px solid var(--border);background:rgba(92,61,30,.05)">
+              <div class="section-title">Urgence soins</div>
+              <div style="font-family:'Crimson Text',serif;font-size:13px;color:var(--ink-mid)">
+                <strong>Allié à 0 PV ?</strong> → <span style="color:var(--red);font-weight:600">Action BONUS</span> :
+                Mot de guérison (1d4{{ mods.wis >= 0 ? '+'+mods.wis : mods.wis }} PV)
+              </div>
+              <div style="font-family:'Crimson Text',serif;font-size:12px;color:var(--ink-light);margin-top:6px;font-style:italic">
+                Cantrip Glas des trépassés : {{ tollDamage }}
+                <br>Sorts mineurs : {{ cantripDice }} dé{{ cantripDice > 1 ? 's' : '' }} par sort mineur
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- ════════════════════════════════════
@@ -757,51 +798,6 @@
                 « Si vous me permettez une observation non sollicitée... »<br>
                 « Techniquement parlant... »<br>
                 « Ce n'est pas ce que j'aurais anticipé, mais bon. »
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Combos de combat -->
-        <div class="divider"><span>✦</span></div>
-        <div class="section-title">Combos de combat</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
-          <div>
-            <div class="combo-box">
-              <div class="combo-title">⚔ Round d'ouverture</div>
-              <ul class="combo-steps">
-                <li><strong>Action :</strong> Fléau sur 3 ennemis — DD Charisme {{ S(mods.cha+prof) }}</li>
-                <li><strong>Action bonus :</strong> Arme spirituelle (invoquer) — {{ S(spellAtk) }} / 1d8{{ S(mods.wis) }}</li>
-                <li>3 ennemis à −1d4, dégâts passifs chaque round</li>
-              </ul>
-            </div>
-            <div class="combo-box" style="border-color:var(--gold);background:rgba(122,92,30,.06)">
-              <div class="combo-title" style="color:var(--gold)">✦ Double debuff</div>
-              <ul class="combo-steps">
-                <li><strong>Bane actif</strong> (concentration, DD {{ S(mods.cha+prof) }})</li>
-                <li><strong>Action :</strong> Cécité/Surdité — sans concentration !</li>
-                <li><strong>Action bonus :</strong> Arme spirituelle ({{ S(spellAtk) }}, 1d8{{ S(mods.wis) }})</li>
-              </ul>
-            </div>
-          </div>
-          <div>
-            <div class="combo-box">
-              <div class="combo-title">🎯 Contre un boss</div>
-              <ul class="combo-steps">
-                <li><strong>Action :</strong> Immobilisation — DD {{ spellDC }} Sagesse</li>
-                <li><strong>Action bonus :</strong> Arme spirituelle</li>
-                <li>Alliés : avantage + critiques automatiques !</li>
-              </ul>
-            </div>
-            <div style="padding:10px;border:1px solid var(--border);background:rgba(92,61,30,.05)">
-              <div class="section-title">Urgence soins</div>
-              <div style="font-family:'Crimson Text',serif;font-size:13px;color:var(--ink-mid)">
-                <strong>Allié à 0 PV ?</strong> → <span style="color:var(--red);font-weight:600">Action BONUS</span> :
-                Mot de guérison (1d4{{ mods.wis >= 0 ? '+'+mods.wis : mods.wis }} PV)
-              </div>
-              <div style="font-family:'Crimson Text',serif;font-size:12px;color:var(--ink-light);margin-top:6px;font-style:italic">
-                Cantrip Glas des trépassés : {{ tollDamage }}
-                <br>Sorts mineurs : {{ cantripDice }} dé{{ cantripDice > 1 ? 's' : '' }} par sort mineur
               </div>
             </div>
           </div>
