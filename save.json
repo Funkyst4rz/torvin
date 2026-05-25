@@ -31,6 +31,7 @@
       }
     }
   },
+  "caManual": 14,
   "armorBase": 10,
   "armorType": "medium",
   "useShield": true,
@@ -52,7 +53,7 @@
   "hpTemp": 0,
   "slotsUsed": {
     "1": 0,
-    "2": 1,
+    "2": 0,
     "3": 0,
     "4": 0,
     "5": 0
@@ -62,13 +63,30 @@
   },
   "cdUsed": 0,
   "customSpells": {
-    "1": [],
+    "1": [
+      {
+        "id": "bane",
+        "name": "Fléau",
+        "tag": "DD Cha",
+        "conc": true
+      }
+    ],
     "2": [],
     "3": [],
     "4": [],
     "5": []
   },
-  "removedSpells": [],
+  "removedSpells": [
+    "sc-sw",
+    "sc-bane"
+  ],
+  "skillProfs": [
+    "arcanes",
+    "religion",
+    "medecine",
+    "intuition",
+    "persuasion"
+  ],
   "concentration": null,
   "conditions": [],
   "deathSaves": {
