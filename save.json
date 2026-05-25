@@ -105,7 +105,13 @@
   "customEquipment": [
     "Lettre de guilde"
   ],
-  "customAttacks": [],
+  "customAttacks": [
+    {
+      "name": "Masse d'arme",
+      "bonus": "—",
+      "damage": "1d6"
+    }
+  ],
   "attunedItems": [],
   "currency": {
     "pp": 0,
