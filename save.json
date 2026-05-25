@@ -91,9 +91,9 @@
         "conc": true
       },
       {
-        "id": "sacredflame",
-        "name": "Flamme sacrée",
-        "tag": "DD Dex",
+        "id": "thaumaturgy",
+        "name": "Thaumaturgie",
+        "tag": "utilitaire",
         "conc": false
       }
     ],
