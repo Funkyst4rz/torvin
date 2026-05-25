@@ -246,6 +246,10 @@
                 <span class="pv-label">❤ Points de vie actuels</span>
                 <div class="pv-controls">
                   <input class="pv-input" type="number" v-model.number="char.hpCurrent" :min="0" :max="hpMax">
+                  <div class="pv-spinners">
+                    <button class="pv-spin" @click="adjustHP(+1)" tabindex="-1">▴</button>
+                    <button class="pv-spin" @click="adjustHP(-1)" tabindex="-1">▾</button>
+                  </div>
                 </div>
                 <div class="pv-max">Maximum : <strong>{{ hpMax }}</strong>
                   <span v-if="isDeathsDoor" style="color:var(--red);font-weight:700"> ☠ Jets de mort !</span>

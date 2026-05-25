@@ -330,6 +330,14 @@ body {
 .pv-max { font-family:'Crimson Text',serif;font-size:12px;color:var(--ink-light);text-align:center;margin-top:4px; }
 .pv-controls { display:flex;align-items:center;margin:5px 0; }
 .pv-controls .pv-input { flex:1;min-width:0; }
+.pv-spinners { display:flex;flex-direction:column;gap:1px;flex-shrink:0;padding-left:4px; }
+.pv-spin {
+  background:transparent;border:none;padding:0 3px;
+  font-size:9px;line-height:1;height:13px;
+  color:var(--ink-light);cursor:pointer;
+  transition:color .15s;
+}
+.pv-spin:hover { color:var(--gold-light); }
 
 /* ── SECTIONS ──────────────────────────────────────────────── */
 .section-title {
