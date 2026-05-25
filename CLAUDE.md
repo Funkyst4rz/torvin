@@ -21,7 +21,6 @@ D:\torvin\
 ├── app.js       — Logique Vue 3 (createApp, data, computed, methods)
 ├── data.js      — Données statiques D&D 5e (LEVELS, DOMAIN_SPELLS, DEFAULT_CHAR…)
 ├── save.json    — État sauvegardé (écrit par l'app via API GitHub, ne pas éditer manuellement)
-├── CONTEXT.md   — Contexte narratif et règles D&D détaillées pour Torvin
 ├── README.md    — Documentation publique du projet
 └── .github/
     └── workflows/
@@ -116,6 +115,9 @@ DEFAULT_RACIAL  // Bonus raciaux Gnome des Roches
 ### Champs obligatoires de DEFAULT_CHAR (vérifiés par CI)
 `name · level · base · racial · asi · hpRolls · hpCurrent · currency · languages · phrases · concentration`
 
+### CA — champ manuel
+`caManual` (number) — la CA n'est **pas** calculée automatiquement. Le joueur la saisit directement dans l'onglet Personnage. Les champs `armorBase`, `armorType`, `useShield` sont conservés pour un calcul futur éventuel mais n'ont pas d'effet actuel.
+
 ---
 
 ## Règles D&D pertinentes pour Torvin
@@ -124,9 +126,12 @@ DEFAULT_RACIAL  // Bonus raciaux Gnome des Roches
 - **Classe :** Clerc · **Race :** Gnome des Roches
 - **Niveau de départ :** 3 · Fourchette gérée : 1–10
 - Sagesse de base 15, passe à **17 au niveau 4** (ASI +2 Sag)
-- **Canalisation divine** : 1×/repos court aux niv. 1–5, 2× aux niv. 6–9, 3× au niv. 10
+- **Vitesse :** 7,5 m (25 pieds — Gnome des Roches)
+- **Canalisation divine** : 1× niv.2–5 · 2× niv.6–17 (3× à partir du niv.18 seulement)
+- **Capacités Domaine Arcane (SCAG)** : Arcane Initiate (niv.1) · Abjuration Arcanique (niv.2) · Briseur de sorts (niv.6) · Incantation Puissante (niv.8) · Maîtrise Arcanique (niv.10)
 - Sorts de domaine : toujours préparés, **ne comptent pas** dans le quota de préparation
-- Double maîtrise (Bénédictions du Savoir) : Arcanes et Histoire
+- **Abjuration Arcanique** cible : célestes, élémentaires, fées, fiélons, morts-vivants (pas les aberrations)
+- Maîtrise simple en Arcanes (Arcane Initiate) et Histoire (compétence de classe)
 
 ---
 
