@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "torvin-static",
+      "runtimeExecutable": "D:\\torvin\\.node\\node.exe",
+      "runtimeArgs": ["-e", "require('http').createServer((req,res)=>{const fs=require('fs'),path=require('path');let f=path.join('D:\\\\torvin',req.url==='/'?'index.html':req.url);fs.readFile(f,(e,d)=>{if(e){res.writeHead(404);res.end();}else{const ext=path.extname(f);const t={'html':'text/html','css':'text/css','js':'application/javascript','json':'application/json'};res.writeHead(200,{'Content-Type':t[ext.slice(1)]||'text/plain'});res.end(d);}});}).listen(5500,()=>console.log('http://localhost:5500'))"],
+      "port": 5500
+    }
+  ]
+}

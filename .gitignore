@@ -1,0 +1,7 @@
+# Node.js portable (outil local, ne pas committer)
+.node/
+
+# Éditeurs / OS
+.DS_Store
+Thumbs.db
+*.swp
