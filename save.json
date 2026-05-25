@@ -6,7 +6,7 @@
   "background": "Artisan de Guilde",
   "deity": "Azouth",
   "alignment": "Neutre Bon",
-  "level": 7,
+  "level": 3,
   "base": {
     "str": 8,
     "dex": 12,
@@ -48,7 +48,7 @@
     5,
     6
   ],
-  "hpCurrent": 45,
+  "hpCurrent": 26,
   "hpTemp": 0,
   "slotsUsed": {
     "1": 0,
