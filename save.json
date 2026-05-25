@@ -90,8 +90,7 @@
         "id": "minorIllusion",
         "name": "Illusion mineure",
         "tag": "utilitaire",
-        "conc": false,
-        "racial": true
+        "conc": false
       },
       {
         "id": "rayFrost",

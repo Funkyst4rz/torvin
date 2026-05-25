@@ -158,7 +158,7 @@ const CLERIC_SPELLS = {
 
 // Capacités débloquées par niveau
 const FEATURES_BY_LEVEL = [
-  { minLvl:1,  name:'Arcane Initiate',                desc:"Maîtrise de la compétence Arcanes. 2 sorts mineurs de magicien comptant comme sorts mineurs de clerc (Torvin : Main du mage + 1 au choix — Illusion mineure est déjà un cantrip racial du Gnome des Roches)." },
+  { minLvl:1,  name:'Arcane Initiate',                desc:"Maîtrise de la compétence Arcanes. 2 sorts mineurs de magicien comptant comme sorts mineurs de clerc (Torvin : Main du mage + Illusion mineure)." },
   { minLvl:1,  name:'Ruse gnome',                     desc:"Avantage sur tous les JS d'Intelligence, Sagesse et Charisme contre la magie." },
   { minLvl:1,  name:'Savoir d\'artisan',              desc:"Double le bonus de maîtrise pour les jets d'Intelligence (Histoire) liés aux objets magiques, alchimiques ou technologiques." },
   { minLvl:1,  name:'Bricoleur · Vision 18 m',        desc:"Fabriquer des automates mécaniques (30 min + 10 po matériaux). Vision dans le noir 18 m." },
@@ -321,7 +321,7 @@ const DEFAULT_CHAR = {
     0: [
       { id:'tollDead',      name:'Glas des trépassés', tag:'DD Sag',     conc:false },
       { id:'mageHand',      name:'Main du mage',        tag:'utilitaire', conc:false },
-      { id:'minorIllusion', name:'Illusion mineure',    tag:'utilitaire', conc:false, racial:true },
+      { id:'minorIllusion', name:'Illusion mineure',    tag:'utilitaire', conc:false },
       { id:'guidance',      name:'Guidance',            tag:'utilitaire', conc:true  },
       { id:'sacredflame',   name:'Flamme sacrée',       tag:'DD Dex',     conc:false },
       { id:'resistance',    name:'Résistance',           tag:'buff',       conc:true  },
