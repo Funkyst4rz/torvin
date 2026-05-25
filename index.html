@@ -394,6 +394,21 @@
                 <input class="add-input" type="text" v-model="newEquip" placeholder="Ajouter un objet…" @keyup.enter="addCustomEquip">
                 <button class="add-btn" @click="addCustomEquip" title="Ajouter">+</button>
               </div>
+              <hr style="border:none;border-top:1px solid var(--border-light);margin:8px 0">
+              <div class="currency-row">
+                <div class="currency-box" v-for="c in [{key:'pp',label:'Platine'},{key:'gp',label:'Or'},{key:'ep',label:'Élec.'},{key:'sp',label:'Argent'},{key:'cp',label:'Cuivre'}]" :key="c.key">
+                  <span class="currency-label">{{ c.label }}</span>
+                  <div style="display:flex;align-items:center">
+                    <input class="currency-input" type="number" v-model.number="char.currency[c.key]" min="0">
+                    <div class="pv-spinners" style="padding-left:2px">
+                      <button class="pv-spin" @click="char.currency[c.key]++" tabindex="-1">▴</button>
+                      <button class="pv-spin" @click="char.currency[c.key] = Math.max(0, char.currency[c.key] - 1)" tabindex="-1">▾</button>
+                    </div>
+                  </div>
+                  <span class="currency-code">{{ c.key.toUpperCase() }}</span>
+                </div>
+              </div>
+              <div class="currency-total">≈ {{ currencyInGP }} po</div>
             </div>
           </div>
 
@@ -476,6 +491,7 @@
             <div class="feature-desc">{{ nextLevelGoal }}</div>
           </div>
         </div>
+
       </div>
 
       <!-- ════════════════════════════════════
@@ -711,41 +727,21 @@
           </div>
         </div>
 
-        <!-- Monnaies + Harmonisation -->
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
-          <div class="section-box">
-            <div class="section-title">Monnaies</div>
-            <div class="currency-row">
-              <div class="currency-box" v-for="c in [{key:'pp',label:'Platine'},{key:'gp',label:'Or'},{key:'ep',label:'Élec.'},{key:'sp',label:'Argent'},{key:'cp',label:'Cuivre'}]" :key="c.key">
-                <span class="currency-label">{{ c.label }}</span>
-                <div style="display:flex;align-items:center">
-                  <input class="currency-input" type="number" v-model.number="char.currency[c.key]" min="0">
-                  <div class="pv-spinners" style="padding-left:2px">
-                    <button class="pv-spin" @click="char.currency[c.key]++" tabindex="-1">▴</button>
-                    <button class="pv-spin" @click="char.currency[c.key] = Math.max(0, char.currency[c.key] - 1)" tabindex="-1">▾</button>
-                  </div>
-                </div>
-                <span class="currency-code">{{ c.key.toUpperCase() }}</span>
-              </div>
+        <!-- Harmonisation -->
+        <div class="section-box">
+          <div class="section-title">Harmonisation ({{ (char.attunedItems||[]).length }}/3)</div>
+          <div class="attunement-slots">
+            <div v-for="(item, i) in (char.attunedItems||[])" :key="'att-'+i" class="attunement-slot filled">
+              <span>✦ {{ item }}</span>
+              <button class="equip-delete" @click="removeAttunement(i)">✕</button>
             </div>
-            <div class="currency-total">≈ {{ currencyInGP }} po</div>
+            <div v-for="n in (3 - (char.attunedItems||[]).length)" :key="'empty-'+n" class="attunement-slot empty">
+              — Emplacement libre —
+            </div>
           </div>
-
-          <div class="section-box">
-            <div class="section-title">Harmonisation ({{ (char.attunedItems||[]).length }}/3)</div>
-            <div class="attunement-slots">
-              <div v-for="(item, i) in (char.attunedItems||[])" :key="'att-'+i" class="attunement-slot filled">
-                <span>✦ {{ item }}</span>
-                <button class="equip-delete" @click="removeAttunement(i)">✕</button>
-              </div>
-              <div v-for="n in (3 - (char.attunedItems||[]).length)" :key="'empty-'+n" class="attunement-slot empty">
-                — Emplacement libre —
-              </div>
-            </div>
-            <div class="add-form" v-if="(char.attunedItems||[]).length < 3">
-              <input class="add-input" type="text" v-model="newAttuned" placeholder="Objet magique harmonisé…" @keyup.enter="addAttunement">
-              <button class="add-btn" @click="addAttunement">+</button>
-            </div>
+          <div class="add-form" v-if="(char.attunedItems||[]).length < 3">
+            <input class="add-input" type="text" v-model="newAttuned" placeholder="Objet magique harmonisé…" @keyup.enter="addAttunement">
+            <button class="add-btn" @click="addAttunement">+</button>
           </div>
         </div>
 
@@ -856,6 +852,7 @@
           <div class="lore-body">
             <div class="lore-col">
               <p class="lore-text"><span class="lore-dropcap">T</span>orvin était artisan dans une guilde de bricoleurs gnomes — réparateur de mécanismes, démonteur de curiosités, restaurateur d'objets oubliés que d'autres auraient jetés. Quand un client lui apporta un boîtier de bronze cabossé dont les engrenages refusaient obstinément de tourner, il ne vit d'abord qu'un puzzle mécanique de plus.</p>
+              <p class="lore-text">On l'appelait déjà "Trois-Parchemins" à la guilde — parce qu'il ne touchait jamais à un mécanisme sans avoir d'abord rédigé trois copies de ses observations préliminaires. Une pour ses archives, une au cas où la première serait perdue, et une troisième "pour la postérité, au cas où les deux premières brûleraient". Ses collègues trouvaient ça agaçant. Torvin trouvait ça raisonnable.</p>
               <p class="lore-text">En l'ouvrant, il découvrit des inscriptions arcanes azouthiennes nichées dans les rouages — des glyphes que personne n'avait dû lire depuis des générations. Par pure curiosité intellectuelle, il les activa.</p>
               <p class="lore-text">Azouth le choisit. Involontairement.</p>
               <blockquote class="lore-quote">«&nbsp;Je n'ai pas demandé à devenir clerc. J'ai juste posé une question à un mécanisme. Et il a répondu d'une façon que je n'avais pas anticipée.&nbsp;»</blockquote>
