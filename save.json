@@ -29,6 +29,12 @@
       "bonuses": {
         "wis": 2
       }
+    },
+    "8": {
+      "type": "asi",
+      "bonuses": {
+        "wis": 2
+      }
     }
   },
   "caManual": 14,
@@ -41,7 +47,7 @@
     8,
     6,
     6,
-    1,
+    6,
     1,
     3,
     6,
@@ -59,11 +65,53 @@
     "5": 0
   },
   "spellChecks": {
-    "sc-d1-0": false,
-    "cs-bane": false
+    "cs-spweapon": false,
+    "sc-bd": false,
+    "sc-hp": false,
+    "sc-d2-0": false,
+    "sc-d2-1": false
   },
   "cdUsed": 0,
   "customSpells": {
+    "0": [
+      {
+        "id": "tollDead",
+        "name": "Glas des trépassés",
+        "tag": "DD Sag",
+        "conc": false
+      },
+      {
+        "id": "mageHand",
+        "name": "Main du mage",
+        "tag": "utilitaire",
+        "conc": false
+      },
+      {
+        "id": "minorIllusion",
+        "name": "Illusion mineure",
+        "tag": "utilitaire",
+        "conc": false,
+        "racial": true
+      },
+      {
+        "id": "rayFrost",
+        "name": "Rayon de givre",
+        "tag": "+atk/1d8",
+        "conc": false
+      },
+      {
+        "id": "guidance",
+        "name": "Guidance",
+        "tag": "utilitaire",
+        "conc": true
+      },
+      {
+        "id": "resistance",
+        "name": "Résistance",
+        "tag": "buff",
+        "conc": true
+      }
+    ],
     "1": [
       {
         "id": "bane",
@@ -72,7 +120,14 @@
         "conc": true
       }
     ],
-    "2": [],
+    "2": [
+      {
+        "id": "spweapon",
+        "name": "Arme spirituelle",
+        "tag": "bon./1d8",
+        "conc": false
+      }
+    ],
     "3": [],
     "4": [],
     "5": []
@@ -82,10 +137,10 @@
     "sc-bane"
   ],
   "skillProfs": [
+    "arcanes",
     "medecine",
     "intuition",
     "persuasion",
-    "arcanes",
     "histoire"
   ],
   "concentration": null,
@@ -106,7 +161,13 @@
   "customEquipment": [
     "Lettre de guilde"
   ],
-  "customAttacks": [],
+  "customAttacks": [
+    {
+      "name": "Masse d'arme",
+      "bonus": "—",
+      "damage": "1d6"
+    }
+  ],
   "attunedItems": [],
   "currency": {
     "pp": 0,
