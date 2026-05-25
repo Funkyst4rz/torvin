@@ -103,12 +103,6 @@
         "name": "Guidance",
         "tag": "utilitaire",
         "conc": true
-      },
-      {
-        "id": "resistance",
-        "name": "Résistance",
-        "tag": "buff",
-        "conc": true
       }
     ],
     "1": [
@@ -167,7 +161,9 @@
       "damage": "1d6"
     }
   ],
-  "attunedItems": ["La Relique d'Azouth"],
+  "attunedItems": [
+    "La Relique d'Azouth"
+  ],
   "currency": {
     "pp": 0,
     "gp": 15,
