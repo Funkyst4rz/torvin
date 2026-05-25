@@ -35,6 +35,19 @@
   </div>
 
   <!-- ══════════════════════════════════════
+       INFO MODAL
+       ══════════════════════════════════════ -->
+  <div class="spell-modal-overlay" v-if="infoModal" @click.self="closeInfo">
+    <div class="spell-modal">
+      <div class="spell-modal-header">
+        <span class="spell-modal-title">{{ infoModal.title }}</span>
+        <button class="conc-clear" @click="closeInfo">✕</button>
+      </div>
+      <div class="info-modal-body" v-html="infoModal.body"></div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
        ASI / FEAT MODAL
        ══════════════════════════════════════ -->
   <div class="asi-overlay" v-if="showASIModal" @click.self="dismissASI">
@@ -200,7 +213,7 @@
           <div class="stat-block">
             <div class="section-title">Caractéristiques</div>
             <div v-for="st in statsDisplay" :key="st.key" class="stat-box" :class="{'stat-main': st.primary}">
-              <span class="stat-name">{{ st.label }}</span>
+              <span class="stat-name">{{ st.label }} <span class="info-btn" @click="openStatInfo(st.key)">ⓘ</span></span>
               <span class="stat-score">{{ st.total }}</span>
               <span class="stat-mod">{{ S(st.mod) }}</span>
               <div class="stat-base-row">
@@ -214,9 +227,9 @@
               </div>
               <span v-if="st.asi > 0" class="stat-asi-badge" title="Bonus ASI">+{{ st.asi }}✦</span>
             </div>
-            <div class="passive-box">
+            <div class="passive-box" style="cursor:pointer" @click="openInfo('Sagesse passive', '= 10 + bonus de Perception.<br><strong>Actuellement : ' + passivePerc + '</strong><br><br>Utilisée par le MJ pour vérifier discrètement si vous remarquez quelque chose — sans jet de dés de votre part. Plus c\'est haut, plus Torvin perçoit l\'environnement même distrait.')">
               <div class="passive-val">{{ passivePerc }}</div>
-              <span class="passive-label">Sagesse passive</span>
+              <span class="passive-label">Sagesse passive <span class="info-btn">ⓘ</span></span>
             </div>
           </div>
 
@@ -225,7 +238,7 @@
             <div class="section-title">Combat</div>
             <div class="combat-row">
               <div class="combat-box">
-                <span class="combat-label">CA</span>
+                <span class="combat-label">CA <span class="info-btn" @click="openInfo('Classe d\'Armure (CA)', 'Les attaquants doivent obtenir ≥ votre CA pour vous toucher.<br><br><strong>Références rapides :</strong><br>• Cuir : 11 + mod. DEX<br>• Cuir clouté : 12 + mod. DEX<br>• Chemise de mailles : 13 + mod. DEX (max +2)<br>• Cotte de mailles : 16 (pas de DEX, nécessite maîtrise)<br><br>La CA est saisie manuellement dans cette fiche.')">ⓘ</span></span>
                 <div style="display:flex;align-items:center">
                   <input class="combat-input" type="number" v-model.number="char.caManual" min="0" max="30" title="Classe d'Armure — saisir manuellement">
                   <div class="pv-spinners">
@@ -234,12 +247,12 @@
                   </div>
                 </div>
               </div>
-              <div class="combat-box">
-                <span class="combat-label">Initiative</span>
+              <div class="combat-box" style="cursor:pointer" @click="openInfo('Initiative', 'Détermine l\'ordre d\'action au combat.<br><strong>= 1d20 + Mod. DEX (' + S(mods.dex) + ')</strong><br><br>En cas d\'égalité : le MJ tranche, ou jet supplémentaire. Agir en premier peut être décisif — Immobilisation avant que les ennemis n\'agissent !')">
+                <span class="combat-label">Initiative <span class="info-btn">ⓘ</span></span>
                 <span class="combat-val">{{ S(mods.dex) }}</span>
               </div>
               <div class="combat-box">
-                <span class="combat-label">Vitesse</span>
+                <span class="combat-label">Vitesse <span class="info-btn" @click.stop="openInfo('Vitesse de déplacement', 'Distance max de déplacement par tour (action de déplacement).<br><br><strong>7,5 m (25 pieds)</strong> — vitesse de base du Gnome des Roches.<br><br>Peut être réduite de moitié par : terrain difficile, conditions (entravé, exténué niv.2…). Certaines conditions l\'annulent totalement (paralysé, pétrifié).')">ⓘ</span></span>
                 <div style="display:flex;align-items:center">
                   <input class="combat-input" type="number" v-model.number="char.speed" min="0" max="99">
                   <div class="pv-spinners">
@@ -252,12 +265,12 @@
                   eff: {{ effectiveSpeed }}m
                 </div>
               </div>
-              <div class="combat-box">
-                <span class="combat-label">Maîtrise</span>
+              <div class="combat-box" style="cursor:pointer" @click="openInfo('Bonus de Maîtrise', 'Ajouté aux jets où vous avez la maîtrise : attaques, compétences, sorts, outils.<br><br><strong>Progression par niveau :</strong><br>• Niv. 1–4 : +2<br>• Niv. 5–8 : +3<br>• Niv. 9–12 : +4<br>• Niv. 13–16 : +5<br>• Niv. 17–20 : +6<br><br>Actuellement niveau ' + char.level + ' → <strong>' + S(prof) + '</strong>')">
+                <span class="combat-label">Maîtrise <span class="info-btn">ⓘ</span></span>
                 <span class="combat-val">{{ S(prof) }}</span>
               </div>
-              <div class="combat-box">
-                <span class="combat-label">Dés de vie</span>
+              <div class="combat-box" style="cursor:pointer" @click="openInfo('Dés de vie', '1d8 par niveau de clerc.<br><br><strong>Utilisés lors d\'un repos court</strong> pour récupérer des PV : dépensez 1 ou plusieurs dés (1d8 + Mod. CON par dé).<br><br>Les dés non utilisés se rechargent lors d\'un repos long (jusqu\'à la moitié de votre max, arrondi haut).')">
+                <span class="combat-label">Dés de vie <span class="info-btn">ⓘ</span></span>
                 <span class="combat-val">{{ hitDice }}</span>
               </div>
             </div>
@@ -265,7 +278,7 @@
             <!-- PV -->
             <div class="pv-section">
               <div class="pv-box">
-                <span class="pv-label">❤ Points de vie actuels</span>
+                <span class="pv-label">❤ Points de vie actuels <span class="info-btn" @click.stop="openInfo('Points de vie', '<strong>Maximum actuel : ' + hpMax + ' PV</strong><br>= somme des dés de vie + Mod. CON × niveau.<br><br><strong>À 0 PV :</strong> inconscient → jets de mort (d20 ≥ 10 = succès). 3 succès : stabilisé. 3 échecs : mort.<br><br>Si l\'excédent de dégâts en un coup ≥ PV max : mort instantanée.')">ⓘ</span></span>
                 <div class="pv-controls">
                   <input class="pv-input" type="number" v-model.number="char.hpCurrent" :min="0" :max="hpMax">
                   <div class="pv-spinners">
@@ -278,7 +291,7 @@
                 </div>
               </div>
               <div class="pv-box">
-                <span class="pv-label">✦ PV temporaires</span>
+                <span class="pv-label">✦ PV temporaires <span class="info-btn" @click.stop="openInfo('PV temporaires', 'Absorbent les dégâts <strong>avant</strong> les PV réels.<br><br>• Ne se cumulent pas : si deux sources vous en donnent, gardez le plus élevé.<br>• Ne se récupèrent pas avec les sorts de soin.<br>• Disparaissent après un repos long.<br><br>Exemple : 5 PVT + 12 PV → 7 dégâts → 0 PVT, 12 PV.')">ⓘ</span></span>
                 <div class="pv-controls">
                   <input class="pv-input" type="number" v-model.number="char.hpTemp" min="0" style="color:var(--ink-mid)">
                   <div class="pv-spinners">
@@ -287,7 +300,7 @@
                   </div>
                 </div>
                 <div class="pv-max">
-                  Canalisation divine :
+                  Canalisation divine <span class="info-btn" @click.stop="openInfo('Canalisation divine', '<strong>Se recharge à chaque repos court ou long.</strong><br><br>Utilisations par repos :<br>• Niv. 2–5 : 1×<br>• Niv. 6–17 : 2×<br><br><strong>Usages disponibles pour Torvin :</strong><br>• <em>Renvoi des morts-vivants</em> — JS CHA (DD ' + S(mods.cha + prof) + ') ou renvoi<br>• <em>Abjuration Arcanique</em> (domaine) — bannit célestes, élémentaires, fées, fiélons (FP ≤ ½ niveau à partir du niv.5)')">ⓘ</span> :
                   <span style="cursor:pointer;color:var(--gold);font-weight:700" @click="toggleCD">
                     {{ char.cdUsed }}/{{ levelData.cd }} utilisée{{ char.cdUsed > 1 ? 's' : '' }}
                   </span>
@@ -298,7 +311,9 @@
             <!-- Repos -->
             <div class="rest-bar">
               <button class="rest-btn short" @click="shortRest">⬋ Repos court — 1d8 PV + CD</button>
+              <span class="info-btn" style="margin-right:6px" @click="openInfo('Repos court (~1 heure)', 'Récupère :<br>• Dés de vie dépensés (0 à ' + char.level + ' dés, 1d8 + Mod. CON par dé)<br>• Canalisation divine<br><br>Ne récupère PAS : emplacements de sorts, PV max.')">ⓘ</span>
               <button class="rest-btn long"  @click="longRest">☀ Repos long — tout récupérer</button>
+              <span class="info-btn" @click="openInfo('Repos long (~8 heures)', 'Récupère :<br>• <strong>Tous les PV</strong><br>• La moitié des dés de vie max (arrondi haut) — actuellement ' + Math.ceil(char.level / 2) + ' dés<br>• <strong>Tous les emplacements de sorts</strong><br>• Canalisation divine<br><br>Nécessite au moins 6 heures de sommeil sur les 8 heures de repos.')">ⓘ</span>
             </div>
 
             <!-- HP dice tracker -->
@@ -323,7 +338,8 @@
             <div class="section-box">
               <div class="section-title">Jets de sauvegarde</div>
               <div class="saves-list">
-                <div class="save-row" v-for="sv in savingThrows" :key="sv.name">
+                <div class="save-row" v-for="sv in savingThrows" :key="sv.name"
+                     style="cursor:pointer" @click="openSaveInfo(sv)" title="Cliquer pour en savoir plus">
                   <span class="skill-prof" :class="{ filled: sv.prof }"></span>
                   <span class="skill-name">{{ sv.name }}</span>
                   <span class="skill-bonus" :class="{ high: sv.prof }">{{ S(sv.bonus) }}</span>
@@ -484,7 +500,7 @@
 
         <!-- Bannière de concentration active -->
         <div v-if="char.concentration" class="conc-banner">
-          ◆ Concentration active :
+          ◆ Concentration active <span class="info-btn" @click.stop="openInfo('Concentration', 'Un seul sort de concentration à la fois.<br><br><strong>Se brise si :</strong><br>• Vous prenez des dégâts → JS CON DD max(10, ½ dégâts)<br>• Vous êtes incapacité, pétrifié ou mort<br>• Vous lancez un autre sort de concentration<br>• Vous le choisissez (bouton ✕)<br><br>Actuellement : <strong>' + char.concentration + '</strong><br>JS CON : ' + S(concentrationSaveBonus) + (concentrationHasAdvantage ? ' + avantage (War Caster)' : ''))">ⓘ</span> :
           <strong>{{ char.concentration }}</strong>
           <span style="margin-left:10px;font-size:0.56rem">
             JS Con : {{ S(concentrationSaveBonus) }}{{ concentrationHasAdvantage ? ' + avantage (War Caster)' : '' }}
@@ -494,11 +510,11 @@
 
         <!-- Stat bar -->
         <div class="spell-stats-bar">
-          <span class="spell-stat-item">DD sorts : <strong class="spell-stat-val">{{ spellDC }}</strong></span>
-          <span class="spell-stat-item">Bonus attaque : <strong class="spell-stat-val">{{ S(spellAtk) }}</strong></span>
-          <span class="spell-stat-item">Sorts mineurs : <strong class="spell-stat-val">{{ cantrips.length }} (×{{ cantripDice }} dés)</strong></span>
-          <span class="spell-prepared-bar">
-            Sorts préparés :
+          <span class="spell-stat-item" style="cursor:pointer" @click="openInfo('DD sorts', '= 8 + Maîtrise + Mod. Sagesse<br>= 8 + ' + prof + ' + ' + mods.wis + ' = <strong>' + spellDC + '</strong><br><br>Les ennemis font un jet de sauvegarde contre ce DD pour résister à vos sorts. Il n\'y a pas de jet d\'attaque de votre côté — c\'est eux qui doivent dépasser ' + spellDC + '.')">DD sorts : <strong class="spell-stat-val">{{ spellDC }}</strong> <span class="info-btn">ⓘ</span></span>
+          <span class="spell-stat-item" style="cursor:pointer" @click="openInfo('Bonus d\'attaque de sort', '= Maîtrise + Mod. Sagesse<br>= ' + prof + ' + ' + mods.wis + ' = <strong>' + S(spellAtk) + '</strong><br><br>Ajouté au d20 pour les sorts qui nécessitent un <strong>jet d\'attaque</strong> (pas un JS ennemi). Exemples : Arme spirituelle, Fléau de flammes.<br><br>Différence clé : vous lancez le d20 et espérez dépasser la CA cible.')">Bonus attaque : <strong class="spell-stat-val">{{ S(spellAtk) }}</strong> <span class="info-btn">ⓘ</span></span>
+          <span class="spell-stat-item" style="cursor:pointer" @click="openInfo('Sorts mineurs', 'Gratuits et à volonté — pas d\'emplacement consommé.<br><br><strong>Scaling par niveau de personnage :</strong><br>• Niv. 1–4 : ×1 dé <span style=\'color:var(--gold)\'>← vous êtes là</span><br>• Niv. 5–10 : ×2 dés<br>• Niv. 11–16 : ×3 dés<br>• Niv. 17+ : ×4 dés<br><br>Exemple : Glas des trépassés fait actuellement ' + cantripDice + 'd8 (ou ' + cantripDice + 'd12 si la cible a déjà perdu des PV).')">Sorts mineurs : <strong class="spell-stat-val">{{ cantrips.length }} (×{{ cantripDice }} dés)</strong> <span class="info-btn">ⓘ</span></span>
+          <span class="spell-prepared-bar" style="cursor:pointer" @click="openInfo('Sorts préparés', '= Niveau de clerc + Mod. Sagesse<br>= ' + char.level + ' + ' + mods.wis + ' = <strong>' + (char.level + mods.wis) + ' sorts max</strong><br><br>• Les <strong>sorts de domaine</strong> (Arcane) ne comptent pas dans ce quota — ils sont toujours préparés.<br>• Vous pouvez changer votre liste après un repos long.<br>• Les sorts mineurs ne comptent pas non plus.')">
+            Sorts préparés <span class="info-btn">ⓘ</span> :
             <span class="spell-prepared-count" :class="{ 'prepared-over': preparedOver }">
               {{ preparedCount }}/{{ preparedMax }}
             </span>
@@ -566,6 +582,7 @@
           <div class="spell-level-header">
             <span class="spell-level-num">
               Niveau {{ slotLvl }} — {{ slots[slotLvl] }} emplacement{{ slots[slotLvl]>1?'s':'' }}
+              <span class="info-btn" @click.stop="openInfo('Emplacements de sorts — Niveau ' + slotLvl, 'Vous avez <strong>' + slots[slotLvl] + ' emplacement' + (slots[slotLvl]>1?'s':'') + '</strong> de niveau ' + slotLvl + '.<br><br>Un sort de niveau X consomme un emplacement de niveau ≥ X. Lancer dans un emplacement supérieur peut amplifier l\'effet (ex: Soins dans un slot niv.2 guérit plus).<br><br><strong>Récupération :</strong> tous les emplacements reviennent après un repos long.')">ⓘ</span>
             </span>
             <div class="spell-slots">
               <span v-for="i in slots[slotLvl]" :key="i"
@@ -870,6 +887,17 @@
                 « Ce n'est pas ce que j'aurais anticipé, mais bon. »
               </div>
             </div>
+          </div>
+        </div>
+
+        <!-- Description physique -->
+        <div class="divider"><span>✦</span></div>
+        <div class="lore-section">
+          <div class="section-title">Apparence</div>
+          <div class="lore-body" style="display:block">
+            <p class="lore-text"><span class="lore-dropcap">T</span>orvin est un gnome d'âge moyen, 95 centimètres, veste de cuir bien coupée — propre, méticuleux, presque élégant. Sauf que chaque centimètre carré de sa tenue est couvert de poches, sacoches et feuillets qui débordent. Il cliquète légèrement à chaque pas.</p>
+            <p class="lore-text">Des yeux noisette très vifs, des cheveux gris-brun qui partent dans toutes les directions, et des mains qui s'agitent en permanence quand il parle — ce qui est tout le temps.</p>
+            <p class="lore-text">Autour du cou, une chaîne avec un petit boîtier de bronze gravé qu'il tripote machinalement sans s'en apercevoir. C'est la Relique. Ne lui demandez pas ce qu'elle fait — il vous répondra pendant vingt minutes.</p>
           </div>
         </div>
 

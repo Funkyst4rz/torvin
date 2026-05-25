@@ -107,6 +107,7 @@ createApp({
       openPickers: {},
       spellSearch: '',
       spellModal: null,
+      infoModal: null,
 
       // Inline add forms
       newEquip: '',
@@ -370,12 +371,12 @@ createApp({
       // Resilient (Con) feat adds Con save proficiency
       const conProf = this.activeFeatIds.includes('resilient-con');
       return [
-        { name:'Sagesse ✓',     bonus:wis+p,              prof:true     },
-        { name:'Charisme ✓',    bonus:cha+p,              prof:true     },
-        { name:'Constitution',  bonus:conProf ? con+p : con, prof:conProf },
-        { name:'Intelligence',  bonus:int,                prof:false    },
-        { name:'Dextérité',     bonus:dex,                prof:false    },
-        { name:'Force',         bonus:str,                prof:false    },
+        { name:'Sagesse ✓',     key:'wis', bonus:wis+p,              prof:true     },
+        { name:'Charisme ✓',    key:'cha', bonus:cha+p,              prof:true     },
+        { name:'Constitution',  key:'con', bonus:conProf ? con+p : con, prof:conProf },
+        { name:'Intelligence',  key:'int', bonus:int,                prof:false    },
+        { name:'Dextérité',     key:'dex', bonus:dex,                prof:false    },
+        { name:'Force',         key:'str', bonus:str,                prof:false    },
       ];
     },
 
@@ -652,6 +653,43 @@ createApp({
       this.spellModal = { name: spell.name, tag: spell.tag || '—', conc: !!spell.conc, bonus: !!spell.bonus, desc, level: level || null };
     },
     closeSpellModal() { this.spellModal = null; },
+
+    // ── Info modal ───────────────────────────
+    openInfo(title, body) { this.infoModal = { title, body }; },
+    closeInfo() { this.infoModal = null; },
+
+    openStatInfo(key) {
+      const names = { str:'Force (FOR)', dex:'Dextérité (DEX)', con:'Constitution (CON)', int:'Intelligence (INT)', wis:'Sagesse (SAG) ★', cha:'Charisme (CHA)' };
+      const uses = {
+        str: ["Jets d'attaque au corps à corps (armes physiques)", "Compétence : Athlétisme", "Sauts, soulever, pousser, tirer (cap. de charge : " + ((this.char.base.str + (this.char.racial.str||0)) * 15) + " kg max)", "Peu utile pour un clerc — Torvin préfère les sorts"],
+        dex: ["Initiative au combat (actuellement " + this.S(this.mods.dex) + ")", "Compétences : Acrobaties, Discrétion, Tour de main", "CA si armure légère ou sans armure", "Jets d'attaque à distance et armes finesse"],
+        con: ["PV max (mod. CON × niveau inclus — total actuel : " + this.hpMax + " PV)", "JS Constitution — maintenir la concentration (DD 10 ou ½ des dégâts)", "Résistance aux poisons, maladies, effets physiques", "Pas de compétences liées"],
+        int: ["Compétences : Arcanes ★, Histoire, Investigation, Nature, Religion ★", "Ruse gnome : avantage sur tous les JS d'Intelligence contre la magie", "Savoir d'artisan : double maîtrise pour Histoire (objets magiques / technologiques)"],
+        wis: ["DD sorts (" + this.spellDC + ") et bonus d'attaque de sort (" + this.S(this.spellAtk) + ")", "Compétences : Médecine ★, Perspicacité ★, Perception, Dressage, Survie", "Sagesse passive : " + this.passivePerc + " (perception discrète)", "Ruse gnome : avantage sur tous les JS de Sagesse contre la magie"],
+        cha: ["Compétences : Persuasion ★, Duperie, Intimidation, Représentation", "DD Renvoi des Morts-Vivants et Abjuration Arcanique : " + this.S(this.mods.cha + this.prof), "Moins critique pour Torvin que la Sagesse"],
+      };
+      const stat = this.statsDisplay.find(s => s.key === key);
+      const body = '<strong>Score :</strong> ' + stat.total + ' &nbsp;→&nbsp; Modificateur : <strong>' + this.S(this.mods[key]) + '</strong>'
+        + (stat.racial ? '<br><span style="font-size:0.8em;color:var(--ink-light)">Base ' + stat.base + ' + racial ' + stat.racial + (stat.asi ? ' + ASI ' + stat.asi : '') + '</span>' : '')
+        + '<br><br><strong>Utilisée pour :</strong><br>'
+        + uses[key].map(u => '• ' + u).join('<br>');
+      this.openInfo(names[key], body);
+    },
+
+    openSaveInfo(sv) {
+      const triggers = {
+        wis: 'Charme, Peur, Immobilisation de personne, Domination, Motif hypnotique. <em>Ruse gnome : avantage sur JS de SAG contre la magie.</em>',
+        cha: 'Bannissement (important : Abjuration Arcanique utilise ce DD), Geôle argentée, sorts fiélons.',
+        con: '<strong>Maintien de la concentration</strong> — DD = max(10, ½ des dégâts reçus). Poisons, maladies, pétrification.',
+        int: 'Illusions mentales, Confusion, certaines variantes de Domination. <em>Ruse gnome : avantage sur JS d\'INT contre la magie.</em>',
+        dex: 'Explosions et zones (Boule de feu, Appel de la foudre), pièges à déclenchement.',
+        str: 'Contention physique, Vague tonnante, saisissement magique.',
+      };
+      const formula = '1d20 + ' + this.S(this.mods[sv.key]) + (sv.prof ? ' + ' + this.S(this.prof) + ' (maîtrise)' : '') + ' = <strong>' + this.S(sv.bonus) + '</strong>';
+      const body = '<strong>Formule :</strong> ' + formula + (sv.prof ? ' <em>(maîtrise clerc ✓)</em>' : '')
+        + '<br><br><strong>Déclenché par :</strong><br>' + triggers[sv.key];
+      this.openInfo('JS ' + sv.name.replace(' ✓', ''), body);
+    },
 
     // ── Suggested spells removal ─────────────
     removeSuggestedSpell(id) {
