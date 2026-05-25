@@ -14,7 +14,7 @@ const LEVELS = {
   7:  { prof:3, slots:{1:4,2:3,3:3,4:1},     cd:2, info:'Sorts de domaine niv.4 débloqués' },
   8:  { prof:3, slots:{1:4,2:3,3:3,4:2},     cd:2, info:'Incantation Puissante · Amélioration de caractéristiques · Destruction (FP 1)' },
   9:  { prof:4, slots:{1:4,2:3,3:3,4:3,5:1}, cd:2, info:'Sorts de domaine niv.5 débloqués' },
-  10: { prof:4, slots:{1:4,2:3,3:3,4:3,5:2}, cd:2, info:'Intervention divine · Canalisation divine 2×/repos court' },
+  10: { prof:4, slots:{1:4,2:3,3:3,4:3,5:2}, cd:2, info:'Intervention divine (jet ≤ niveau = succès · 1×/repos long)' },
 };
 
 // Niveaux d'ASI pour le Clerc (dans la plage niv.1–10)
@@ -47,7 +47,7 @@ const DOMAIN_SPELLS = {
 // Sorts suggérés par niveau de sort (proposition de base pour Torvin)
 const SUGGESTED_SPELLS = {
   1: [
-    { id:'sc-bane', name:'Fléau (Bane) ⭐',    tag:'DD Cha', conc:true,  bonus:false },
+    { id:'sc-bane', name:'Fléau (Bane)',       tag:'DD Cha', conc:true,  bonus:false },
     { id:'sc-hw',   name:'Mot de guérison',    tag:'soin',   conc:false, bonus:true  },
   ],
   2: [
@@ -140,10 +140,11 @@ const CLERIC_SPELLS = {
 
 // Capacités débloquées par niveau
 const FEATURES_BY_LEVEL = [
-  { minLvl:1,  name:'Arcane Initiate',                desc:"Maîtrise de la compétence Arcanes. 2 sorts mineurs de magicien de votre choix qui comptent comme des sorts mineurs de clerc (Torvin : Main du mage, Illusion mineure)." },
+  { minLvl:1,  name:'Arcane Initiate',                desc:"Maîtrise de la compétence Arcanes. 2 sorts mineurs de magicien comptant comme sorts mineurs de clerc (Torvin : Main du mage + 1 au choix — Illusion mineure est déjà un cantrip racial du Gnome des Roches)." },
   { minLvl:1,  name:'Ruse gnome',                     desc:"Avantage sur tous les JS d'Intelligence, Sagesse et Charisme contre la magie." },
+  { minLvl:1,  name:'Savoir d\'artisan',              desc:"Double le bonus de maîtrise pour les jets d'Intelligence (Histoire) liés aux objets magiques, alchimiques ou technologiques." },
   { minLvl:1,  name:'Bricoleur · Vision 18 m',        desc:"Fabriquer des automates mécaniques (30 min + 10 po matériaux). Vision dans le noir 18 m." },
-  { minLvl:2,  name:'Canalisation divine',             desc:"Renvoi des morts-vivants (base) ou Abjuration Arcanique (célestes, élémentaires, fées, fiélons, morts-vivants). 1× niv.2–5 · 2× niv.6–17." },
+  { minLvl:2,  name:'Canalisation divine',             desc:"Renvoi des morts-vivants (base clerc) ou Abjuration Arcanique (célestes, élémentaires, fées, fiélons uniquement — pas les morts-vivants). Dès niv.5 : banissement si FP ≤ ½. 1× niv.2–5 · 2× niv.6–17." },
   { minLvl:5,  name:'Destruction des morts-vivants',  desc:'Renvoi = destruction si FP ≤ ½ (niv.5-7) · FP ≤ 1 (niv.8-10).' },
   { minLvl:6,  name:'Briseur de sorts',               desc:"Quand vous restaurez des PV à un allié avec un sort de niv.1+, vous pouvez aussi dissiper un sort sur lui dont le niveau ≤ l'emplacement utilisé." },
   { minLvl:8,  name:'Incantation Puissante',           desc:'Modificateur de Sagesse ajouté aux dégâts des sorts mineurs de Clerc.' },

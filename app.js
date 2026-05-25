@@ -381,13 +381,8 @@ createApp({
     // Glas des trépassés avec scaling cantrip
     tollDamage() {
       const d = this.cantripDice;
-      const bonus = this.char.level >= 6 ? `+${this.mods.wis}` : '';
+      const bonus = this.char.level >= 8 ? `+${this.mods.wis}` : '';
       return `${d}d8${bonus} / ${d}d12${bonus} nécrotique`;
-    },
-
-    // Projectile magique : scaling automatique par emplacement
-    magicMissileDesc() {
-      return `${this.cantripDice + 2} fléchettes × 1d4+1 force (auto)`;
     },
 
     // HP en pourcentage (pour affichage éventuel)

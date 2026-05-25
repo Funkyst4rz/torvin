@@ -128,10 +128,10 @@ DEFAULT_RACIAL  // Bonus raciaux Gnome des Roches
 - Sagesse de base 15, passe à **17 au niveau 4** (ASI +2 Sag)
 - **Vitesse :** 7,5 m (25 pieds — Gnome des Roches)
 - **Canalisation divine** : 1× niv.2–5 · 2× niv.6–17 (3× à partir du niv.18 seulement)
-- **Capacités Domaine Arcane (SCAG)** : Arcane Initiate (niv.1) · Abjuration Arcanique (niv.2) · Briseur de sorts (niv.6) · Incantation Puissante (niv.8) · Maîtrise Arcanique (niv.10)
+- **Capacités Domaine Arcane (SCAG)** : Arcane Initiate (niv.1) · Abjuration Arcanique (niv.2) · Briseur de sorts (niv.6) · Incantation Puissante (niv.8) · Maîtrise Arcanique (niv.17)
 - Sorts de domaine : toujours préparés, **ne comptent pas** dans le quota de préparation
-- **Abjuration Arcanique** cible : célestes, élémentaires, fées, fiélons, morts-vivants (pas les aberrations)
-- Maîtrise simple en Arcanes (Arcane Initiate) et Histoire (compétence de classe)
+- **Abjuration Arcanique** cible : célestes, élémentaires, fées, fiélons **uniquement** (pas les morts-vivants — gérés par Renvoi des morts-vivants de base). Banissement si FP ≤ ½ dès niv.5
+- Maîtrise simple en Arcanes (Arcane Initiate), Religion et Médecine (choix de classe), Intuition et Persuasion (background Artisan de Guilde)
 
 ---
 
