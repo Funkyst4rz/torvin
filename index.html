@@ -337,21 +337,6 @@
               <table class="attacks-table">
                 <thead><tr><th>Nom</th><th>Bonus att.</th><th>Dégâts / Type</th></tr></thead>
                 <tbody>
-                  <tr>
-                    <td>Masse d'armes</td>
-                    <td>{{ maceAttack }}</td>
-                    <td>{{ maceDamage }}</td>
-                  </tr>
-                  <tr>
-                    <td>Glas des trépassés</td>
-                    <td>DD {{ spellDC }} Sag</td>
-                    <td>{{ tollDamage }}</td>
-                  </tr>
-                  <tr>
-                    <td>Projectile magique</td>
-                    <td>automatique</td>
-                    <td>3+1/emplacement × (1d4+1) force</td>
-                  </tr>
                   <tr v-for="(atk, i) in char.customAttacks" :key="i">
                     <td>{{ atk.name }}</td>
                     <td>{{ atk.bonus }}</td>
