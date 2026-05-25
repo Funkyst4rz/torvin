@@ -1,0 +1,89 @@
+name: Validate Character Sheet
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  validate:
+    name: Syntax & Structure Checks
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # ── JavaScript syntax check (no build step needed) ────────
+      - name: Check JS syntax — app.js
+        run: node --check app.js
+
+      - name: Check JS syntax — data.js
+        run: node --check data.js
+
+      # ── Required files presence ────────────────────────────────
+      - name: Check required files exist
+        run: |
+          for f in index.html style.css app.js data.js; do
+            if [ ! -f "$f" ]; then
+              echo "ERROR: Missing required file: $f"
+              exit 1
+            fi
+            echo "OK: $f"
+          done
+
+      # ── Security check: token must NOT be in any source file ───
+      - name: Check for accidental token exposure
+        run: |
+          if grep -rn "ghp_" index.html app.js data.js style.css 2>/dev/null; then
+            echo "ERROR: GitHub token pattern found in source files!"
+            exit 1
+          fi
+          echo "OK: No token found in source files"
+
+      # ── HTML structure checks ──────────────────────────────────
+      - name: Install htmlhint
+        run: npm install -g htmlhint
+
+      - name: Lint HTML
+        run: |
+          htmlhint index.html \
+            --rules='{ "tagname-lowercase": true, "attr-lowercase": true, "attr-value-double-quotes": true, "doctype-first": true, "tag-pair": true, "spec-char-escape": false, "id-unique": true, "src-not-empty": true, "attr-no-duplication": true }'
+
+      # ── Structural content checks ──────────────────────────────
+      - name: Verify tab structure in HTML
+        run: |
+          for tab in main spells combat histoire notes; do
+            if ! grep -q "activeTab==='$tab'" index.html; then
+              echo "ERROR: Tab '$tab' not found in index.html"
+              exit 1
+            fi
+            echo "OK: Tab '$tab' present"
+          done
+
+      - name: Verify DEFAULT_CHAR has required fields
+        run: |
+          for field in name level base racial asi hpRolls hpCurrent currency languages phrases concentration; do
+            if ! grep -q "$field" data.js; then
+              echo "ERROR: DEFAULT_CHAR missing field: $field"
+              exit 1
+            fi
+            echo "OK: field '$field' in data.js"
+          done
+
+      - name: Verify security function (token deletion before save)
+        run: |
+          if ! grep -q "delete state.ghToken" app.js; then
+            echo "ERROR: _serializeState() must delete ghToken before any save"
+            exit 1
+          fi
+          echo "OK: ghToken is deleted before serialization"
+
+      - name: Summary
+        run: echo "All checks passed — character sheet is valid."
