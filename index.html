@@ -1,1295 +1,859 @@
 <!DOCTYPE html>
-<html lang="fr"><head>
-<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<html lang="fr">
+<head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Torvin "Trois-Parchemins" — Fiche de Personnage</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --parchment:#f5ead6;--parchment-dark:#e8d5a8;--ink:#1a0e00;--ink-mid:#3d2b1f;
-    --ink-light:#6b4c35;--red:#8b1a1a;--gold:#7a5c1e;--gold-light:#c4922a;
-    --border:#5c3d1e;--green:#1a5c2a;
-  }
-  *{box-sizing:border-box;margin:0;padding:0;}
-  body{background:#2a1f14;font-family:'Crimson Text',Georgia,serif;color:var(--ink);min-height:100vh;padding:20px;
-    background-image:radial-gradient(ellipse at 20% 20%,rgba(90,60,20,.3) 0%,transparent 60%),radial-gradient(ellipse at 80% 80%,rgba(60,30,10,.4) 0%,transparent 60%);}
-  .page{max-width:960px;margin:0 auto;background:var(--parchment);border:2px solid var(--border);
-    box-shadow:0 0 0 6px #2a1f14,0 0 0 8px var(--border),0 20px 60px rgba(0,0,0,.7);position:relative;overflow:hidden;}
-  .page::before{content:'';position:absolute;inset:0;pointer-events:none;z-index:1;opacity:.5;
-    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='.05'/%3E%3C/svg%3E");}
-  .corner{position:absolute;width:60px;height:60px;z-index:3;}
-  .corner svg{width:100%;height:100%;}
-  .corner-tl{top:6px;left:6px;}.corner-tr{top:6px;right:6px;transform:scaleX(-1);}
-  .corner-bl{bottom:6px;left:6px;transform:scaleY(-1);}.corner-br{bottom:6px;right:6px;transform:scale(-1,-1);}
-  .content{position:relative;z-index:2;padding:50px 45px 45px;}
-
-  /* LEVEL BAR */
-  .level-bar{display:flex;align-items:center;gap:12px;background:rgba(92,61,30,.1);border:1.5px solid var(--border);padding:10px 14px;margin-bottom:14px;flex-wrap:wrap;}
-  .level-bar-title{font-family:'Cinzel',serif;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--gold);}
-  .level-bubbles{display:flex;gap:6px;flex-wrap:wrap;}
-  .lvl-btn{font-family:'Cinzel',serif;font-size:10px;font-weight:700;width:30px;height:30px;border-radius:50%;border:1.5px solid var(--border);background:var(--parchment-dark);color:var(--ink-light);cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;}
-  .lvl-btn:hover{border-color:var(--gold);color:var(--gold);}
-  .lvl-btn.active{background:var(--gold);border-color:var(--gold);color:white;}
-  .level-info{font-family:'Crimson Text',serif;font-size:12px;color:var(--ink-light);font-style:italic;margin-left:auto;}
-
-  /* SAVE BAR */
-  .save-bar{display:flex;align-items:center;gap:10px;background:rgba(92,61,30,.08);border:1px solid var(--border);padding:8px 12px;margin-bottom:14px;flex-wrap:wrap;}
-  .save-btn{font-family:'Cinzel',serif;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1px;padding:6px 14px;border:1.5px solid var(--border);background:var(--parchment-dark);color:var(--ink);cursor:pointer;transition:all .2s;}
-  .save-btn:hover{background:var(--border);color:var(--parchment);}
-  .save-btn.primary{background:var(--gold);color:white;border-color:var(--gold);}
-  .save-btn.primary:hover{background:var(--gold-light);}
-  .save-status{font-family:'Cinzel',serif;font-size:9px;color:var(--ink-light);flex:1;}
-  .save-status.ok{color:var(--green);}.save-status.err{color:var(--red);}
-  .config-panel{background:rgba(26,14,0,.05);border:1.5px solid var(--border);padding:14px 16px;margin-bottom:14px;display:none;}
-  .config-panel.open{display:block;}
-  .config-title{font-family:'Cinzel',serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--gold);margin-bottom:10px;}
-  .config-row{display:flex;gap:10px;align-items:center;margin-bottom:8px;flex-wrap:wrap;}
-  .config-label{font-family:'Cinzel',serif;font-size:8.5px;font-weight:700;text-transform:uppercase;color:var(--ink-light);min-width:80px;}
-  .config-input{flex:1;min-width:200px;font-family:'Crimson Text',serif;font-size:13px;background:var(--parchment);border:1px solid var(--border);padding:5px 10px;color:var(--ink);outline:none;}
-  .config-input:focus{border-color:var(--gold-light);}
-  .config-note{font-family:'Crimson Text',serif;font-size:11px;color:var(--ink-light);font-style:italic;margin-top:6px;}
-
-  /* HEADER */
-  .header{text-align:center;margin-bottom:20px;padding-bottom:16px;border-bottom:2px solid var(--border);position:relative;}
-  .header::after{content:'❧';position:absolute;bottom:-12px;left:50%;transform:translateX(-50%);background:var(--parchment);padding:0 10px;color:var(--gold);font-size:18px;}
-  .char-name{font-family:'Cinzel',serif;font-size:30px;font-weight:900;color:var(--ink);letter-spacing:2px;line-height:1.1;}
-  .char-subtitle{font-family:'IM Fell English',serif;font-size:14px;color:var(--ink-light);margin-top:4px;font-style:italic;}
-  .info-bar{display:grid;grid-template-columns:repeat(5,1fr);border:1px solid var(--border);margin:22px 0 18px;}
-  .info-cell{padding:8px 10px;border-right:1px solid var(--border);text-align:center;}
-  .info-cell:last-child{border-right:none;}
-  .info-label{font-family:'Cinzel',serif;font-size:7.5px;font-weight:700;color:var(--ink-light);text-transform:uppercase;letter-spacing:.8px;display:block;margin-bottom:3px;}
-  .info-value{font-family:'Crimson Text',serif;font-size:12px;font-weight:600;color:var(--ink);}
-
-  /* TABS */
-  .tabs{display:flex;margin-bottom:18px;border-bottom:2px solid var(--border);}
-  .tab{font-family:'Cinzel',serif;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1px;padding:8px 16px;cursor:pointer;color:var(--ink-light);border:1.5px solid transparent;border-bottom:none;background:transparent;transition:all .2s;margin-bottom:-2px;}
-  .tab.active{color:var(--ink);background:var(--parchment);border-color:var(--border);border-bottom-color:var(--parchment);}
-  .tab-content{display:none;}.tab-content.active{display:block;}
-
-  /* LAYOUT */
-  .main-grid{display:grid;grid-template-columns:155px 1fr 200px;gap:16px;margin-bottom:16px;}
-  .stat-block{display:flex;flex-direction:column;gap:8px;}
-  .stat-box{border:1.5px solid var(--border);background:var(--parchment-dark);text-align:center;padding:8px 6px 6px;}
-  .stat-name{font-family:'Cinzel',serif;font-size:7px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--ink-light);display:block;margin-bottom:4px;}
-  .stat-score{font-family:'Cinzel',serif;font-size:28px;font-weight:900;color:var(--ink);line-height:1;display:block;}
-  .stat-mod{font-family:'Cinzel',serif;font-size:13px;font-weight:700;color:var(--ink-mid);display:inline-block;border:1.5px solid var(--border);border-radius:50%;width:32px;height:32px;line-height:28px;background:var(--parchment);margin-top:4px;}
-  .stat-main .stat-score{color:var(--red);}
-  .combat-row{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:12px;}
-  .combat-box{border:1.5px solid var(--border);background:var(--parchment-dark);text-align:center;padding:8px 6px;}
-  .combat-label{font-family:'Cinzel',serif;font-size:7px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--ink-light);display:block;margin-bottom:4px;}
-  .combat-val{font-family:'Cinzel',serif;font-size:18px;font-weight:900;color:var(--ink);}
-  .pv-section{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;}
-  .pv-box{border:1.5px solid var(--border);padding:8px 10px;background:var(--parchment-dark);}
-  .pv-label{font-family:'Cinzel',serif;font-size:7.5px;font-weight:700;text-transform:uppercase;color:var(--ink-light);display:block;margin-bottom:4px;}
-  .pv-input{width:100%;background:transparent;border:none;border-bottom:1.5px solid var(--border);font-family:'Cinzel',serif;font-size:20px;font-weight:700;color:var(--red);text-align:center;outline:none;padding:2px 0;}
-  .pv-input:focus{border-bottom-color:var(--gold-light);}
-  .pv-max{font-family:'Crimson Text',serif;font-size:11px;color:var(--ink-light);text-align:center;margin-top:3px;}
-  .section-title{font-family:'Cinzel',serif;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--ink-light);border-bottom:1px solid var(--border);padding-bottom:4px;margin-bottom:8px;}
-  .section-box{border:1.5px solid var(--border);padding:10px 12px;background:rgba(245,234,214,.5);margin-bottom:12px;}
-  .skills-list{display:flex;flex-direction:column;gap:2px;}
-  .skill-row{display:grid;grid-template-columns:22px 1fr 28px;align-items:center;gap:4px;padding:2px 4px;font-size:11px;}
-  .skill-row:nth-child(even){background:rgba(92,61,30,.06);}
-  .skill-prof{width:12px;height:12px;border:1.5px solid var(--border);border-radius:50%;display:inline-block;background:transparent;}
-  .skill-prof.filled{background:var(--ink-mid);}.skill-prof.double{background:var(--gold);border-color:var(--gold);}
-  .skill-name{font-family:'Crimson Text',serif;color:var(--ink);}
-  .skill-bonus{font-family:'Cinzel',serif;font-size:10px;font-weight:700;color:var(--ink-mid);text-align:right;}
-  .skill-bonus.high{color:var(--gold);}
-  .attacks-table{width:100%;border-collapse:collapse;font-size:11px;}
-  .attacks-table th{font-family:'Cinzel',serif;font-size:7.5px;font-weight:700;text-transform:uppercase;color:var(--ink-light);padding:4px 6px;text-align:left;border-bottom:1px solid var(--border);}
-  .attacks-table td{padding:5px 6px;border-bottom:1px dashed rgba(92,61,30,.2);font-family:'Crimson Text',serif;}
-  .trait-block{border:1px solid var(--border);background:var(--parchment-dark);padding:8px 10px;margin-bottom:6px;}
-  .trait-label{font-family:'Cinzel',serif;font-size:7.5px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--gold);display:block;margin-bottom:4px;}
-  .trait-text{font-family:'IM Fell English',serif;font-size:12px;font-style:italic;color:var(--ink-mid);line-height:1.5;}
-  .feature-block{border:1px solid var(--border);padding:8px 10px;margin-bottom:6px;background:rgba(92,61,30,.04);}
-  .feature-name{font-family:'Cinzel',serif;font-size:9px;font-weight:700;color:var(--ink);display:block;margin-bottom:3px;}
-  .feature-desc{font-family:'Crimson Text',serif;font-size:11.5px;color:var(--ink-mid);line-height:1.5;}
-  .equip-list{list-style:none;}
-  .equip-list li{font-family:'Crimson Text',serif;font-size:12px;color:var(--ink);padding:3px 0;border-bottom:1px dashed rgba(92,61,30,.2);display:flex;gap:6px;}
-  .equip-list li::before{content:'•';color:var(--gold);font-size:16px;line-height:1;flex-shrink:0;}
-  .divider{display:flex;align-items:center;gap:10px;margin:14px 0;color:var(--gold);}
-  .divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border);}
-  .passive-box{display:flex;align-items:center;gap:8px;margin-top:8px;}
-  .passive-label{font-family:'Cinzel',serif;font-size:7.5px;font-weight:700;text-transform:uppercase;color:var(--ink-light);}
-  .passive-val{font-family:'Cinzel',serif;font-size:14px;font-weight:700;color:var(--ink);border:1.5px solid var(--border);border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;}
-  .saves-list{display:flex;flex-direction:column;gap:2px;margin-bottom:10px;}
-  .save-row{display:grid;grid-template-columns:16px 1fr 28px;align-items:center;gap:4px;padding:2px 4px;font-size:11px;}
-
-  /* SORTS */
-  .spell-level-block{margin-bottom:10px;}
-  .spell-level-header{display:flex;justify-content:space-between;align-items:center;background:var(--parchment-dark);border:1px solid var(--border);padding:4px 8px;margin-bottom:4px;}
-  .spell-level-num{font-family:'Cinzel',serif;font-size:10px;font-weight:700;color:var(--ink-mid);}
-  .spell-slots{display:flex;gap:4px;align-items:center;}
-  .slot-bubble{width:16px;height:16px;border:1.5px solid var(--border);border-radius:50%;cursor:pointer;background:var(--parchment);transition:background .2s;}
-  .slot-bubble.used{background:var(--ink-mid);}
-  .spell-row{display:grid;grid-template-columns:14px 1fr 60px 50px;align-items:center;gap:6px;padding:3px 6px;font-size:11px;}
-  .spell-row:nth-child(even){background:rgba(92,61,30,.05);}
-  .spell-check{width:10px;height:10px;border:1.5px solid var(--border);cursor:pointer;background:transparent;transition:background .15s;}
-  .spell-check.checked{background:var(--ink-mid);}
-  .spell-name{font-family:'Crimson Text',serif;color:var(--ink);}
-  .spell-tag{font-family:'Cinzel',serif;font-size:7px;font-weight:700;color:var(--ink-light);}
-  .spell-conc{font-family:'Cinzel',serif;font-size:7px;color:var(--red);font-weight:700;text-align:center;}
-  .spell-name.domain{font-style:italic;color:var(--ink-light);}
-  .spell-locked{opacity:.4;font-style:italic;}
-
-  /* NIVEAU BADGE */
-  .new-badge{font-family:'Cinzel',serif;font-size:7px;font-weight:700;color:white;background:var(--green);padding:1px 5px;border-radius:2px;margin-left:6px;text-transform:uppercase;letter-spacing:.5px;}
-
-  /* ROLEPLAY */
-  .combo-box{background:rgba(139,26,26,.06);border:1.5px solid var(--red);padding:10px 12px;margin-bottom:8px;}
-  .combo-title{font-family:'Cinzel',serif;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--red);margin-bottom:6px;}
-  .combo-steps{list-style:none;counter-reset:step;}
-  .combo-steps li{font-family:'Crimson Text',serif;font-size:12px;color:var(--ink);padding:3px 0 3px 24px;position:relative;border-bottom:1px dashed rgba(92,61,30,.15);}
-  .combo-steps li:last-child{border-bottom:none;}
-  .combo-steps li::before{counter-increment:step;content:counter(step);position:absolute;left:0;font-family:'Cinzel',serif;font-size:9px;font-weight:700;color:var(--red);background:rgba(139,26,26,.1);width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center;top:4px;}
-  .phrase-block{border-left:3px solid var(--gold);padding:6px 10px;margin-bottom:6px;background:rgba(122,92,30,.05);}
-  .phrase-situation{font-family:'Cinzel',serif;font-size:8px;font-weight:700;text-transform:uppercase;color:var(--gold);margin-bottom:3px;}
-  .phrase-text{font-family:'IM Fell English',serif;font-size:12px;font-style:italic;color:var(--ink-mid);line-height:1.5;}
-  .footer{text-align:center;padding-top:14px;border-top:1px solid var(--border);margin-top:14px;}
-  .footer p{font-family:'Cinzel',serif;font-size:8px;color:var(--ink-light);letter-spacing:1px;text-transform:uppercase;}
-
-  /* LEVEL UP NOTIFICATION */
-  .levelup-toast{position:fixed;top:20px;left:50%;transform:translateX(-50%);background:var(--gold);color:white;font-family:'Cinzel',serif;font-size:11px;font-weight:700;padding:10px 24px;border-radius:2px;box-shadow:0 4px 20px rgba(0,0,0,.4);z-index:100;opacity:0;transition:opacity .3s;pointer-events:none;letter-spacing:1px;}
-  .levelup-toast.show{opacity:1;}
-
-  /* PV CONTROLS */
-  .pv-controls{display:flex;align-items:center;gap:4px;margin:4px 0;}
-  .pv-adj{font-family:'Cinzel',serif;font-size:9px;font-weight:700;width:26px;height:26px;border:1.5px solid var(--border);background:var(--parchment-dark);color:var(--ink-mid);cursor:pointer;transition:all .2s;flex-shrink:0;padding:0;}
-  .pv-adj.neg{border-color:var(--red);color:var(--red);}
-  .pv-adj.neg:hover{background:var(--red);color:white;}
-  .pv-adj.pos{border-color:var(--green);color:var(--green);}
-  .pv-adj.pos:hover{background:var(--green);color:white;}
-  .pv-controls .pv-input{flex:1;min-width:0;}
-
-  /* REPOS */
-  .rest-bar{display:flex;gap:8px;margin-bottom:12px;}
-  .rest-btn{font-family:'Cinzel',serif;font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:1px;padding:6px 10px;border:1.5px solid var(--border);background:var(--parchment-dark);cursor:pointer;transition:all .2s;flex:1;}
-  .rest-btn.short{border-color:var(--gold);color:var(--gold);}
-  .rest-btn.short:hover{background:var(--gold);color:white;}
-  .rest-btn.long{border-color:var(--green);color:var(--green);}
-  .rest-btn.long:hover{background:var(--green);color:white;}
-
-  /* DICE ROLLER */
-  .dice-panel{background:rgba(26,14,0,.05);border:1.5px solid var(--border);padding:10px 14px;margin-bottom:14px;display:none;}
-  .dice-panel.open{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
-  .dice-btn{font-family:'Cinzel',serif;font-size:9px;font-weight:700;padding:5px 9px;border:1.5px solid var(--border);background:var(--parchment-dark);color:var(--ink);cursor:pointer;transition:all .2s;}
-  .dice-btn:hover{background:var(--gold);border-color:var(--gold);color:white;}
-  .dice-result{font-family:'Cinzel',serif;font-size:22px;font-weight:900;color:var(--ink);min-width:32px;text-align:center;transition:color .3s;}
-  .dice-result.flash{color:var(--gold);}
-  .dice-label{font-family:'Crimson Text',serif;font-size:11px;color:var(--ink-light);font-style:italic;}
-
-  /* SPELL PICKER */
-  .spell-picker{display:none;border-top:1px dashed var(--border);max-height:260px;overflow-y:auto;background:rgba(245,234,214,.6);}
-  .spell-picker.open{display:block;}
-  .spell-picker-row{display:flex;align-items:flex-start;gap:8px;padding:6px 8px;border-bottom:1px dashed rgba(92,61,30,.12);}
-  .spell-picker-row:hover{background:rgba(122,92,30,.06);}
-  .spell-picker-info{flex:1;min-width:0;}
-  .spell-picker-name{font-family:'Cinzel',serif;font-size:9px;font-weight:700;color:var(--ink);display:block;}
-  .spell-picker-tags{font-family:'Cinzel',serif;font-size:7px;color:var(--gold);display:block;margin-top:1px;}
-  .spell-picker-desc{font-family:'Crimson Text',serif;font-size:11px;color:var(--ink-mid);line-height:1.4;margin-top:2px;font-style:italic;}
-  .spell-picker-add{font-family:'Cinzel',serif;font-size:13px;font-weight:700;width:22px;height:22px;border:1.5px solid var(--green);background:transparent;color:var(--green);cursor:pointer;flex-shrink:0;transition:all .2s;padding:0;}
-  .spell-picker-add:hover{background:var(--green);color:white;}
-  .spell-picker-empty{font-family:'Crimson Text',serif;font-size:11px;color:var(--ink-light);font-style:italic;padding:8px;}
-  .spell-add-btn{font-family:'Cinzel',serif;font-size:7.5px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;width:100%;padding:5px;border:1px dashed var(--border);background:transparent;color:var(--ink-light);cursor:pointer;transition:all .2s;margin-top:2px;}
-  .spell-add-btn:hover,.spell-add-btn.active{background:rgba(92,61,30,.06);color:var(--gold);border-color:var(--gold);border-style:solid;}
-  .spell-row-custom{grid-template-columns:14px 1fr 60px 40px 16px !important;}
-
-  /* DELETE & ADD BUTTONS */
-  .delete-btn{font-family:'Cinzel',serif;font-size:9px;font-weight:700;background:none;border:none;color:var(--red);cursor:pointer;padding:0 2px;opacity:.45;line-height:1;}
-  .delete-btn:hover{opacity:1;}
-  .add-form{display:flex;gap:4px;margin-top:6px;align-items:center;flex-wrap:wrap;}
-  .add-input{font-family:'Crimson Text',serif;font-size:12px;background:var(--parchment);border:1px solid var(--border);padding:4px 8px;color:var(--ink);outline:none;flex:1;min-width:0;}
-  .add-input:focus{border-color:var(--gold-light);}
-  .add-input-sm{flex:2;}
-  .add-input-xs{flex:0 0 48px;}
-  .add-btn{font-family:'Cinzel',serif;font-size:13px;font-weight:700;width:28px;height:28px;border:1.5px solid var(--green);background:transparent;color:var(--green);cursor:pointer;flex-shrink:0;transition:all .2s;padding:0;}
-  .add-btn:hover{background:var(--green);color:white;}
-
-  /* HIT DICE TRACKER */
-  .hd-section{border:1.5px solid var(--border);padding:8px 10px;background:var(--parchment-dark);margin-bottom:12px;}
-  .hd-grid{display:flex;gap:3px;flex-wrap:wrap;align-items:flex-end;margin-top:6px;}
-  .hd-cell{display:flex;flex-direction:column;align-items:center;gap:2px;}
-  .hd-lvl-label{font-family:'Cinzel',serif;font-size:6px;font-weight:700;color:var(--ink-light);text-transform:uppercase;}
-  .hd-input{font-family:'Cinzel',serif;font-size:12px;font-weight:700;width:28px;height:24px;text-align:center;border:1px solid var(--border);background:var(--parchment);color:var(--ink);outline:none;padding:0;-moz-appearance:textfield;}
-  .hd-input::-webkit-inner-spin-button{display:none;}
-  .hd-input:focus{border-color:var(--gold-light);}
-  .hd-input:disabled{opacity:.3;background:transparent;border-style:dashed;color:var(--ink-light);}
-  .hd-sep{width:1px;height:24px;background:var(--border);margin:0 5px;align-self:flex-end;}
-  .hd-summary{font-family:'Cinzel',serif;font-size:9px;font-weight:700;color:var(--gold);align-self:flex-end;padding-bottom:4px;}
-  .hd-title-row{display:flex;justify-content:space-between;align-items:baseline;}
-
-  /* NOTES */
-  .notes-area{width:100%;min-height:280px;font-family:'Crimson Text',Georgia,serif;font-size:13px;color:var(--ink);background:rgba(245,234,214,.3);border:1.5px solid var(--border);padding:12px;resize:vertical;outline:none;line-height:1.7;}
-  .notes-area:focus{border-color:var(--gold-light);}
-  .notes-hint{font-family:'Cinzel',serif;font-size:8px;color:var(--ink-light);margin-top:6px;text-align:right;text-transform:uppercase;letter-spacing:.5px;}
-
-  /* LORE / BACKGROUND NARRATIF */
-  .lore-section{margin-top:8px;border:1.5px solid var(--border);background:rgba(92,61,30,.04);padding:22px 28px 24px;}
-  .lore-body{display:grid;grid-template-columns:1fr 1fr;gap:0 36px;margin-top:14px;}
-  .lore-col{display:flex;flex-direction:column;gap:12px;}
-  .lore-text{font-family:'IM Fell English',serif;font-size:13.5px;color:var(--ink-mid);line-height:1.85;text-align:justify;}
-  .lore-dropcap{font-family:'Cinzel',serif;font-size:52px;font-weight:900;color:var(--red);float:left;line-height:.78;padding-right:6px;padding-top:5px;}
-  .lore-quote{font-family:'IM Fell English',serif;font-size:13px;font-style:italic;color:var(--gold);border-left:3px solid var(--gold-light);padding:8px 14px;background:rgba(122,92,30,.07);line-height:1.7;}
-  .lore-epigraph{font-family:'Cinzel',serif;font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--ink-light);text-align:center;margin-top:18px;padding-top:14px;border-top:1px solid var(--border);grid-column:1/-1;}
-
-  @media(max-width:680px){
-    .content{padding:30px 18px 24px;}
-    .main-grid{grid-template-columns:120px 1fr;}
-    .main-grid>*:last-child{grid-column:1/-1;}
-    .combat-row{grid-template-columns:repeat(3,1fr);}
-    .info-bar{grid-template-columns:repeat(3,1fr);}
-    .char-name{font-size:22px;}
-    .level-bubbles{gap:4px;}
-    .lvl-btn{width:26px;height:26px;font-size:9px;}
-    .lore-body{grid-template-columns:1fr;}
-  }
-</style>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="levelup-toast" id="toast"></div>
-<div class="page">
-  <div class="corner corner-tl"><svg viewBox="0 0 60 60" fill="none"><path d="M5 55L5 5L55 5" stroke="#5c3d1e" stroke-width="2"></path><circle cx="5" cy="5" r="3" fill="#7a5c1e"></circle><path d="M8 20Q12 16 16 20Q20 24 16 28" stroke="#7a5c1e" stroke-width="1" fill="none"></path><path d="M20 8Q24 12 20 16Q16 20 20 24" stroke="#7a5c1e" stroke-width="1" fill="none"></path></svg></div>
-  <div class="corner corner-tr"><svg viewBox="0 0 60 60" fill="none"><path d="M5 55L5 5L55 5" stroke="#5c3d1e" stroke-width="2"></path><circle cx="5" cy="5" r="3" fill="#7a5c1e"></circle><path d="M8 20Q12 16 16 20Q20 24 16 28" stroke="#7a5c1e" stroke-width="1" fill="none"></path><path d="M20 8Q24 12 20 16Q16 20 20 24" stroke="#7a5c1e" stroke-width="1" fill="none"></path></svg></div>
-  <div class="corner corner-bl"><svg viewBox="0 0 60 60" fill="none"><path d="M5 55L5 5L55 5" stroke="#5c3d1e" stroke-width="2"></path><circle cx="5" cy="5" r="3" fill="#7a5c1e"></circle><path d="M8 20Q12 16 16 20Q20 24 16 28" stroke="#7a5c1e" stroke-width="1" fill="none"></path><path d="M20 8Q24 12 20 16Q16 20 20 24" stroke="#7a5c1e" stroke-width="1" fill="none"></path></svg></div>
-  <div class="corner corner-br"><svg viewBox="0 0 60 60" fill="none"><path d="M5 55L5 5L55 5" stroke="#5c3d1e" stroke-width="2"></path><circle cx="5" cy="5" r="3" fill="#7a5c1e"></circle><path d="M8 20Q12 16 16 20Q20 24 16 28" stroke="#7a5c1e" stroke-width="1" fill="none"></path><path d="M20 8Q24 12 20 16Q16 20 20 24" stroke="#7a5c1e" stroke-width="1" fill="none"></path></svg></div>
+<div id="app">
 
-  <div class="content">
+  <!-- TOAST -->
+  <div class="levelup-toast" id="toast"></div>
 
-    <!-- LEVEL BAR -->
-    <div class="level-bar">
-      <span class="level-bar-title">⬆ Niveau</span>
-      <div class="level-bubbles" id="level-bubbles"></div>
-      <span class="level-info" id="level-info">Sorts de domaine niv.2 débloqués</span>
-    </div>
-
-    <!-- SAVE BAR -->
-    <div class="save-bar">
-      <button class="save-btn primary" onclick="saveToGitHub()">💾 Sauvegarder</button>
-      <button class="save-btn" onclick="loadFromGitHub()">↓ Charger</button>
-      <button class="save-btn" onclick="toggleDice()">🎲 Dés</button>
-      <button class="save-btn" onclick="toggleConfig()">⚙ Config</button>
-      <span class="save-status" id="save-status">Non configuré — cliquez sur ⚙ Config pour activer la sauvegarde GitHub</span>
-    </div>
-    <div class="config-panel" id="config-panel">
-      <div class="config-title">⚙ Configuration GitHub</div>
-      <div class="config-row">
-        <span class="config-label">Token GitHub</span>
-        <input class="config-input" type="password" id="gh-token" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
+  <!-- ══════════════════════════════════════
+       ASI / FEAT MODAL
+       ══════════════════════════════════════ -->
+  <div class="asi-overlay" v-if="showASIModal" @click.self="dismissASI">
+    <div class="asi-modal">
+      <div class="asi-modal-header">
+        <span class="asi-modal-title">⬆ Amélioration — Niveau {{ asiModalLevel }}</span>
+        <button class="save-btn" style="padding:3px 10px;font-size:8px" @click="dismissASI">✕ Plus tard</button>
       </div>
-      <div class="config-row">
-        <button class="save-btn primary" onclick="saveConfig()">Enregistrer</button>
-        <button class="save-btn" onclick="clearConfig()">Effacer</button>
-      </div>
-      <div class="config-note">⚠ Votre token est stocké uniquement dans votre navigateur. Il n'est jamais publié sur GitHub.</div>
-    </div>
-    <div class="dice-panel" id="dice-panel">
-      <button class="dice-btn" onclick="rollDice(4)">d4</button>
-      <button class="dice-btn" onclick="rollDice(6)">d6</button>
-      <button class="dice-btn" onclick="rollDice(8)">d8</button>
-      <button class="dice-btn" onclick="rollDice(10)">d10</button>
-      <button class="dice-btn" onclick="rollDice(12)">d12</button>
-      <button class="dice-btn" onclick="rollDice(20)">d20</button>
-      <button class="dice-btn" onclick="rollDice(100)">d100</button>
-      <span class="dice-result" id="dice-result">—</span>
-      <span class="dice-label" id="dice-label"></span>
-    </div>
-
-    <!-- HEADER -->
-    <div class="header">
-      <div class="char-name">Torvin « Trois-Parchemins »</div>
-      <div class="char-subtitle" id="char-subtitle">Gnome des Roches · Clerc Domaine Arcane, Niveau 3 · Serviteur involontaire d'Azouth</div>
-    </div>
-    <div class="info-bar">
-      <div class="info-cell"><span class="info-label">Classe &amp; Niveau</span><span class="info-value" id="info-class">Clerc 3 — Arcane</span></div>
-      <div class="info-cell"><span class="info-label">Race</span><span class="info-value">Gnome des Roches</span></div>
-      <div class="info-cell"><span class="info-label">Historique</span><span class="info-value">Artisan de Guilde</span></div>
-      <div class="info-cell"><span class="info-label">Divinité</span><span class="info-value">Azouth</span></div>
-      <div class="info-cell"><span class="info-label">Alignement</span><span class="info-value">Neutre Bon</span></div>
-    </div>
-
-    <!-- TABS -->
-    <div class="tabs">
-      <div class="tab active" onclick="switchTab('main')">Personnage</div>
-      <div class="tab" onclick="switchTab('spells')">Sorts</div>
-      <div class="tab" onclick="switchTab('roleplay')">Roleplay</div>
-      <div class="tab" onclick="switchTab('notes')">Notes</div>
-    </div>
-
-    <!-- TAB PERSONNAGE -->
-    <div class="tab-content active" id="tab-main">
-      <div class="main-grid">
-        <div class="stat-block">
-          <div class="section-title">Caractéristiques</div>
-          <div class="stat-box stat-main"><span class="stat-name">Sagesse ★</span><span class="stat-score">15</span><span class="stat-mod">+2</span></div>
-          <div class="stat-box stat-main"><span class="stat-name">Intelligence</span><span class="stat-score">16</span><span class="stat-mod">+3</span></div>
-          <div class="stat-box"><span class="stat-name">Constitution</span><span class="stat-score">14</span><span class="stat-mod">+2</span></div>
-          <div class="stat-box"><span class="stat-name">Dextérité</span><span class="stat-score">12</span><span class="stat-mod">+1</span></div>
-          <div class="stat-box"><span class="stat-name">Charisme</span><span class="stat-score">10</span><span class="stat-mod">+0</span></div>
-          <div class="stat-box"><span class="stat-name">Force</span><span class="stat-score">8</span><span class="stat-mod">−1</span></div>
-          <div class="passive-box"><div class="passive-val" id="passive-wis">12</div><span class="passive-label">Sagesse passive</span></div>
+      <div class="asi-modal-body">
+        <p class="asi-desc">À ce niveau, Torvin gagne une amélioration. Choisissez comment utiliser cette progression.</p>
+        <div class="asi-existing" v-if="char.asi[asiModalLevel]">
+          <div class="asi-existing-label">Choix actuel</div>
+          <div class="asi-existing-val">{{ asiSummary(asiModalLevel) }}</div>
         </div>
-        <div>
-          <div class="section-title">Combat</div>
-          <div class="combat-row">
-            <div class="combat-box"><span class="combat-label">CA</span><span class="combat-val">15</span></div>
-            <div class="combat-box"><span class="combat-label">Initiative</span><span class="combat-val">+1</span></div>
-            <div class="combat-box"><span class="combat-label">Vitesse</span><span class="combat-val">9 m</span></div>
-            <div class="combat-box"><span class="combat-label">Bonus Maîtrise</span><span class="combat-val" id="prof-bonus">+2</span></div>
-            <div class="combat-box"><span class="combat-label">Dés de vie</span><span class="combat-val" id="hit-dice">3d8</span></div>
+        <div class="asi-options">
+          <div class="asi-option" :class="{selected: asiMode==='one'}" @click="asiMode='one'">
+            <div class="asi-option-title">▶ +2 à une caractéristique</div>
+            <div v-if="asiMode==='one'" class="asi-stat-row">
+              <select class="asi-select" v-model="asiStat1">
+                <option v-for="k in statKeys" :key="k" :value="k">
+                  {{ statLabels[k] }} (actuellement {{ stats[k] }} → {{ stats[k]+2 }})
+                </option>
+              </select>
+            </div>
           </div>
-          <div class="pv-section">
-            <div class="pv-box">
-              <span class="pv-label">❤ Points de vie actuels</span>
-              <div class="pv-controls">
-                <button class="pv-adj neg" onclick="adjustPV(-5)">−5</button>
-                <button class="pv-adj neg" onclick="adjustPV(-1)">−1</button>
-                <input class="pv-input" type="number" id="pv-current" value="26" min="0">
-                <button class="pv-adj pos" onclick="adjustPV(+1)">+1</button>
-                <button class="pv-adj pos" onclick="adjustPV(+5)">+5</button>
+          <div class="asi-option" :class="{selected: asiMode==='two'}" @click="asiMode='two'">
+            <div class="asi-option-title">▶ +1 à deux caractéristiques</div>
+            <div v-if="asiMode==='two'" class="asi-stat-row">
+              <select class="asi-select" v-model="asiStat1">
+                <option v-for="k in statKeys" :key="k" :value="k">{{ statLabels[k] }} ({{ stats[k] }} → {{ stats[k]+1 }})</option>
+              </select>
+              <select class="asi-select" v-model="asiStat2">
+                <option v-for="k in statKeys" :key="k" :value="k">{{ statLabels[k] }} ({{ stats[k] }} → {{ stats[k]+1 }})</option>
+              </select>
+            </div>
+          </div>
+          <div class="asi-option" :class="{selected: asiMode==='feat'}" @click="asiMode='feat'">
+            <div class="asi-option-title">▶ Prendre un don (Feat)</div>
+            <div v-if="asiMode==='feat'" class="feat-list">
+              <div v-for="feat in allFeats" :key="feat.id"
+                   class="feat-card" :class="{ selected: asiFeatId===feat.id, recommended: feat.recommended }"
+                   @click.stop="asiFeatId=feat.id">
+                <div class="feat-name">{{ feat.name }}</div>
+                <div class="feat-desc">{{ feat.desc }}</div>
               </div>
-              <div class="pv-max">Maximum : <span id="pv-max-display">26</span></div>
-            </div>
-            <div class="pv-box">
-              <span class="pv-label">✦ PV temporaires</span>
-              <input class="pv-input" type="number" id="pv-temp" value="0" min="0" style="color:var(--ink-mid)">
-              <div class="pv-max">Canalisation divine : <span id="cd-status" style="cursor: pointer; color: var(--gold);" onclick="toggleCD()">☐ disponible</span></div>
-            </div>
-          </div>
-          <div class="rest-bar">
-            <button class="rest-btn short" onclick="shortRest()">⬋ Repos court — 1 dé de vie</button>
-            <button class="rest-btn long" onclick="longRest()">☀ Repos long — tout récupérer</button>
-          </div>
-          <div class="hd-section">
-            <div class="hd-title-row">
-              <span class="section-title" style="border:none;padding:0;margin:0">Dés de vie (d8)</span>
-              <span class="hd-summary" id="hd-summary">—</span>
-            </div>
-            <div class="hd-grid" id="hd-grid"></div>
-          </div>
-          <div class="section-box">
-            <div class="section-title">Jets de sauvegarde</div>
-            <div class="saves-list">
-              <div class="save-row"><span class="skill-prof filled"></span><span class="skill-name">Sagesse ✓</span><span class="skill-bonus high" id="st-wis">+4</span></div>
-              <div class="save-row"><span class="skill-prof"></span><span class="skill-name">Intelligence</span><span class="skill-bonus" id="st-int">+3</span></div>
-              <div class="save-row"><span class="skill-prof"></span><span class="skill-name">Constitution</span><span class="skill-bonus" id="st-con">+2</span></div>
-              <div class="save-row"><span class="skill-prof"></span><span class="skill-name">Dextérité</span><span class="skill-bonus" id="st-dex">+1</span></div>
-              <div class="save-row"><span class="skill-prof"></span><span class="skill-name">Charisme</span><span class="skill-bonus" id="st-cha">+0</span></div>
-              <div class="save-row"><span class="skill-prof"></span><span class="skill-name">Force</span><span class="skill-bonus" id="st-str">-1</span></div>
-            </div>
-          </div>
-          <div class="section-box">
-            <div class="section-title">Attaques</div>
-            <table class="attacks-table">
-              <thead><tr><th>Nom</th><th>Bonus att.</th><th>Dégâts / Type</th></tr></thead>
-              <tbody>
-                <tr><td>Masse d'armes</td><td>+1</td><td>1d6−1 contondant</td></tr>
-                <tr><td>Glas des trépassés</td><td id="atk-toll">DD 12 Sag</td><td>1d8 / 1d12 nécrotique</td></tr>
-                <tr><td>Projectile magique</td><td>automatique</td><td>3×1d4+1 force</td></tr>
-              </tbody>
-              <tbody id="custom-attacks"></tbody>
-            </table>
-            <div class="add-form">
-              <input class="add-input add-input-sm" type="text" id="atk-name-input" placeholder="Nom…" onkeydown="handleAtkKey(event)">
-              <input class="add-input add-input-xs" type="text" id="atk-bonus-input" placeholder="+X" onkeydown="handleAtkKey(event)">
-              <input class="add-input" type="text" id="atk-dmg-input" placeholder="Dés / type" onkeydown="handleAtkKey(event)">
-              <button class="add-btn" onclick="addCustomAttack()" title="Ajouter">+</button>
-            </div>
-          </div>
-          <div class="section-box">
-            <div class="section-title">Équipement</div>
-            <ul class="equip-list">
-              <li><strong>La Relique d'Azouth</strong> — focaliseur d'incantation &amp; lien divin</li>
-              <li>Masse d'armes</li><li>Armure de cuir + Bouclier (CA 15)</li>
-              <li>Outils de bricoleur</li><li>Pack d'explorateur</li>
-              <li>Lettre de guilde · 15 pièces d'or</li>
-            </ul>
-            <ul class="equip-list" id="custom-equip-list"></ul>
-            <div class="add-form">
-              <input class="add-input" type="text" id="equip-input" placeholder="Ajouter un objet…" onkeydown="handleEquipKey(event)">
-              <button class="add-btn" onclick="addCustomEquip()" title="Ajouter">+</button>
             </div>
           </div>
         </div>
-        <div>
-          <div class="section-box">
-            <div class="section-title">Compétences</div>
-            <div class="skills-list">
-              <div class="skill-row"><span class="skill-prof double"></span><span class="skill-name">Arcanes (Int)</span><span class="skill-bonus high" id="sk-arcana">+7</span></div>
-              <div class="skill-row"><span class="skill-prof double"></span><span class="skill-name">Histoire (Int)</span><span class="skill-bonus high" id="sk-history">+7</span></div>
-              <div class="skill-row"><span class="skill-prof filled"></span><span class="skill-name">Religion (Int)</span><span class="skill-bonus" id="sk-religion">+5</span></div>
-              <div class="skill-row"><span class="skill-prof filled"></span><span class="skill-name">Médecine (Sag)</span><span class="skill-bonus" id="sk-medicine">+4</span></div>
-              <div class="skill-row"><span class="skill-prof"></span><span class="skill-name">Investigation (Int)</span><span class="skill-bonus" id="sk-investigation">+3</span></div>
-              <div class="skill-row"><span class="skill-prof"></span><span class="skill-name">Nature (Int)</span><span class="skill-bonus" id="sk-nature">+3</span></div>
-              <div class="skill-row"><span class="skill-prof"></span><span class="skill-name">Perception (Sag)</span><span class="skill-bonus" id="sk-perception">+2</span></div>
-              <div class="skill-row"><span class="skill-prof"></span><span class="skill-name">Intuition (Sag)</span><span class="skill-bonus" id="sk-insight">+2</span></div>
-              <div class="skill-row"><span class="skill-prof"></span><span class="skill-name">Dressage (Sag)</span><span class="skill-bonus" id="sk-animal">+2</span></div>
-              <div class="skill-row"><span class="skill-prof"></span><span class="skill-name">Survie (Sag)</span><span class="skill-bonus" id="sk-survival">+2</span></div>
-              <div class="skill-row"><span class="skill-prof"></span><span class="skill-name">Acrobaties (Dex)</span><span class="skill-bonus" id="sk-acrobatics">+1</span></div>
-              <div class="skill-row"><span class="skill-prof"></span><span class="skill-name">Discrétion (Dex)</span><span class="skill-bonus" id="sk-stealth">+1</span></div>
-              <div class="skill-row"><span class="skill-prof"></span><span class="skill-name">Escamotage (Dex)</span><span class="skill-bonus" id="sk-sleight">+1</span></div>
-              <div class="skill-row"><span class="skill-prof"></span><span class="skill-name">Tromperie (Cha)</span><span class="skill-bonus" id="sk-deception">+0</span></div>
-              <div class="skill-row"><span class="skill-prof"></span><span class="skill-name">Persuasion (Cha)</span><span class="skill-bonus" id="sk-persuasion">+0</span></div>
-              <div class="skill-row"><span class="skill-prof"></span><span class="skill-name">Intimidation (Cha)</span><span class="skill-bonus" id="sk-intimidation">+0</span></div>
-              <div class="skill-row"><span class="skill-prof"></span><span class="skill-name">Représentation (Cha)</span><span class="skill-bonus" id="sk-performance">+0</span></div>
-              <div class="skill-row"><span class="skill-prof"></span><span class="skill-name">Athlétisme (For)</span><span class="skill-bonus" id="sk-athletics" style="color:var(--red)">-1</span></div>
-            </div>
-          </div>
-          <div class="section-title" style="margin-top:10px">Personnalité</div>
-          <div class="trait-block"><span class="trait-label">Traits</span><div class="trait-text">«&nbsp;J'explique tout ce que je fais, même en combat. Surtout en plein combat.&nbsp;»<br><br>«&nbsp;La magie n'est qu'un mécanisme qu'on ne comprend pas encore.&nbsp;»</div></div>
-          <div class="trait-block"><span class="trait-label">Idéal</span><div class="trait-text">«&nbsp;La connaissance doit circuler librement.&nbsp;»</div></div>
-          <div class="trait-block"><span class="trait-label">Lien</span><div class="trait-text">«&nbsp;La relique d'Azouth est en ma possession. Je ne sais pas ce qu'elle fait vraiment.&nbsp;»</div></div>
-          <div class="trait-block"><span class="trait-label">Défaut</span><div class="trait-text">«&nbsp;Incapable de jeter quoi que ce soit. Mon sac est un désastre.&nbsp;»</div></div>
+        <div class="asi-actions">
+          <button class="save-btn" @click="dismissASI">Annuler</button>
+          <button class="save-btn primary" @click="confirmASI">✓ Confirmer</button>
         </div>
       </div>
-      <div class="divider"><span>✦</span></div>
-      <div class="section-title">Capacités &amp; Traits</div>
-      <div id="features-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px"><div class="feature-block"><span class="feature-name">Bénédictions du Savoir</span><div class="feature-desc">Maîtrise doublée en Arcanes et Histoire.</div></div><div class="feature-block"><span class="feature-name">Sorts mineurs bonus (magicien)</span><div class="feature-desc">Deux sorts mineurs supplémentaires issus de la liste du magicien.</div></div><div class="feature-block"><span class="feature-name">Ruse gnome</span><div class="feature-desc">Avantage sur tous les JS d'Intelligence, Sagesse et Charisme contre la magie.</div></div><div class="feature-block"><span class="feature-name">Bricoleur · Vision 18m</span><div class="feature-desc">Construire des automates mécaniques. Vision dans le noir 18 m.</div></div><div class="feature-block"><span class="feature-name">Canalisation divine</span><div class="feature-desc">Renvoi des morts-vivants ou Renvoi des créatures arcaniques. Utilisations selon niveau.</div></div><div class="feature-block" style="background: rgba(122, 92, 30, 0.08); border-color: var(--gold);"><span class="feature-name" style="color:var(--gold)">Objectif niveau 4</span><div class="feature-desc">Amélioration de caractéristiques (+2 Sag → 17)</div></div></div>
-    </div>
-
-    <!-- TAB SORTS -->
-    <div class="tab-content" id="tab-spells">
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:12px">
-        <div class="combat-box" style="padding:10px"><span class="combat-label">Caractéristique</span><span class="combat-val">Sagesse</span></div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-          <div class="combat-box" style="padding:10px"><span class="combat-label">DD Sauvegarde</span><span class="combat-val" id="spell-dc">12</span></div>
-          <div class="combat-box" style="padding:10px"><span class="combat-label">Bonus Attaque Sort</span><span class="combat-val" id="spell-atk">+4</span></div>
-        </div>
-      </div>
-      <div class="section-box" style="margin-bottom:12px">
-        <div class="section-title">Sorts mineurs</div>
-        <div class="spell-row"><div></div><span class="spell-name">Glas des trépassés</span><span class="spell-tag" id="toll-tag">DD 12 Sag</span><span class="spell-tag">1d8/1d12</span></div>
-        <div class="spell-row"><div></div><span class="spell-name">Main du mage</span><span class="spell-tag">utilitaire</span><span class="spell-tag">—</span></div>
-        <div class="spell-row"><div></div><span class="spell-name">Illusion mineure</span><span class="spell-tag">utilitaire</span><span class="spell-tag">—</span></div>
-      </div>
-      <div id="spell-slots-container"><div class="spell-level-block"><div class="spell-level-header">
-      <span class="spell-level-num">Niveau 1 — 4 emplacements</span>
-      <div class="spell-slots"><span class="slot-bubble" onclick="toggleSlot(this,'slot-1-0')"></span><span class="slot-bubble" onclick="toggleSlot(this,'slot-1-1')"></span><span class="slot-bubble" onclick="toggleSlot(this,'slot-1-2')"></span><span class="slot-bubble" onclick="toggleSlot(this,'slot-1-3')"></span></div>
-    </div><div class="spell-row"><span class="spell-check" id="sc-d1-0" onclick="toggleCheck(this,'sc-d1-0')"></span><span class="spell-name domain">Identification <em style="font-size:10px">[domaine]</em></span><span class="spell-tag">rituel</span><span class="spell-conc">—</span></div><div class="spell-row" style="background: rgba(92, 61, 30, 0.05);"><span class="spell-check" id="sc-d1-1" onclick="toggleCheck(this,'sc-d1-1')"></span><span class="spell-name domain">Projectile magique <em style="font-size:10px">[domaine]</em></span><span class="spell-tag">auto</span><span class="spell-conc">—</span></div><div class="spell-row" style="background: rgba(139, 26, 26, 0.06);"><span class="spell-check" id="sc-bane" onclick="toggleCheck(this,'sc-bane')"></span><span class="spell-name"><strong>Fléau (Bane) ⭐</strong></span><span class="spell-tag">DD Cha</span><span class="spell-conc" style="color:var(--red)">CONC.</span></div><div class="spell-row"><span class="spell-check" id="sc-hw" onclick="toggleCheck(this,'sc-hw')"></span><span class="spell-name"><strong>Mot de guérison</strong></span><span class="spell-tag">1d4+2</span><span class="spell-conc" style="color:var(--gold)">BON.</span></div></div><div class="spell-level-block"><div class="spell-level-header">
-      <span class="spell-level-num">Niveau 2 — 2 emplacements</span>
-      <div class="spell-slots"><span class="slot-bubble" onclick="toggleSlot(this,'slot-2-0')"></span><span class="slot-bubble" onclick="toggleSlot(this,'slot-2-1')"></span></div>
-    </div><div class="spell-row"><span class="spell-check" id="sc-d2-0" onclick="toggleCheck(this,'sc-d2-0')"></span><span class="spell-name domain">Arme magique <em style="font-size:10px">[domaine]</em></span><span class="spell-tag">buff</span><span class="spell-conc">CONC.</span></div><div class="spell-row" style="background: rgba(92, 61, 30, 0.05);"><span class="spell-check" id="sc-d2-1" onclick="toggleCheck(this,'sc-d2-1')"></span><span class="spell-name domain">Flèche acide de Melf <em style="font-size:10px">[domaine]</em></span><span class="spell-tag">4d4 acide</span><span class="spell-conc">—</span></div><div class="spell-row" style="background: rgba(139, 26, 26, 0.06);"><span class="spell-check" id="sc-hp" onclick="toggleCheck(this,'sc-hp')"></span><span class="spell-name"><strong>Immobilisation (Hold Person)</strong></span><span class="spell-tag">DD Sag</span><span class="spell-conc" style="color:var(--red)">CONC.</span></div><div class="spell-row"><span class="spell-check" id="sc-bd" onclick="toggleCheck(this,'sc-bd')"></span><span class="spell-name"><strong>Cécité / Surdité</strong></span><span class="spell-tag">DD Con</span><span class="spell-conc" style="color:var(--gold)">NON ✓</span></div><div class="spell-row"><span class="spell-check" id="sc-sw" onclick="toggleCheck(this,'sc-sw')"></span><span class="spell-name"><strong>Arme spirituelle</strong></span><span class="spell-tag">+4/1d8+2</span><span class="spell-conc" style="color:var(--gold)">BON.</span></div></div></div>
-      <div style="margin-top:12px;padding:10px;background:rgba(139,26,26,.07);border:1px solid var(--red)">
-        <div style="font-family:'Cinzel',serif;font-size:8px;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">⚠ Concentration</div>
-        <div style="font-family:'Crimson Text',serif;font-size:12px;color:var(--ink-mid)">Un seul sort à concentration. <strong>Fléau</strong> OU <strong>Immobilisation</strong>, jamais les deux. <strong>Cécité/Surdité</strong> et <strong>Arme spirituelle</strong> se cumulent avec tout.</div>
-      </div>
-      <div class="divider"><span>✦</span></div>
-      <div class="section-title">Sorts de domaine futurs</div>
-      <div id="future-spells" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px"><div class="feature-block" style="opacity: 0.4;"><span class="feature-name">Niveau 3</span><div class="feature-desc">Boule de feu · Contresort</div></div><div class="feature-block" style="opacity: 0.4;"><span class="feature-name">Niveau 5</span><div class="feature-desc">Œil d'Arcane · Amélioration de caract.</div></div><div class="feature-block" style="opacity: 0.4;"><span class="feature-name">Niveau 7</span><div class="feature-desc">Télékinésie · Mur de force</div></div></div>
-    </div>
-
-    <!-- TAB ROLEPLAY -->
-    <div class="tab-content" id="tab-roleplay">
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
-        <div>
-          <div class="section-title">Combos de combat</div>
-          <div class="combo-box"><div class="combo-title">⚔ Round d'ouverture</div><ul class="combo-steps"><li><strong>Action :</strong> Fléau sur 3 ennemis — DD Charisme</li><li><strong>Action bonus :</strong> Arme spirituelle (invoquer)</li><li>3 ennemis à −1d4, dégâts passifs chaque round</li></ul></div>
-          <div class="combo-box" style="border-color:var(--gold);background:rgba(122,92,30,.06)"><div class="combo-title" style="color:var(--gold)">✦ Double debuff</div><ul class="combo-steps"><li><strong>Bane actif</strong> (concentration)</li><li><strong>Action :</strong> Cécité/Surdité (pas de conc. !)</li><li><strong>Action bonus :</strong> Arme spirituelle (+4, 1d8+2)</li></ul></div>
-          <div class="combo-box"><div class="combo-title">🎯 Contre un boss</div><ul class="combo-steps"><li><strong>Action :</strong> Immobilisation — DD Sagesse</li><li><strong>Action bonus :</strong> Arme spirituelle</li><li>Alliés : avantage + critiques automatiques !</li></ul></div>
-          <div style="padding:10px;border:1px solid var(--border);background:rgba(92,61,30,.05)"><div class="section-title">Urgence soins</div><div style="font-family:'Crimson Text',serif;font-size:13px;color:var(--ink-mid)"><strong>Allié à 0 PV ?</strong> → <span style="color:var(--red);font-weight:600">Action BONUS</span> : Mot de guérison (1d4+2)</div></div>
-        </div>
-        <div>
-          <div class="section-title">Phrases situationnelles</div>
-          <div class="phrase-block"><div class="phrase-situation">En lançant Fléau</div><div class="phrase-text">«&nbsp;Fascinant — réduire votre efficacité combat augmente les probabilités de survie de mes collègues. Je procède.&nbsp;»</div></div>
-          <div class="phrase-block"><div class="phrase-situation">En soignant</div><div class="phrase-text">«&nbsp;Vous saignez à un rythme préoccupant. J'ai documenté ce type de blessure — le protocole est clair.&nbsp;»</div></div>
-          <div class="phrase-block"><div class="phrase-situation">En ratant un sort</div><div class="phrase-text">«&nbsp;Hm. Résultat inattendu. Ce n'était pas une erreur, c'était... une donnée supplémentaire.&nbsp;»</div></div>
-          <div class="phrase-block"><div class="phrase-situation">Découverte magique</div><div class="phrase-text">«&nbsp;Passez-moi ça. Non — je ne vais pas le casser. Enfin... probablement pas.&nbsp;»</div></div>
-          <div class="phrase-block"><div class="phrase-situation">Quelqu'un conteste</div><div class="phrase-text">«&nbsp;C'est... une perspective. Incorrecte, mais une perspective tout de même.&nbsp;»</div></div>
-          <div class="phrase-block"><div class="phrase-situation">Situation désespérée</div><div class="phrase-text">«&nbsp;Ce n'est pas idéal. Ce n'est vraiment, vraiment pas idéal. Je recalcule.&nbsp;»</div></div>
-          <div style="margin-top:10px;padding:10px;border:1px solid var(--border)"><div class="section-title">Réflexes universels</div><div style="font-family:'IM Fell English',serif;font-size:12px;color:var(--ink-mid);font-style:italic;line-height:1.9">«&nbsp;Intéressant... j'avais lu quelque chose à ce sujet.&nbsp;»<br>«&nbsp;Si vous me permettez une observation non sollicitée...&nbsp;»<br>«&nbsp;Techniquement parlant...&nbsp;»<br>«&nbsp;Ce n'est pas ce que j'aurais anticipé, mais bon.&nbsp;»</div></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- TAB NOTES -->
-    <div class="tab-content" id="tab-notes">
-      <div class="section-title">Notes de session</div>
-      <textarea class="notes-area" id="notes-text" placeholder="Notes de session, observations de Torvin, événements importants, noms de PNJ..."></textarea>
-      <div class="notes-hint">Sauvegardé automatiquement · inclus dans la sauvegarde GitHub</div>
-    </div>
-
-    <!-- BACKGROUND NARRATIF -->
-    <div class="divider"><span>✦</span></div>
-    <div class="lore-section">
-      <div class="section-title">Histoire — L'Origine de Torvin</div>
-      <div class="lore-body">
-        <div class="lore-col">
-          <p class="lore-text"><span class="lore-dropcap">T</span>orvin était artisan dans une guilde de bricoleurs gnomes — réparateur de mécanismes, démonteur de curiosités, restaurateur d'objets oubliés que d'autres auraient jetés. Quand un client lui apporta un boîtier de bronze cabossé dont les engrenages refusaient obstinément de tourner, il ne vit d'abord qu'un puzzle mécanique de plus.</p>
-          <p class="lore-text">En l'ouvrant, il découvrit des inscriptions arcanes azouthiennes nichées dans les rouages — des glyphes que personne n'avait dû lire depuis des générations. Par pure curiosité intellectuelle, il les activa.</p>
-          <p class="lore-text">Azouth le choisit. Involontairement.</p>
-          <blockquote class="lore-quote">«&nbsp;Je n'ai pas demandé à devenir clerc. J'ai juste posé une question à un mécanisme. Et il a répondu d'une façon que je n'avais pas anticipée.&nbsp;»</blockquote>
-        </div>
-        <div class="lore-col">
-          <p class="lore-text">Depuis, Torvin traite ses pouvoirs divins comme un mécanisme qu'il n'a pas encore entièrement démonté. Il prie Azouth comme il consulterait un manuel technique — méthodiquement, sans ferveur excessive, avec l'espoir sincère d'y trouver des instructions claires.</p>
-          <p class="lore-text">Jusqu'à présent, les instructions restent singulièrement cryptiques. La Relique d'Azouth demeure en sa possession — l'objet même qui a déclenché tout cela, son focaliseur d'incantation, son lien divin involontaire. Il ne sait pas encore ce qu'elle fait vraiment. Il prend des notes.</p>
-          <blockquote class="lore-quote">«&nbsp;La connaissance doit circuler librement. La garder pour soi est un crime contre l'humanité. Et contre la méthode scientifique.&nbsp;»</blockquote>
-          <p class="lore-epigraph">Gnome des Roches · Artisan de Guilde · Serviteur involontaire d'Azouth, Dieu des Magiciens</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="footer">
-      <p id="footer-text">Torvin « Trois-Parchemins » · Domaine Arcane · Azouth · Niveau 3</p>
-      <p style="margin-top:3px;opacity:.6" id="footer-next">Prochain niveau : Amélioration de caractéristiques (+2 Sag → 17)</p>
     </div>
   </div>
-</div>
-
-<script>
-// ══════════════════════════════════════════
-// DONNÉES PAR NIVEAU
-// ══════════════════════════════════════════
-const WIS=15,INT=16,CON=14,DEX=12,CHA=10,STR=8;
-const mod=s=>Math.floor((s-10)/2);
-const sign=n=>(n>=0?'+':'')+n;
-
-const LEVELS = {
-  1:{prof:2,hp:8,cd:1,slots:{1:2},info:'Sorts de domaine niv.1 débloqués'},
-  2:{prof:2,hp:14,cd:2,slots:{1:3},info:'Canalisation divine débloquée'},
-  3:{prof:2,hp:20,cd:2,slots:{1:4,2:2},info:'Sorts de domaine niv.2 débloqués'},
-  4:{prof:2,hp:26,cd:2,slots:{1:4,2:3},info:'Amélioration de caractéristiques (+2 Sag → 17)'},
-  5:{prof:3,hp:32,cd:2,slots:{1:4,2:3,3:2},info:'Sorts de domaine niv.3 + Destruction des morts-vivants'},
-  6:{prof:3,hp:38,cd:2,slots:{1:4,2:3,3:3},info:'Potent Spellcasting : +mod Sag aux dégâts des sorts mineurs'},
-  7:{prof:3,hp:44,cd:2,slots:{1:4,2:3,3:3,4:1},info:'Sorts de domaine niv.4 débloqués'},
-  8:{prof:3,hp:50,cd:2,slots:{1:4,2:3,3:3,4:2},info:'Amélioration de caractéristiques'},
-  9:{prof:4,hp:56,cd:2,slots:{1:4,2:3,3:3,4:3,5:1},info:'Sorts de domaine niv.5 débloqués'},
-  10:{prof:4,hp:62,cd:3,slots:{1:4,2:3,3:3,4:3,5:2},info:'Intervention divine débloquée'},
-};
-
-// Sorts de domaine Arcane (SCAG) par niveau de sort
-const DOMAIN_SPELLS = {
-  1:[
-    {name:'Détection de la magie',tag:'rituel',conc:'CONC.'},
-    {name:'Projectile magique',tag:'auto',conc:'—'},
-  ],
-  3:[
-    {name:'Arme magique',tag:'buff',conc:'CONC.'},
-    {name:'Aura magique de Nystul',tag:'illusion',conc:'CONC.'},
-  ],
-  5:[
-    {name:'Dissipation de la magie',tag:'utilitaire',conc:'—'},
-    {name:'Cercle magique',tag:'protection',conc:'—'},
-  ],
-  7:[
-    {name:"Œil d'Arcane",tag:'divination',conc:'CONC.'},
-    {name:'Coffre de Léomund',tag:'invocation',conc:'—'},
-  ],
-  9:[
-    {name:'Lien planaire',tag:'DD Cha',conc:'CONC.'},
-    {name:'Cercle de téléportation',tag:'rituel',conc:'—'},
-  ],
-};
-
-// Sorts préparés principaux
-const PREPARED_SPELLS = {
-  1:[
-    {id:'sc-bane',name:'Fléau (Bane) ⭐',tag:'DD Cha',conc:'CONC.',bg:'rgba(139,26,26,.06)'},
-    {id:'sc-hw',name:'Mot de guérison',tag:'1d4+2',conc:'BON.',concColor:'var(--gold)'},
-  ],
-  2:[
-    {id:'sc-hp',name:'Immobilisation (Hold Person)',tag:'DD Sag',conc:'CONC.',bg:'rgba(139,26,26,.06)'},
-    {id:'sc-bd',name:'Cécité / Surdité',tag:'DD Con',conc:'NON ✓',concColor:'var(--gold)'},
-    {id:'sc-sw',name:'Arme spirituelle',tag:'+4/1d8+2',conc:'BON.',concColor:'var(--gold)'},
-  ],
-  3:[
-    {id:'sc-ss',name:'Silence',tag:'zone',conc:'CONC.'},
-    {id:'sc-sb',name:'Lumière du jour',tag:'60ft',conc:'—'},
-  ],
-  4:[
-    {id:'sc-bg',name:'Gardien de la foi',tag:'zone',conc:'—'},
-    {id:'sc-fof',name:'Liberté de mouvement',tag:'buff',conc:'—'},
-  ],
-  5:[
-    {id:'sc-con',name:'Contagion',tag:'DD Con',conc:'—'},
-    {id:'sc-flf',name:'Colonne de flamme',tag:'+atk',conc:'—'},
-  ],
-};
-
-// Sorts disponibles par niveau (liste Clerc)
-const CLERIC_SPELLS = {
-  0:[
-    {id:'guidance',name:'Guidance',tag:'utilitaire',conc:true,desc:"Touchez une créature. Elle peut ajouter 1d4 à un jet de caractéristique pendant 1 minute."},
-    {id:'light',name:'Lumière',tag:'utilitaire',conc:false,desc:"Un objet touché émet une lumière vive sur 6 m et faible sur 6 m supplémentaires pendant 1 heure."},
-    {id:'resistance',name:'Résistance',tag:'buff',conc:true,desc:"Touchez une créature. Elle peut ajouter 1d4 à un jet de sauvegarde de son choix pendant 1 minute."},
-    {id:'sacred-flame',name:'Flamme sacrée',tag:'DD Dex',conc:false,desc:"JS Dextérité (DD sorts) ou 1d8 dégâts radiants. Ignore les couvertures."},
-    {id:'spare-dying',name:'Stabilisation',tag:'utilitaire',conc:false,desc:"Touchez une créature à 0 PV pour la stabiliser sans jet de dés."},
-    {id:'thaumaturgy',name:'Thaumaturgie',tag:'utilitaire',conc:false,desc:"Manifeste un signe mineur de puissance divine (voix, lumière, tremblements, yeux brillants) pendant 1 minute."},
-  ],
-  1:[
-    {id:'bless',name:'Bénédiction',tag:'buff',conc:true,desc:"3 créatures de votre choix ajoutent 1d4 à leurs jets d'attaque et de sauvegarde pendant 1 minute."},
-    {id:'command',name:'Commandement',tag:'contrôle',conc:false,desc:"Une créature obéit à un commandement d'un mot (Approche, Fuis, Tombe, Arrête, Lâche). JS Sag pour résister."},
-    {id:'cure-wounds',name:'Soin des blessures',tag:'soin',conc:false,desc:"Au toucher : la cible récupère 1d8 + mod Sag PV."},
-    {id:'detect-evil',name:'Détection du mal et du bien',tag:'divination',conc:true,desc:"Percevez la présence de créatures aberrantes, célestes, élémentaires, fées, fiélons ou morts-vivants dans 9 m pendant 10 min."},
-    {id:'detect-magic',name:'Détection de la magie',tag:'rituel',conc:true,desc:"Percevez la magie dans 9 m et son école pendant 10 min. Peut être lancé comme rituel."},
-    {id:'guiding-bolt',name:'Trait de lumière',tag:'+atk/4d6',conc:false,desc:"Attaque sort à distance : 4d6 dégâts radiants. La prochaine attaque contre la cible a l'avantage."},
-    {id:'inflict-wounds',name:'Infliger des blessures',tag:'+atk/3d10',conc:false,desc:"Attaque sort au contact : 3d10 dégâts nécrotiques."},
-    {id:'protection-evil',name:'Protection contre le mal',tag:'défense',conc:true,desc:"Une créature alliée est protégée des aberrations, célestes, élémentaires, fées, fiélons et morts-vivants."},
-    {id:'sanctuary',name:'Sanctuaire',tag:'défense',conc:false,desc:"Les attaquants visant la cible doivent réussir un JS Sagesse (DD sorts) ou choisir une autre cible."},
-    {id:'shield-faith',name:'Bouclier de la foi',tag:'+2 CA',conc:true,desc:"Une créature gagne +2 à la CA pendant 10 minutes."},
-    {id:'create-water',name:"Création d'eau",tag:'utilitaire',conc:false,desc:"Crée jusqu'à 40 litres d'eau potable ou purifier de l'eau empoisonnée dans un contenant."},
-  ],
-  2:[
-    {id:'aid',name:'Aide',tag:'+5 PV',conc:false,desc:"3 créatures alliées gagnent +5 PV maximum et +5 PV actuels pendant 8 heures."},
-    {id:'calm-emotions',name:'Apaisement des émotions',tag:'contrôle',conc:true,desc:"Sphère 4,5 m : supprime charmes et peurs, ou rend les humanoïdes indifférents aux ennemis."},
-    {id:'lesser-restoration',name:'Restauration partielle',tag:'utilitaire',conc:false,desc:"Supprime une maladie, un poison actif, une paralysie ou une cécité affectant une créature."},
-    {id:'locate-object',name:"Localisation d'objet",tag:'divination',conc:true,desc:"Localisez un objet spécifique ou un type d'objet dans 300 m pendant 10 min."},
-    {id:'prayer-healing',name:'Prière de guérison',tag:'soin 10min',conc:false,desc:"6 créatures récupèrent 2d8 + mod Sag PV. Incantation de 10 minutes."},
-    {id:'protection-poison',name:'Protection contre le poison',tag:'défense',conc:false,desc:"Neutralise un poison actif et accorde résistance aux dégâts de poison pendant 1 heure."},
-    {id:'silence',name:'Silence',tag:'zone',conc:true,desc:"Sphère 6 m : aucun son ne passe, sorts à composante verbale impossibles à l'intérieur."},
-    {id:'warding-bond',name:'Lien de protection',tag:'défense',conc:false,desc:"+1 CA et JS, résistance à tous dégâts. Vous subissez une copie des dégâts que la cible subit."},
-    {id:'zone-truth',name:'Zone de vérité',tag:'utilitaire',conc:false,desc:"Sphère 4,5 m : les créatures qui ratent leur JS Charisme ne peuvent pas mentir délibérément."},
-    {id:'augury',name:'Augure',tag:'rituel',conc:false,desc:"Obtenez un présage (bien, mal, les deux, aucun) sur une action planifiée dans les 30 prochaines minutes."},
-    {id:'gentle-repose',name:'Repos du défunt',tag:'rituel',conc:false,desc:"Un cadavre est préservé et ne peut pas être réanimé en mort-vivant pendant 10 jours."},
-  ],
-  3:[
-    {id:'animate-dead',name:'Animation des morts',tag:'nécro',conc:false,desc:"Animez un squelette ou zombie qui vous obéit pendant 24h. À renouveler pour maintenir le contrôle."},
-    {id:'beacon-hope',name:"Balise d'espoir",tag:'buff',conc:true,desc:"Alliés dans 9 m : avantage aux JS Sag et contre la mort, PV maximum récupérés lors des soins."},
-    {id:'bestow-curse',name:'Malédiction',tag:'debuff',conc:true,desc:"Au toucher : désavantage sur jets d'une caractéristique, -1d8 dégâts contre vous, ou raté de tour sur 1-2."},
-    {id:'daylight',name:'Lumière du jour',tag:'utilitaire',conc:false,desc:"Lumière vive sur 18 m et faible sur 18 m de plus pendant 1 heure. Dissipe les ténèbres magiques de niv. ≤ 2."},
-    {id:'dispel-magic',name:'Dissipation de la magie',tag:'utilitaire',conc:false,desc:"Met fin aux effets magiques niv. ≤ 3 sur une cible. Niveaux supérieurs : DD progressif."},
-    {id:'mass-healing-word',name:'Soins de groupe',tag:'soin bon.',conc:false,desc:"Action bonus : jusqu'à 6 créatures visibles récupèrent 1d4 + mod Sag PV."},
-    {id:'protection-energy',name:"Protection contre l'énergie",tag:'résistance',conc:true,desc:"Une créature acquiert la résistance à un type de dégâts choisi (acide, froid, feu, foudre, tonnerre)."},
-    {id:'revivify',name:'Rappel à la vie',tag:'utilitaire',conc:false,desc:"Ramenez à 1 PV une créature morte il y a moins d'1 minute. (Requiert une gemme de 300 po)"},
-    {id:'spirit-guardians',name:'Esprits gardiens',tag:'zone',conc:true,desc:"Spectres tourbillonnants dans 4,5 m infligent 3d8 dégâts radiants ou nécrotiques aux ennemis."},
-    {id:'remove-curse',name:'Suppression de malédiction',tag:'utilitaire',conc:false,desc:"Supprime toutes les malédictions affectant une créature ou désactive un objet maudit au toucher."},
-    {id:'sending',name:'Message',tag:'divination',conc:false,desc:"Envoyez 25 mots à n'importe quelle créature que vous connaissez, où qu'elle soit. Elle peut répondre."},
-    {id:'tongues',name:'Langues',tag:'utilitaire',conc:false,desc:"Une créature comprend toutes les langues parlées et se fait comprendre en toutes langues pendant 1 heure."},
-  ],
-  4:[
-    {id:'banishment',name:'Bannissement',tag:'contrôle',conc:true,desc:"JS Charisme (DD sorts) ou bannie pendant 1 min. Si extra-planaire, permanent après 1 minute sans concentration."},
-    {id:'death-ward',name:'Protection contre la mort',tag:'défense',conc:false,desc:"Quand la cible tomberait à 0 PV pour la 1ère fois, elle reste à 1 PV à la place. Dure 8 heures."},
-    {id:'divination',name:'Divination',tag:'rituel',conc:false,desc:"Obtenez une réponse véridique de votre divinité sur un événement dans les 7 prochains jours."},
-    {id:'freedom-movement',name:'Liberté de mouvement',tag:'buff',conc:false,desc:"Une créature ignore terrain difficile, enchevêtrements et réductions magiques de vitesse pendant 1 heure."},
-    {id:'guardian-faith',name:'Gardien de la foi',tag:'zone',conc:false,desc:"Un gardien spectral inflige 20 dégâts radiants aux ennemis entrant dans sa zone de 3 m (60 PV total)."},
-    {id:'locate-creature',name:'Localisation de créature',tag:'divination',conc:true,desc:"Localisez une créature spécifique ou un type de créature dans 1 km pendant 1 heure."},
-  ],
-  5:[
-    {id:'commune',name:'Communion',tag:'rituel',conc:false,desc:"Posez 3 questions à votre divinité (oui/non). Fonctionne une fois par jour."},
-    {id:'contagion',name:'Contagion',tag:'DD Con',conc:false,desc:"Au toucher : après 3 JS Physique ratés cumulés, la cible contracte une maladie dévastatrice pendant 7 jours."},
-    {id:'dispel-evil',name:'Dissipation du mal',tag:'défense',conc:true,desc:"Avantage aux JS contre aberrations, célestes, fées, fiélons, morts-vivants. Peut en bannir un au contact."},
-    {id:'flame-strike',name:'Colonne de flamme',tag:'+atk',conc:false,desc:"Cylindre 3 m × 9 m : 4d6 feu + 4d6 radiants. JS Dextérité pour moitié des dégâts."},
-    {id:'greater-restoration',name:'Restauration supérieure',tag:'utilitaire',conc:false,desc:"Supprime épuisement, charme, pétrification, malédiction ou réduction de caractéristique/PV max."},
-    {id:'mass-cure-wounds',name:'Soins de groupe supérieurs',tag:'soin',conc:false,desc:"Jusqu'à 6 créatures dans 9 m récupèrent 3d8 + mod Sag PV."},
-    {id:'raise-dead',name:'Rappel des morts',tag:'utilitaire',conc:false,desc:"Ramenez une créature morte depuis ≤ 10 jours à 1 PV. (Gemme de 500 po) Les malus s'effacent progressivement."},
-    {id:'scrying',name:'Scrutation',tag:'divination',conc:true,desc:"Observez une créature spécifique à n'importe quel endroit. JS Sagesse (modifié par familiarité) pour résister."},
-    {id:'legend-lore',name:'Légende',tag:'divination',conc:false,desc:"Apprenez des bribes d'histoire légendaire sur un lieu, objet ou personnage de légende."},
-  ],
-};
-
-// Capacités par niveau
-const FEATURES_BY_LEVEL = [
-  {minLvl:1,name:'Bénédictions du Savoir',desc:'Maîtrise doublée en Arcanes et Histoire.',isNew:false},
-  {minLvl:1,name:'Sorts mineurs bonus (magicien)',desc:'Deux sorts mineurs supplémentaires issus de la liste du magicien.',isNew:false},
-  {minLvl:1,name:'Ruse gnome',desc:'Avantage sur tous les JS d\'Intelligence, Sagesse et Charisme contre la magie.',isNew:false},
-  {minLvl:1,name:'Bricoleur · Vision 18m',desc:'Construire des automates mécaniques. Vision dans le noir 18 m.',isNew:false},
-  {minLvl:2,name:'Canalisation divine',desc:'Renvoi des morts-vivants ou Renvoi des créatures arcaniques. Utilisations selon niveau.',isNew:false},
-  {minLvl:4,name:'Amélioration de caractéristiques',desc:'+2 Sagesse → 17 (+3). Tous les DCs et soins progressent.',isNew:false},
-  {minLvl:5,name:'Destruction des morts-vivants',desc:'Renvoi détruit les morts-vivants de FP ≤ 1/2 (niv.5), puis s\'améliore.',isNew:false},
-  {minLvl:6,name:'Incantation Puissante',desc:'Ajoutez votre modificateur de Sagesse aux dégâts des sorts mineurs.',isNew:false},
-  {minLvl:8,name:'Amélioration de caractéristiques',desc:'+2 à une caractéristique de votre choix.',isNew:false},
-  {minLvl:10,name:'Intervention divine',desc:'Appel à Azouth pour une aide miraculeuse. Succès automatique à 20.',isNew:false},
-];
-
-// ══════════════════════════════════════════
-// ÉTAT COURANT
-// ══════════════════════════════════════════
-let currentLevel = 3;
-let wisMod = mod(WIS);
-let hpRolls = [0,8,6,6,0,0,0,0,0,0,0];
-let customSpells = {1:[],2:[],3:[],4:[],5:[]};
-let customEquipment = [];
-let customAttacks = [];
-
-function getProfBonus(lvl){ return LEVELS[lvl].prof; }
-function getSpellDC(lvl){ return 8+getProfBonus(lvl)+wisMod; }
-function getSpellAtk(lvl){ return getProfBonus(lvl)+wisMod; }
-function getHPMax(lvl){
-  let dice=0;
-  for(let i=1;i<=lvl;i++) dice+=hpRolls[i]||0;
-  return dice + mod(CON)*lvl;
-}
-
-// ══════════════════════════════════════════
-// RENDER LEVEL
-// ══════════════════════════════════════════
-function renderLevel(lvl, isLevelUp){
-  const prev = currentLevel;
-  currentLevel = lvl;
-  const data = LEVELS[lvl];
-
-  // Niv.4 : Sagesse monte à 17
-  wisMod = lvl >= 4 ? mod(17) : mod(WIS);
-
-  // Level bubbles
-  document.querySelectorAll('.lvl-btn').forEach((b,i)=>b.classList.toggle('active',i+1===lvl));
-  document.getElementById('level-info').textContent = data.info;
-
-  // Header
-  document.getElementById('char-subtitle').textContent =
-    `Gnome des Roches · Clerc Domaine Arcane, Niveau ${lvl} · Serviteur involontaire d'Azouth`;
-  document.getElementById('info-class').textContent = `Clerc ${lvl} — Arcane`;
-
-  // Stats de combat
-  const prof = getProfBonus(lvl);
-  document.getElementById('prof-bonus').textContent = sign(prof);
-  document.getElementById('hit-dice').textContent = `${lvl}d8`;
-  document.getElementById('spell-dc').textContent = getSpellDC(lvl);
-  document.getElementById('spell-atk').textContent = sign(getSpellAtk(lvl));
-  document.getElementById('atk-toll').textContent = `DD ${getSpellDC(lvl)} Sag`;
-  document.getElementById('toll-tag').textContent = `DD ${getSpellDC(lvl)} Sag`;
-  if(lvl>=6){ // Potent Spellcasting
-    const dmg = `1d8+${wisMod}/1d12+${wisMod}`;
-    document.querySelector('[id="toll-tag"]') && (document.getElementById('toll-tag').textContent = `DD ${getSpellDC(lvl)}`);
-  }
-
-  // PV — lancer les dés des nouveaux niveaux
-  if(isLevelUp && lvl > prev){
-    for(let l=prev+1;l<=lvl;l++){
-      if(!hpRolls[l]) hpRolls[l]=Math.ceil(Math.random()*8);
-    }
-  }
-  const hpMax = getHPMax(lvl);
-  document.getElementById('pv-max-display').textContent = hpMax;
-  if(isLevelUp && lvl !== prev){
-    const gain = hpMax - getHPMax(prev);
-    const cur = parseInt(document.getElementById('pv-current').value)||0;
-    document.getElementById('pv-current').value = Math.max(0, cur + gain);
-  }
-  renderHDGrid(lvl);
-
-  // Sagesse passive
-  document.getElementById('passive-wis').textContent = 10+wisMod;
-
-  // Jets de sauvegarde
-  document.getElementById('st-wis').textContent = sign(wisMod+prof);
-  document.getElementById('st-int').textContent = sign(mod(INT));
-  document.getElementById('st-con').textContent = sign(mod(CON));
-  document.getElementById('st-dex').textContent = sign(mod(DEX));
-  document.getElementById('st-cha').textContent = sign(mod(CHA));
-  document.getElementById('st-str').textContent = sign(mod(STR));
-
-  // Compétences
-  const dbl = prof*2;
-  document.getElementById('sk-arcana').textContent   = sign(mod(INT)+dbl);
-  document.getElementById('sk-history').textContent  = sign(mod(INT)+dbl);
-  document.getElementById('sk-religion').textContent = sign(mod(INT)+prof);
-  document.getElementById('sk-medicine').textContent = sign(wisMod+prof);
-  document.getElementById('sk-investigation').textContent = sign(mod(INT));
-  document.getElementById('sk-nature').textContent   = sign(mod(INT));
-  document.getElementById('sk-perception').textContent = sign(wisMod);
-  document.getElementById('sk-insight').textContent  = sign(wisMod);
-  document.getElementById('sk-animal').textContent   = sign(wisMod);
-  document.getElementById('sk-survival').textContent = sign(wisMod);
-  document.getElementById('sk-acrobatics').textContent = sign(mod(DEX));
-  document.getElementById('sk-stealth').textContent  = sign(mod(DEX));
-  document.getElementById('sk-sleight').textContent  = sign(mod(DEX));
-  document.getElementById('sk-deception').textContent = sign(mod(CHA));
-  document.getElementById('sk-persuasion').textContent = sign(mod(CHA));
-  document.getElementById('sk-intimidation').textContent = sign(mod(CHA));
-  document.getElementById('sk-performance').textContent = sign(mod(CHA));
-  document.getElementById('sk-athletics').textContent = sign(mod(STR));
-
-  // Capacités
-  renderFeatures(lvl, isLevelUp && lvl > prev ? lvl : null);
-
-  // Sorts
-  renderSpells(lvl, isLevelUp && lvl > prev ? lvl : null);
-
-  // Footer
-  document.getElementById('footer-text').textContent =
-    `Torvin « Trois-Parchemins » · Domaine Arcane · Azouth · Niveau ${lvl}`;
-  const nextLvl = LEVELS[lvl+1];
-  document.getElementById('footer-next').textContent = nextLvl
-    ? `Prochain niveau : ${nextLvl.info}` : 'Niveau maximum atteint — Torvin est légendaire.';
-
-  // Toast
-  if(isLevelUp && lvl > prev){
-    if(lvl === prev+1){
-      const roll=hpRolls[lvl];
-      showToast(`✦ Niveau ${lvl} ! d8: ${roll} + ${mod(CON)} CON = +${roll+mod(CON)} PV · ${data.info}`);
-    } else {
-      showToast(`✦ Niveau ${lvl} atteint ! ${data.info}`);
-    }
-  }
-
-  autoSaveLocal();
-}
-
-function renderFeatures(lvl, newLvl){
-  const grid = document.getElementById('features-grid');
-  grid.innerHTML = '';
-  FEATURES_BY_LEVEL.filter(f=>f.minLvl<=lvl).forEach(f=>{
-    const isNew = newLvl && f.minLvl===newLvl;
-    const div = document.createElement('div');
-    div.className = 'feature-block';
-    if(f.minLvl===4 && lvl>=4) div.style.borderColor='var(--gold)';
-    if(f.minLvl===10) div.style.borderColor='var(--red)';
-    div.innerHTML = `<span class="feature-name">${f.name}${isNew?'<span class="new-badge">Nouveau</span>':''}</span><div class="feature-desc">${f.desc}</div>`;
-    grid.appendChild(div);
-  });
-  // Objectif prochain niveau
-  if(LEVELS[lvl+1]){
-    const div = document.createElement('div');
-    div.className = 'feature-block';
-    div.style.cssText = 'background:rgba(122,92,30,.08);border-color:var(--gold)';
-    div.innerHTML = `<span class="feature-name" style="color:var(--gold)">Objectif niveau ${lvl+1}</span><div class="feature-desc">${LEVELS[lvl+1].info}</div>`;
-    grid.appendChild(div);
-  }
-}
-
-function renderSpells(lvl, newLvl){
-  const container = document.getElementById('spell-slots-container');
-  container.innerHTML = '';
-  const slots = LEVELS[lvl].slots;
-
-  // Sorts de domaine disponibles (selon niv de sort accessible)
-  const maxSpellLvl = Math.max(...Object.keys(slots).map(Number));
-
-  Object.keys(slots).sort((a,b)=>a-b).forEach(slotLvl=>{
-    slotLvl = parseInt(slotLvl);
-    const total = slots[slotLvl];
-    const block = document.createElement('div');
-    block.className = 'spell-level-block';
-
-    // Header avec emplacements
-    const isNewSlot = newLvl && !LEVELS[newLvl-1]?.slots?.[slotLvl];
-    let bubblesHtml = '';
-    for(let i=0;i<total;i++){
-      const key=`slot-${slotLvl}-${i}`;
-      const used = (savedSlots[key]||false);
-      bubblesHtml+=`<span class="slot-bubble${used?' used':''}" onclick="toggleSlot(this,'${key}')"></span>`;
-    }
-    block.innerHTML=`<div class="spell-level-header">
-      <span class="spell-level-num">Niveau ${slotLvl} — ${total} emplacement${total>1?'s':''}${isNewSlot?'<span class="new-badge" style="margin-left:8px">Nouveau</span>':''}</span>
-      <div class="spell-slots">${bubblesHtml}</div>
-    </div>`;
-
-    // Sorts de domaine pour ce niveau de sort
-    const domainKey = slotLvl===1?1:slotLvl===2?3:slotLvl===3?5:slotLvl===4?7:slotLvl===5?9:null;
-    if(domainKey && DOMAIN_SPELLS[domainKey]){
-      DOMAIN_SPELLS[domainKey].forEach((s,idx)=>{
-        const row = document.createElement('div');
-        row.className = 'spell-row';
-        if(idx%2===1) row.style.background='rgba(92,61,30,.05)';
-        const id=`sc-d${slotLvl}-${idx}`;
-        const checked=savedChecks[id]||false;
-        row.innerHTML=`<span class="spell-check${checked?' checked':''}" id="${id}" onclick="toggleCheck(this,'${id}')"></span><span class="spell-name domain">${s.name} <em style="font-size:10px">[domaine]</em></span><span class="spell-tag">${s.tag}</span><span class="spell-conc">${s.conc}</span>`;
-        block.appendChild(row);
-      });
-    }
-
-    // Sorts préparés pour ce niveau
-    if(PREPARED_SPELLS[slotLvl]){
-      PREPARED_SPELLS[slotLvl].forEach((s)=>{
-        const row = document.createElement('div');
-        row.className = 'spell-row';
-        if(s.bg) row.style.background=s.bg;
-        const checked=savedChecks[s.id]||false;
-        const concColor=s.concColor||'var(--red)';
-        row.innerHTML=`<span class="spell-check${checked?' checked':''}" id="${s.id}" onclick="toggleCheck(this,'${s.id}')"></span><span class="spell-name"><strong>${s.name}</strong></span><span class="spell-tag">${s.tag}</span><span class="spell-conc" style="color:${concColor}">${s.conc}</span>`;
-        block.appendChild(row);
-      });
-    }
-
-    // Sorts personnalisés pour ce niveau
-    (customSpells[slotLvl]||[]).forEach(s=>{
-      const row = document.createElement('div');
-      row.className = 'spell-row spell-row-custom';
-      row.style.background = 'rgba(122,92,30,.05)';
-      const cid = `sc-custom-${slotLvl}-${s.id}`;
-      const checked = savedChecks[cid]||false;
-      const concColor = s.conc ? 'var(--red)' : 'var(--gold)';
-      const concTxt = s.conc ? 'CONC.' : '—';
-      row.innerHTML = `<span class="spell-check${checked?' checked':''}" id="${cid}" onclick="toggleCheck(this,'${cid}')"></span><span class="spell-name">${s.name}</span><span class="spell-tag">${s.tag}</span><span class="spell-conc" style="color:${concColor}">${concTxt}</span><button class="delete-btn" onclick="removeCustomSpell(${slotLvl},'${s.id}')" title="Retirer">×</button>`;
-      block.appendChild(row);
-    });
-
-    // Bouton + picker
-    const addBtn = document.createElement('button');
-    addBtn.className = 'spell-add-btn';
-    addBtn.textContent = '+ Ajouter un sort préparé';
-    addBtn.onclick = (function(lvl, btn){ return function(){ toggleSpellPicker(lvl, btn); }; })(slotLvl, addBtn);
-    block.appendChild(addBtn);
-
-    const picker = document.createElement('div');
-    picker.className = 'spell-picker';
-    picker.id = `spell-picker-${slotLvl}`;
-    const available = getAvailableSpells(slotLvl);
-    if(available.length === 0){
-      picker.innerHTML = '<div class="spell-picker-empty">Tous les sorts connus de ce niveau sont déjà préparés.</div>';
-    } else {
-      available.forEach(spell=>{
-        const row = document.createElement('div');
-        row.className = 'spell-picker-row';
-        const concTag = spell.conc ? ' · <span style="color:var(--red);font-weight:700">CONC.</span>' : '';
-        row.innerHTML = `<div class="spell-picker-info"><span class="spell-picker-name">${spell.name}</span><span class="spell-picker-tags">${spell.tag}${concTag}</span><div class="spell-picker-desc">${spell.desc}</div></div><button class="spell-picker-add" onclick="addCustomSpell(${slotLvl},'${spell.id}')">+</button>`;
-        picker.appendChild(row);
-      });
-    }
-    block.appendChild(picker);
-    container.appendChild(block);
-  });
-
-  // Sorts futurs
-  const futureDiv = document.getElementById('future-spells');
-  futureDiv.innerHTML='';
-  [[5,'Boule de feu · Contresort'],[7,"Œil d'Arcane · Amélioration de caract."],[9,'Télékinésie · Mur de force']].forEach(([reqLvl,txt])=>{
-    const div=document.createElement('div');
-    div.className='feature-block';
-    const unlocked=lvl>=reqLvl;
-    div.style.opacity=unlocked?'1':'0.4';
-    div.innerHTML=`<span class="feature-name">Niveau ${reqLvl-2}${unlocked?'<span class="new-badge">Débloqué</span>':''}</span><div class="feature-desc">${txt}</div>`;
-    futureDiv.appendChild(div);
-  });
-}
-
-// ══════════════════════════════════════════
-// ÉTAT & PERSISTENCE
-// ══════════════════════════════════════════
-let savedSlots={}, savedChecks={};
-
-function getState(){
-  const slots={}, checks={};
-  document.querySelectorAll('.slot-bubble[onclick]').forEach(b=>{
-    const m=b.getAttribute('onclick').match(/'([^']+)'/);
-    if(m) slots[m[1]]=b.classList.contains('used');
-  });
-  document.querySelectorAll('.spell-check[id]').forEach(c=>{
-    checks[c.id]=c.classList.contains('checked');
-  });
-  return {
-    level:currentLevel,
-    pv:document.getElementById('pv-current').value,
-    pvTemp:document.getElementById('pv-temp').value,
-    cd:localStorage.getItem('torvin-cd')==='true',
-    notes:document.getElementById('notes-text').value,
-    hpRolls:[...hpRolls],
-    customSpells:JSON.parse(JSON.stringify(customSpells)),
-    customEquipment:[...customEquipment],
-    customAttacks:[...customAttacks],
-    slots, checks
-  };
-}
-
-function applyState(s){
-  if(!s) return;
-  savedSlots=s.slots||{};
-  savedChecks=s.checks||{};
-  if(s.hpRolls&&s.hpRolls.length===11) hpRolls=s.hpRolls;
-  if(s.customSpells) customSpells=s.customSpells;
-  if(s.customEquipment) customEquipment=s.customEquipment;
-  if(s.customAttacks) customAttacks=s.customAttacks;
-  if(s.level) renderLevel(parseInt(s.level),false);
-  if(s.pv!==undefined) document.getElementById('pv-current').value=s.pv;
-  if(s.pvTemp!==undefined) document.getElementById('pv-temp').value=s.pvTemp;
-  if(s.cd!==undefined){localStorage.setItem('torvin-cd',s.cd);updateCD();}
-  if(s.notes!==undefined) document.getElementById('notes-text').value=s.notes;
-  renderCustomData();
-}
-
-function autoSaveLocal(){
-  localStorage.setItem('torvin-state',JSON.stringify(getState()));
-}
-
-// ══════════════════════════════════════════
-// GITHUB
-// ══════════════════════════════════════════
-const REPO='Funkyst4rz/torvin', FILE='save.json';
-const API=`https://api.github.com/repos/${REPO}/contents/${FILE}`;
-
-function toggleConfig(){
-  const p=document.getElementById('config-panel');
-  p.classList.toggle('open');
-  if(p.classList.contains('open')){const t=localStorage.getItem('gh-token');if(t)document.getElementById('gh-token').value=t;}
-}
-function saveConfig(){
-  const t=document.getElementById('gh-token').value.trim();
-  if(!t) return setStatus('Token vide','err');
-  localStorage.setItem('gh-token',t);
-  document.getElementById('config-panel').classList.remove('open');
-  setStatus('Token enregistré — prêt à sauvegarder','ok');
-}
-function clearConfig(){localStorage.removeItem('gh-token');document.getElementById('gh-token').value='';setStatus('Token effacé','');}
-function getToken(){return localStorage.getItem('gh-token');}
-function setStatus(msg,type){const el=document.getElementById('save-status');el.textContent=msg;el.className='save-status'+(type?' '+type:'');}
-
-async function saveToGitHub(){
-  const token=getToken();
-  if(!token){toggleConfig();return setStatus('Configurez votre token d\'abord','err');}
-  setStatus('Sauvegarde en cours...','');
-  try{
-    const state=getState();
-    const content=btoa(unescape(encodeURIComponent(JSON.stringify(state,null,2))));
-    let sha=null;
-    try{const r=await fetch(API,{headers:{Authorization:`token ${token}`,Accept:'application/vnd.github.v3+json'}});if(r.ok){const d=await r.json();sha=d.sha;}}catch(e){}
-    const body={message:`Sauvegarde Torvin niv.${currentLevel} — ${new Date().toLocaleString('fr-FR')}`,content};
-    if(sha)body.sha=sha;
-    const res=await fetch(API,{method:'PUT',headers:{Authorization:`token ${token}`,Accept:'application/vnd.github.v3+json','Content-Type':'application/json'},body:JSON.stringify(body)});
-    if(res.ok){autoSaveLocal();setStatus(`✓ Sauvegardé sur GitHub — ${new Date().toLocaleTimeString('fr-FR')}`,'ok');}
-    else{const err=await res.json();setStatus('Erreur : '+(err.message||res.status),'err');}
-  }catch(e){setStatus('Erreur réseau : '+e.message,'err');}
-}
-
-async function loadFromGitHub(){
-  const token=getToken();
-  if(!token){toggleConfig();return setStatus('Configurez votre token d\'abord','err');}
-  setStatus('Chargement...','');
-  try{
-    const res=await fetch(API,{headers:{Authorization:`token ${token}`,Accept:'application/vnd.github.v3+json'}});
-    if(res.ok){
-      const data=await res.json();
-      const state=JSON.parse(decodeURIComponent(escape(atob(data.content))));
-      applyState(state);
-      localStorage.setItem('torvin-state',JSON.stringify(state));
-      setStatus('✓ Données chargées depuis GitHub','ok');
-    }else if(res.status===404){setStatus('Aucune sauvegarde trouvée sur GitHub','');}
-    else{setStatus('Erreur '+res.status,'err');}
-  }catch(e){setStatus('Erreur : '+e.message,'err');}
-}
-
-// ══════════════════════════════════════════
-// UI HELPERS
-// ══════════════════════════════════════════
-function switchTab(name){
-  const names=['main','spells','roleplay','notes'];
-  document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',names[i]===name));
-  document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
-  document.getElementById('tab-'+name).classList.add('active');
-}
-
-function toggleSlot(el,key){el.classList.toggle('used');savedSlots[key]=el.classList.contains('used');autoSaveLocal();}
-function toggleCheck(el,id){el.classList.toggle('checked');savedChecks[id]=el.classList.contains('checked');autoSaveLocal();}
-
-// ── SORTS PERSONNALISÉS ──────────────────
-function getAvailableSpells(level){
-  const used = new Set();
-  (PREPARED_SPELLS[level]||[]).forEach(s=>used.add(s.name.split('(')[0].trim().toLowerCase()));
-  (customSpells[level]||[]).forEach(s=>used.add(s.name.toLowerCase()));
-  return (CLERIC_SPELLS[level]||[]).filter(s=>!used.has(s.name.toLowerCase()));
-}
-
-function toggleSpellPicker(level, btn){
-  const picker = document.getElementById(`spell-picker-${level}`);
-  const isOpen = picker.classList.contains('open');
-  document.querySelectorAll('.spell-picker.open').forEach(p=>p.classList.remove('open'));
-  document.querySelectorAll('.spell-add-btn.active').forEach(b=>b.classList.remove('active'));
-  if(!isOpen){ picker.classList.add('open'); btn.classList.add('active'); }
-}
-
-function addCustomSpell(level, spellId){
-  const spell = (CLERIC_SPELLS[level]||[]).find(s=>s.id===spellId);
-  if(!spell) return;
-  if(!customSpells[level]) customSpells[level]=[];
-  customSpells[level].push({...spell});
-  renderSpells(currentLevel, null);
-  autoSaveLocal();
-}
-
-function removeCustomSpell(level, spellId){
-  customSpells[level] = (customSpells[level]||[]).filter(s=>s.id!==spellId);
-  renderSpells(currentLevel, null);
-  autoSaveLocal();
-}
-
-// ── ÉQUIPEMENT PERSONNALISÉ ──────────────
-function renderCustomEquip(){
-  const list = document.getElementById('custom-equip-list');
-  if(!list) return;
-  list.innerHTML = '';
-  customEquipment.forEach((item,idx)=>{
-    const li = document.createElement('li');
-    li.innerHTML = `${item} <button class="delete-btn" onclick="removeCustomEquip(${idx})" title="Supprimer">×</button>`;
-    list.appendChild(li);
-  });
-}
-
-function addCustomEquip(){
-  const input = document.getElementById('equip-input');
-  const val = input.value.trim();
-  if(!val) return;
-  customEquipment.push(val);
-  input.value = '';
-  renderCustomEquip();
-  autoSaveLocal();
-}
-
-function removeCustomEquip(idx){
-  customEquipment.splice(idx,1);
-  renderCustomEquip();
-  autoSaveLocal();
-}
-
-// ── ATTAQUES PERSONNALISÉES ──────────────
-function renderCustomAttacks(){
-  const tbody = document.getElementById('custom-attacks');
-  if(!tbody) return;
-  tbody.innerHTML = '';
-  customAttacks.forEach((atk,idx)=>{
-    const tr = document.createElement('tr');
-    tr.innerHTML = `<td>${atk.name}</td><td>${atk.bonus}</td><td style="display:flex;justify-content:space-between;align-items:center">${atk.damage}<button class="delete-btn" onclick="removeCustomAttack(${idx})" title="Supprimer">×</button></td>`;
-    tbody.appendChild(tr);
-  });
-}
-
-function addCustomAttack(){
-  const name = document.getElementById('atk-name-input').value.trim();
-  const bonus = document.getElementById('atk-bonus-input').value.trim();
-  const damage = document.getElementById('atk-dmg-input').value.trim();
-  if(!name && !damage) return;
-  customAttacks.push({name:name||'—', bonus:bonus||'—', damage:damage||'—'});
-  document.getElementById('atk-name-input').value='';
-  document.getElementById('atk-bonus-input').value='';
-  document.getElementById('atk-dmg-input').value='';
-  renderCustomAttacks();
-  autoSaveLocal();
-}
-
-function removeCustomAttack(idx){
-  customAttacks.splice(idx,1);
-  renderCustomAttacks();
-  autoSaveLocal();
-}
-
-function renderCustomData(){
-  renderCustomEquip();
-  renderCustomAttacks();
-}
-
-function handleEquipKey(e){ if(e.key==='Enter') addCustomEquip(); }
-function handleAtkKey(e){ if(e.key==='Enter') addCustomAttack(); }
-
-function renderHDGrid(lvl){
-  const grid = document.getElementById('hd-grid');
-  grid.innerHTML = '';
-  let diceTotal = 0;
-  for(let l=1;l<=10;l++){
-    const cell = document.createElement('div');
-    cell.className = 'hd-cell';
-    const label = document.createElement('div');
-    label.className = 'hd-lvl-label';
-    label.textContent = `N${l}`;
-    const input = document.createElement('input');
-    input.type = 'number';
-    input.className = 'hd-input';
-    input.min = 1; input.max = 8;
-    if(l <= lvl){
-      input.value = hpRolls[l] || '';
-      diceTotal += hpRolls[l] || 0;
-      input.addEventListener('change', (function(lv){
-        return function(){
-          const v = Math.min(8, Math.max(1, parseInt(this.value)||1));
-          this.value = v;
-          hpRolls[lv] = v;
-          const newMax = getHPMax(currentLevel);
-          document.getElementById('pv-max-display').textContent = newMax;
-          const pvEl = document.getElementById('pv-current');
-          if(parseInt(pvEl.value) > newMax) pvEl.value = newMax;
-          renderHDGrid(currentLevel);
-          autoSaveLocal();
-        };
-      })(l));
-    } else {
-      input.disabled = true;
-    }
-    cell.appendChild(label);
-    cell.appendChild(input);
-    grid.appendChild(cell);
-  }
-  const conTotal = mod(CON) * lvl;
-  document.getElementById('hd-summary').textContent =
-    `dés: ${diceTotal} + CON: ${conTotal} = ${diceTotal + conTotal}`;
-}
-
-function adjustPV(delta){
-  const el=document.getElementById('pv-current');
-  const max=getHPMax(currentLevel);
-  el.value=Math.max(0,Math.min(max,(parseInt(el.value)||0)+delta));
-  autoSaveLocal();
-}
-
-function shortRest(){
-  const roll=Math.ceil(Math.random()*8);
-  const heal=roll+mod(CON);
-  const el=document.getElementById('pv-current');
-  const max=getHPMax(currentLevel);
-  el.value=Math.min(max,(parseInt(el.value)||0)+heal);
-  showToast(`⬋ Repos court — d8: ${roll} + ${mod(CON)} CON = +${heal} PV`);
-  autoSaveLocal();
-}
-
-function longRest(){
-  document.getElementById('pv-current').value=getHPMax(currentLevel);
-  document.getElementById('pv-temp').value=0;
-  cdUsed=false;
-  localStorage.setItem('torvin-cd','false');
-  updateCD();
-  document.querySelectorAll('.slot-bubble.used').forEach(b=>b.classList.remove('used'));
-  savedSlots={};
-  showToast('☀ Repos long — PV au maximum, emplacements récupérés');
-  autoSaveLocal();
-}
-
-function rollDice(sides){
-  const result=Math.ceil(Math.random()*sides);
-  const el=document.getElementById('dice-result');
-  el.textContent=result;
-  document.getElementById('dice-label').textContent=`/ d${sides}`;
-  el.classList.remove('flash');
-  void el.offsetWidth;
-  el.classList.add('flash');
-  setTimeout(()=>el.classList.remove('flash'),800);
-}
-
-function toggleDice(){
-  document.getElementById('dice-panel').classList.toggle('open');
-}
-
-let cdUsed=localStorage.getItem('torvin-cd')==='true';
-function toggleCD(){cdUsed=!cdUsed;localStorage.setItem('torvin-cd',cdUsed);updateCD();autoSaveLocal();}
-function updateCD(){
-  const el=document.getElementById('cd-status');
-  el.textContent=cdUsed?'☑ utilisée':'☐ disponible';
-  el.style.color=cdUsed?'var(--red)':'var(--gold)';
-}
-
-function showToast(msg){
-  const t=document.getElementById('toast');
-  t.textContent=msg;t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),3500);
-}
-
-// ══════════════════════════════════════════
-// INIT
-// ══════════════════════════════════════════
-window.addEventListener('load',()=>{
-  // Générer les boutons de niveau
-  const bubbles=document.getElementById('level-bubbles');
-  bubbles.innerHTML='';
-  for(let i=1;i<=10;i++){
-    const btn=document.createElement('div');
-    btn.className='lvl-btn'+(i===3?' active':'');
-    btn.textContent=i;
-    btn.onclick=(()=>{const lvl=i;return()=>renderLevel(lvl,true);})();
-    bubbles.appendChild(btn);
-  }
-
-  // Charger état sauvegardé
-  const local=localStorage.getItem('torvin-state');
-  if(local){try{const s=JSON.parse(local);savedSlots=s.slots||{};savedChecks=s.checks||{};applyState(s);}catch(e){renderLevel(3,false);}}
-  else{renderLevel(3,false);}
-
-  renderCustomData();
-  updateCD();
-  const token=getToken();
-  if(token){setStatus('Token configuré — prêt','ok');}
-  else{setStatus('Non configuré — cliquez sur ⚙ Config pour activer la sauvegarde GitHub');}
-});
-
-document.getElementById('pv-current').addEventListener('input',autoSaveLocal);
-document.getElementById('pv-temp').addEventListener('input',autoSaveLocal);
-document.getElementById('notes-text').addEventListener('input',autoSaveLocal);
-</script>
-
-
-</body></html>
+
+  <!-- ══════════════════════════════════════
+       PAGE PARCHEMIN
+       ══════════════════════════════════════ -->
+  <div class="page">
+    <div class="corner corner-tl"><svg viewBox="0 0 60 60" fill="none"><path d="M5 55L5 5L55 5" stroke="#5c3d1e" stroke-width="2"/><circle cx="5" cy="5" r="3" fill="#7a5c1e"/><path d="M8 20Q12 16 16 20Q20 24 16 28" stroke="#7a5c1e" stroke-width="1" fill="none"/><path d="M20 8Q24 12 20 16Q16 20 20 24" stroke="#7a5c1e" stroke-width="1" fill="none"/></svg></div>
+    <div class="corner corner-tr"><svg viewBox="0 0 60 60" fill="none"><path d="M5 55L5 5L55 5" stroke="#5c3d1e" stroke-width="2"/><circle cx="5" cy="5" r="3" fill="#7a5c1e"/><path d="M8 20Q12 16 16 20Q20 24 16 28" stroke="#7a5c1e" stroke-width="1" fill="none"/><path d="M20 8Q24 12 20 16Q16 20 20 24" stroke="#7a5c1e" stroke-width="1" fill="none"/></svg></div>
+    <div class="corner corner-bl"><svg viewBox="0 0 60 60" fill="none"><path d="M5 55L5 5L55 5" stroke="#5c3d1e" stroke-width="2"/><circle cx="5" cy="5" r="3" fill="#7a5c1e"/><path d="M8 20Q12 16 16 20Q20 24 16 28" stroke="#7a5c1e" stroke-width="1" fill="none"/><path d="M20 8Q24 12 20 16Q16 20 20 24" stroke="#7a5c1e" stroke-width="1" fill="none"/></svg></div>
+    <div class="corner corner-br"><svg viewBox="0 0 60 60" fill="none"><path d="M5 55L5 5L55 5" stroke="#5c3d1e" stroke-width="2"/><circle cx="5" cy="5" r="3" fill="#7a5c1e"/><path d="M8 20Q12 16 16 20Q20 24 16 28" stroke="#7a5c1e" stroke-width="1" fill="none"/><path d="M20 8Q24 12 20 16Q16 20 20 24" stroke="#7a5c1e" stroke-width="1" fill="none"/></svg></div>
+
+    <div class="content">
+
+      <!-- LEVEL BAR -->
+      <div class="level-bar">
+        <span class="level-bar-title">⬆ Niveau</span>
+        <div class="level-bubbles">
+          <div v-for="n in 10" :key="n" class="lvl-btn"
+               :class="{ active: char.level===n, 'asi-pending': pendingASI.includes(n) }"
+               @click="setLevel(n)">{{ n }}</div>
+        </div>
+        <span class="level-info">{{ levelInfo }}</span>
+      </div>
+
+      <!-- SAVE BAR -->
+      <div class="save-bar">
+        <button class="save-btn primary" @click="saveToGitHub">💾 Sauvegarder</button>
+        <button class="save-btn" @click="loadFromGitHub">↓ Charger</button>
+        <button class="save-btn" @click="exportJSON">⬇ Export JSON</button>
+        <button class="save-btn" @click="importJSON">⬆ Import</button>
+        <button class="save-btn" @click="showDice=!showDice">🎲 Dés</button>
+        <button class="save-btn" @click="showConfig=!showConfig">⚙ Config</button>
+        <span class="save-status" :class="saveStatusType">{{ saveStatus }}</span>
+      </div>
+
+      <!-- CONFIG PANEL -->
+      <div class="config-panel" v-if="showConfig">
+        <div class="config-title">⚙ Configuration GitHub</div>
+        <div class="config-row">
+          <span class="config-label">Token</span>
+          <input class="config-input" type="password" v-model="char.ghToken" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
+        </div>
+        <div class="config-row">
+          <span class="config-label">Repo</span>
+          <input class="config-input" type="text" v-model="char.ghRepo" placeholder="user/repo">
+        </div>
+        <div class="config-row">
+          <button class="save-btn primary" @click="saveConfig">Enregistrer</button>
+          <button class="save-btn" @click="clearConfig">Effacer</button>
+        </div>
+        <div class="config-note">⚠ Votre token est stocké uniquement dans votre navigateur. Il n'est jamais publié sur GitHub.</div>
+      </div>
+
+      <!-- DICE PANEL -->
+      <div class="dice-panel" v-if="showDice">
+        <button class="dice-btn" v-for="s in [4,6,8,10,12,20,100]" :key="s" @click="rollDice(s)">d{{ s }}</button>
+        <span class="dice-result" :class="{ flash: diceFlash }">{{ diceResult !== null ? diceResult : '—' }}</span>
+        <span class="dice-label">{{ diceSides ? '/ d'+diceSides : '' }}</span>
+      </div>
+
+      <!-- HEADER -->
+      <div class="header">
+        <input class="char-name-input" type="text" v-model="char.name" spellcheck="false">
+        <div class="char-subtitle">{{ char.race }} · {{ char.className }} {{ char.subclass }}, Niveau {{ char.level }} · Serviteur involontaire d'Azouth</div>
+      </div>
+
+      <!-- INFO BAR -->
+      <div class="info-bar">
+        <div class="info-cell">
+          <span class="info-label">Classe &amp; Niveau</span>
+          <input class="info-value-input" type="text" v-model="char.className" spellcheck="false">
+        </div>
+        <div class="info-cell">
+          <span class="info-label">Race</span>
+          <input class="info-value-input" type="text" v-model="char.race" spellcheck="false">
+        </div>
+        <div class="info-cell">
+          <span class="info-label">Historique</span>
+          <input class="info-value-input" type="text" v-model="char.background" spellcheck="false">
+        </div>
+        <div class="info-cell">
+          <span class="info-label">Divinité</span>
+          <input class="info-value-input" type="text" v-model="char.deity" spellcheck="false">
+        </div>
+        <div class="info-cell">
+          <span class="info-label">Alignement</span>
+          <input class="info-value-input" type="text" v-model="char.alignment" spellcheck="false">
+        </div>
+      </div>
+
+      <!-- TABS -->
+      <div class="tabs">
+        <div class="tab" :class="{active:activeTab==='main'}"     @click="switchTab('main')">Personnage</div>
+        <div class="tab" :class="{active:activeTab==='spells'}"   @click="switchTab('spells')">Sorts</div>
+        <div class="tab" :class="{active:activeTab==='combat'}"   @click="switchTab('combat')">
+          Combat<span v-if="char.conditions.length>0||char.concentration" class="tab-badge">!</span>
+        </div>
+        <div class="tab" :class="{active:activeTab==='histoire'}" @click="switchTab('histoire')">Histoire</div>
+        <div class="tab" :class="{active:activeTab==='notes'}"    @click="switchTab('notes')">Notes</div>
+      </div>
+
+      <!-- ════════════════════════════════════
+           TAB PERSONNAGE
+           ════════════════════════════════════ -->
+      <div class="tab-content" :class="{active:activeTab==='main'}">
+        <div class="main-grid">
+
+          <!-- Col 1 : Caractéristiques -->
+          <div class="stat-block">
+            <div class="section-title">Caractéristiques</div>
+            <div v-for="st in statsDisplay" :key="st.key" class="stat-box" :class="{'stat-main': st.primary}">
+              <span class="stat-name">{{ st.label }}</span>
+              <span class="stat-score">{{ st.total }}</span>
+              <span class="stat-mod">{{ S(st.mod) }}</span>
+              <div class="stat-base-row">
+                <span class="stat-base-label">base</span>
+                <input class="stat-base-input" type="number" v-model.number="char.base[st.key]" min="1" max="20" title="Modifier la valeur de base">
+                <span v-if="st.racial" class="stat-base-label" title="Bonus racial">+{{ st.racial }}R</span>
+              </div>
+              <span v-if="st.asi > 0" class="stat-asi-badge" title="Bonus ASI">+{{ st.asi }}✦</span>
+            </div>
+            <div class="passive-box">
+              <div class="passive-val">{{ passivePerc }}</div>
+              <span class="passive-label">Sagesse passive</span>
+            </div>
+          </div>
+
+          <!-- Col 2 : Combat + PV + Rests + HD + Saves + Attaques + Équipement -->
+          <div>
+            <div class="section-title">Combat</div>
+            <div class="combat-row">
+              <div class="combat-box">
+                <span class="combat-label">CA</span>
+                <span class="combat-val">{{ ca }}</span>
+                <div style="font-size:7.5px;font-family:'Cinzel',serif;color:var(--ink-light);margin-top:2px">
+                  base:<input class="combat-base-input" type="number" v-model.number="char.armorBase" min="0" max="25" title="CA de base de l'armure">
+                  <label><input type="checkbox" v-model="char.useShield"> Bouclier</label>
+                </div>
+                <div style="font-size:7px;font-family:'Cinzel',serif;margin-top:2px">
+                  <select class="armor-type-select" v-model="char.armorType">
+                    <option value="light">Légère (+ Dex)</option>
+                    <option value="medium">Interméd. (+ min(Dex,2))</option>
+                    <option value="heavy">Lourde (sans Dex)</option>
+                    <option value="unarmored">Sans armure</option>
+                    <option value="mage-armor">Armure du mage</option>
+                  </select>
+                </div>
+              </div>
+              <div class="combat-box">
+                <span class="combat-label">Initiative</span>
+                <span class="combat-val">{{ S(mods.dex) }}</span>
+              </div>
+              <div class="combat-box">
+                <span class="combat-label">Vitesse</span>
+                <input class="combat-input" type="number" v-model.number="char.speed" min="0" max="99">
+                <span style="font-family:'Cinzel',serif;font-size:8px;color:var(--ink-light)">m</span>
+                <div v-if="effectiveSpeed !== char.speed" style="font-size:7px;color:var(--red);font-family:'Cinzel',serif">
+                  eff: {{ effectiveSpeed }}m
+                </div>
+              </div>
+              <div class="combat-box">
+                <span class="combat-label">Maîtrise</span>
+                <span class="combat-val">{{ S(prof) }}</span>
+              </div>
+              <div class="combat-box">
+                <span class="combat-label">Dés de vie</span>
+                <span class="combat-val">{{ hitDice }}</span>
+              </div>
+            </div>
+
+            <!-- PV -->
+            <div class="pv-section">
+              <div class="pv-box">
+                <span class="pv-label">❤ Points de vie actuels</span>
+                <div class="pv-controls">
+                  <button class="pv-adj neg" @click="adjustHP(-5)">−5</button>
+                  <button class="pv-adj neg" @click="adjustHP(-1)">−1</button>
+                  <input class="pv-input" type="number" v-model.number="char.hpCurrent" :min="0" :max="hpMax">
+                  <button class="pv-adj pos" @click="adjustHP(+1)">+1</button>
+                  <button class="pv-adj pos" @click="adjustHP(+5)">+5</button>
+                </div>
+                <div class="pv-max">Maximum : <strong>{{ hpMax }}</strong>
+                  <span v-if="isDeathsDoor" style="color:var(--red);font-weight:700"> ☠ Jets de mort !</span>
+                </div>
+              </div>
+              <div class="pv-box">
+                <span class="pv-label">✦ PV temporaires</span>
+                <input class="pv-input" type="number" v-model.number="char.hpTemp" min="0" style="color:var(--ink-mid)">
+                <div class="pv-max">
+                  Canalisation divine :
+                  <span style="cursor:pointer;color:var(--gold);font-weight:700" @click="toggleCD">
+                    {{ char.cdUsed }}/{{ levelData.cd }} utilisée{{ char.cdUsed > 1 ? 's' : '' }}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Repos -->
+            <div class="rest-bar">
+              <button class="rest-btn short" @click="shortRest">⬋ Repos court — 1d8 PV + CD</button>
+              <button class="rest-btn long"  @click="longRest">☀ Repos long — tout récupérer</button>
+            </div>
+
+            <!-- HP dice tracker -->
+            <div class="hd-section">
+              <div class="hd-title-row">
+                <span class="section-title" style="border:none;padding:0;margin:0">Dés de vie (d8)</span>
+                <span class="hd-summary">{{ hdSummary }}</span>
+              </div>
+              <div class="hd-grid">
+                <div class="hd-cell" v-for="l in 10" :key="l">
+                  <div class="hd-lvl-label">N{{ l }}</div>
+                  <input class="hd-input" type="number" :min="1" :max="8"
+                         :value="char.hpRolls[l] || ''"
+                         :disabled="l > char.level"
+                         @change="updateHPRoll(l, $event)"
+                         :title="l <= char.level ? 'Modifier le dé de vie du niveau '+l : 'Non encore atteint'">
+                </div>
+              </div>
+            </div>
+
+            <!-- Jets de sauvegarde -->
+            <div class="section-box">
+              <div class="section-title">Jets de sauvegarde</div>
+              <div class="saves-list">
+                <div class="save-row" v-for="sv in savingThrows" :key="sv.name">
+                  <span class="skill-prof" :class="{ filled: sv.prof }"></span>
+                  <span class="skill-name">{{ sv.name }}</span>
+                  <span class="skill-bonus" :class="{ high: sv.prof }">{{ S(sv.bonus) }}</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Attaques -->
+            <div class="section-box">
+              <div class="section-title">Attaques</div>
+              <table class="attacks-table">
+                <thead><tr><th>Nom</th><th>Bonus att.</th><th>Dégâts / Type</th></tr></thead>
+                <tbody>
+                  <tr>
+                    <td>Masse d'armes</td>
+                    <td>{{ maceAttack }}</td>
+                    <td>{{ maceDamage }}</td>
+                  </tr>
+                  <tr>
+                    <td>Glas des trépassés</td>
+                    <td>DD {{ spellDC }} Sag</td>
+                    <td>{{ tollDamage }}</td>
+                  </tr>
+                  <tr>
+                    <td>Projectile magique</td>
+                    <td>automatique</td>
+                    <td>3×(1d4+1) force</td>
+                  </tr>
+                  <tr v-for="(atk, i) in char.customAttacks" :key="i">
+                    <td>{{ atk.name }}</td>
+                    <td>{{ atk.bonus }}</td>
+                    <td style="display:flex;justify-content:space-between;align-items:center">
+                      {{ atk.damage }}
+                      <button class="delete-btn" @click="removeCustomAttack(i)" title="Supprimer">×</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <div class="add-form">
+                <input class="add-input add-input-sm" type="text" v-model="newAtkName" placeholder="Nom…" @keyup.enter="addCustomAttack">
+                <input class="add-input add-input-xs" type="text" v-model="newAtkBonus" placeholder="+X" @keyup.enter="addCustomAttack">
+                <input class="add-input" type="text" v-model="newAtkDmg" placeholder="Dés / type" @keyup.enter="addCustomAttack">
+                <button class="add-btn" @click="addCustomAttack" title="Ajouter">+</button>
+              </div>
+            </div>
+
+            <!-- Équipement -->
+            <div class="section-box">
+              <div class="section-title">Équipement</div>
+              <ul class="equip-list">
+                <li v-for="(item, i) in char.equipment" :key="'base-'+i">
+                  <span style="flex:1">{{ item }}</span>
+                  <button class="equip-delete" @click="removeBaseEquip(i)" title="Supprimer">✕</button>
+                </li>
+                <li v-for="(item, i) in char.customEquipment" :key="'custom-'+i">
+                  <span style="flex:1">{{ item }}</span>
+                  <button class="equip-delete" @click="removeCustomEquip(i)" title="Supprimer">✕</button>
+                </li>
+              </ul>
+              <div class="add-form">
+                <input class="add-input" type="text" v-model="newEquip" placeholder="Ajouter un objet…" @keyup.enter="addCustomEquip">
+                <button class="add-btn" @click="addCustomEquip" title="Ajouter">+</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Col 3 : Compétences + Langues + Outils -->
+          <div>
+            <div class="section-box">
+              <div class="section-title">Compétences</div>
+              <div class="skills-list">
+                <div class="skill-row" v-for="sk in skillList" :key="sk.name">
+                  <span class="skill-prof" :class="sk.prof"></span>
+                  <span class="skill-name">{{ sk.name }}</span>
+                  <span class="skill-bonus" :class="{ high: sk.high }">{{ S(sk.bonus) }}</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="section-box" style="margin-top:10px">
+              <div class="section-title">Langues</div>
+              <ul class="equip-list">
+                <li v-for="(lang, i) in char.languages" :key="'lang-'+i">
+                  <span style="flex:1;font-size:12px">{{ lang }}</span>
+                  <button class="equip-delete" @click="removeLanguage(i)" title="Supprimer">✕</button>
+                </li>
+              </ul>
+              <div class="add-form">
+                <input class="add-input" type="text" v-model="newLanguage" placeholder="Ajouter une langue…" @keyup.enter="addLanguage">
+                <button class="add-btn" @click="addLanguage">+</button>
+              </div>
+            </div>
+
+            <div class="section-box" style="margin-top:10px">
+              <div class="section-title">Maîtrises d'outils</div>
+              <ul class="equip-list">
+                <li v-for="(tool, i) in char.toolProfs" :key="'tool-'+i">
+                  <span style="flex:1;font-size:12px">{{ tool }}</span>
+                  <button class="equip-delete" @click="removeToolProf(i)" title="Supprimer">✕</button>
+                </li>
+              </ul>
+              <div class="add-form">
+                <input class="add-input" type="text" v-model="newToolProf" placeholder="Ajouter une maîtrise…" @keyup.enter="addToolProf">
+                <button class="add-btn" @click="addToolProf">+</button>
+              </div>
+            </div>
+          </div>
+        </div><!-- /main-grid -->
+
+        <!-- Capacités & Traits -->
+        <div class="divider"><span>✦</span></div>
+        <div class="section-title">Capacités &amp; Traits</div>
+        <div class="features-grid">
+          <div v-for="feat in features" :key="feat.name"
+               class="feature-block" :class="{ legendary: feat.minLvl===10 }">
+            <span class="feature-name">{{ feat.name }}</span>
+            <div class="feature-desc">{{ feat.desc }}</div>
+          </div>
+          <!-- Active feats from ASI -->
+          <div v-for="fid in activeFeatIds" :key="'feat-'+fid"
+               class="feature-block" style="border-color:var(--gold-light);background:rgba(122,92,30,.07)">
+            <template v-if="allFeats.find(f=>f.id===fid)">
+              <span class="feature-name" style="color:var(--gold)">
+                Don : {{ allFeats.find(f=>f.id===fid).name.split('(')[0].trim() }}
+              </span>
+              <div class="feature-desc">{{ allFeats.find(f=>f.id===fid).desc }}</div>
+            </template>
+          </div>
+          <!-- ASI choices -->
+          <div v-for="lvl in asiLevels.filter(l=>l<=char.level)" :key="'asi-disp-'+lvl"
+               class="feature-block asi">
+            <span class="feature-name" style="color:var(--gold)">
+              ASI Niveau {{ lvl }}
+              <span class="new-badge" style="cursor:pointer" @click="editASI(lvl)">
+                {{ char.asi[lvl] ? '✎ modifier' : '⚠ choisir' }}
+              </span>
+            </span>
+            <div class="feature-desc">{{ char.asi[lvl] ? asiSummary(lvl) : 'Non attribuée — cliquez pour choisir' }}</div>
+          </div>
+          <!-- Next level goal -->
+          <div v-if="char.level < 10" class="feature-block asi">
+            <span class="feature-name" style="color:var(--gold)">Objectif niveau {{ char.level+1 }}</span>
+            <div class="feature-desc">{{ nextLevelGoal }}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ════════════════════════════════════
+           TAB SORTS
+           ════════════════════════════════════ -->
+      <div class="tab-content" :class="{active:activeTab==='spells'}">
+
+        <!-- Bannière de concentration active -->
+        <div v-if="char.concentration" class="conc-banner">
+          ◆ Concentration active :
+          <strong>{{ char.concentration }}</strong>
+          <span style="margin-left:10px;font-size:9px">
+            JS Con : {{ S(concentrationSaveBonus) }}{{ concentrationHasAdvantage ? ' + avantage (War Caster)' : '' }}
+          </span>
+          <button class="conc-clear" @click="clearConcentration">✕</button>
+        </div>
+
+        <!-- Stat bar -->
+        <div class="spell-stats-bar">
+          <span class="spell-stat-item">DD sorts : <strong class="spell-stat-val">{{ spellDC }}</strong></span>
+          <span class="spell-stat-item">Bonus attaque : <strong class="spell-stat-val">{{ S(spellAtk) }}</strong></span>
+          <span class="spell-stat-item">Sorts mineurs : <strong class="spell-stat-val">3 (×{{ cantripDice }} dés)</strong></span>
+          <span class="spell-prepared-bar">
+            Sorts préparés : <span class="spell-prepared-count">—/{{ preparedMax }}</span>
+            <span style="font-size:8px;color:var(--ink-light)"> (niv.{{ char.level }} + mod Sag)</span>
+          </span>
+        </div>
+
+        <!-- Sorts mineurs -->
+        <div class="spell-level-block">
+          <div class="spell-level-header">
+            <span class="spell-level-num">Sorts mineurs — à volonté (×{{ cantripDice }} dés)</span>
+          </div>
+          <div class="spell-row" v-for="c in cantrips" :key="c.id">
+            <span class="spell-check" :class="{checked:isChecked(c.id)}" @click="toggleCheck(c.id)"></span>
+            <span class="spell-name"><strong>{{ c.name }}</strong></span>
+            <span class="spell-tag">{{ c.tag }}</span>
+            <span class="spell-conc">{{ c.conc ? 'CONC.' : '—' }}</span>
+          </div>
+        </div>
+
+        <!-- Emplacements par niveau -->
+        <div v-for="slotLvl in slotLevels" :key="'slot-'+slotLvl" class="spell-level-block">
+          <div class="spell-level-header">
+            <span class="spell-level-num">
+              Niveau {{ slotLvl }} — {{ slots[slotLvl] }} emplacement{{ slots[slotLvl]>1?'s':'' }}
+            </span>
+            <div class="spell-slots">
+              <span v-for="i in slots[slotLvl]" :key="i"
+                    class="slot-bubble" :class="{ used: (char.slotsUsed[slotLvl]||0) >= i }"
+                    @click="toggleSlot(slotLvl, i)"
+                    :title="(char.slotsUsed[slotLvl]||0)>=i ? 'Récupérer' : 'Utiliser'"></span>
+            </div>
+          </div>
+
+          <!-- Sorts de domaine -->
+          <template v-if="domainSpells[domainKeyForSlot(slotLvl)]">
+            <div v-for="(ds, di) in domainSpells[domainKeyForSlot(slotLvl)]" :key="'dom-'+slotLvl+'-'+di"
+                 class="spell-row" :style="di%2===1 ? 'background:rgba(92,61,30,.05)' : ''">
+              <span class="spell-check" :class="{checked:isChecked('sc-d'+slotLvl+'-'+di)}" @click="toggleCheck('sc-d'+slotLvl+'-'+di)"></span>
+              <span class="spell-name domain">{{ ds.name }} <em style="font-size:9px">[domaine]</em></span>
+              <span class="spell-tag">{{ ds.tag }}</span>
+              <span class="spell-conc"
+                    :class="{ 'conc-active-badge': char.concentration===ds.name }"
+                    :style="ds.conc ? 'cursor:pointer' : ''"
+                    @click="ds.conc && toggleConcentration(ds.name)"
+                    :title="ds.conc ? (char.concentration===ds.name ? 'Rompre la concentration' : 'Activer la concentration') : ''">
+                {{ ds.conc ? (char.concentration===ds.name ? '◆ACT' : 'CONC.') : '—' }}
+              </span>
+            </div>
+          </template>
+
+          <!-- Sorts suggérés -->
+          <div v-for="sp in (suggestedSpells[slotLvl]||[])" :key="sp.id"
+               class="spell-row" :style="sp.id==='sc-bane' ? 'background:rgba(139,26,26,.06)' : ''">
+            <span class="spell-check" :class="{checked:isChecked(sp.id)}" @click="toggleCheck(sp.id)"></span>
+            <span class="spell-name"><strong>{{ sp.name }}</strong></span>
+            <span class="spell-tag">{{ sp.tag }}</span>
+            <span class="spell-conc"
+                  :class="{ 'conc-active-badge': char.concentration===sp.name, bonus: sp.bonus && !sp.conc }"
+                  :style="sp.conc ? 'cursor:pointer' : ''"
+                  @click="sp.conc && toggleConcentration(sp.name)"
+                  :title="sp.conc ? (char.concentration===sp.name ? 'Rompre' : 'Activer concentration') : ''">
+              {{ sp.conc ? (char.concentration===sp.name ? '◆ACT' : 'CONC.') : sp.bonus ? 'BON.' : '—' }}
+            </span>
+          </div>
+
+          <!-- Sorts personnalisés -->
+          <div v-for="cs in (char.customSpells[slotLvl]||[])" :key="cs.id"
+               class="spell-row spell-row-custom" style="background:rgba(122,92,30,.05)">
+            <span class="spell-check" :class="{checked:isChecked('cs-'+cs.id)}" @click="toggleCheck('cs-'+cs.id)"></span>
+            <span class="spell-name">{{ cs.name }}</span>
+            <span class="spell-tag">{{ cs.tag }}</span>
+            <span class="spell-conc"
+                  :class="{ 'conc-active-badge': char.concentration===cs.name }"
+                  :style="cs.conc ? 'cursor:pointer' : ''"
+                  @click="cs.conc && toggleConcentration(cs.name)"
+                  :title="cs.conc ? (char.concentration===cs.name ? 'Rompre' : 'Activer concentration') : ''">
+              {{ cs.conc ? (char.concentration===cs.name ? '◆ACT' : 'CONC.') : '—' }}
+            </span>
+            <button class="delete-btn" @click="removeCustomSpell(slotLvl, cs.id)" title="Retirer">×</button>
+          </div>
+
+          <!-- Picker -->
+          <button class="spell-add-btn" :class="{active:openPickers[slotLvl]}" @click="togglePicker(slotLvl)">
+            {{ openPickers[slotLvl] ? '▲ Fermer' : '+ Ajouter un sort préparé' }}
+          </button>
+          <div class="spell-picker" :class="{open:openPickers[slotLvl]}">
+            <template v-if="(availableSpells[slotLvl]||[]).length===0">
+              <div class="spell-picker-empty">Tous les sorts de ce niveau sont déjà ajoutés.</div>
+            </template>
+            <div v-for="av in (availableSpells[slotLvl]||[])" :key="av.id" class="spell-picker-row">
+              <div class="spell-picker-info">
+                <span class="spell-picker-name">{{ av.name }}</span>
+                <span class="spell-picker-tags">{{ av.tag }}{{ av.conc ? ' · CONC.' : '' }}</span>
+                <div class="spell-picker-desc">{{ av.desc }}</div>
+              </div>
+              <button class="spell-picker-add" @click="addCustomSpell(slotLvl, av.id)">+</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ════════════════════════════════════
+           TAB COMBAT
+           ════════════════════════════════════ -->
+      <div class="tab-content" :class="{active:activeTab==='combat'}">
+
+        <!-- Ligne 1 : Concentration + Inspiration + Exhaustion -->
+        <div class="combat-meta-row">
+
+          <!-- Concentration -->
+          <div class="section-box conc-section">
+            <div class="section-title">◆ Concentration</div>
+            <div v-if="char.concentration" class="conc-active-area">
+              <div class="conc-spell-name">{{ char.concentration }}</div>
+              <div class="conc-dc-info">
+                JS Constitution si blessé : max(10, dégâts ÷ 2)
+                <span class="conc-save-bonus">{{ S(concentrationSaveBonus) }}{{ concentrationHasAdvantage ? ' · avantage (War Caster)' : '' }}</span>
+              </div>
+              <button class="save-btn" style="margin-top:6px;font-size:8px" @click="clearConcentration">✕ Rompre la concentration</button>
+            </div>
+            <div v-else class="conc-empty">
+              <div style="font-family:'Crimson Text',serif;font-size:12px;color:var(--ink-light);font-style:italic;margin-bottom:8px">Aucun sort en concentration.</div>
+              <div class="add-form">
+                <input class="add-input" type="text" v-model="newConcentration" placeholder="Nom du sort…" @keyup.enter="setConcentration">
+                <button class="add-btn" @click="setConcentration">▶</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Inspiration -->
+          <div class="section-box" style="min-width:120px;text-align:center">
+            <div class="section-title">Inspiration</div>
+            <button class="inspiration-btn" :class="{active: char.inspiration}"
+                    @click="char.inspiration = !char.inspiration">
+              {{ char.inspiration ? '✦ Inspiré !' : '◇ Aucune' }}
+            </button>
+            <div style="font-size:9px;font-family:'Crimson Text',serif;color:var(--ink-light);margin-top:6px;font-style:italic">
+              Avantage à un jet de caract.
+            </div>
+          </div>
+
+          <!-- Épuisement -->
+          <div class="section-box" style="flex:2">
+            <div class="section-title">Épuisement — Niveau {{ char.exhaustion }}/6</div>
+            <div class="exhaustion-track">
+              <div v-for="n in 6" :key="n"
+                   class="exhaustion-pip" :class="{active: n <= char.exhaustion}"
+                   @click="char.exhaustion = (n === char.exhaustion ? n-1 : n)"
+                   :title="exhaustionEffects[n]">{{ n }}</div>
+            </div>
+            <div class="exhaustion-label">{{ exhaustionEffects[char.exhaustion] }}</div>
+          </div>
+        </div>
+
+        <!-- Jets de mort -->
+        <div class="section-box">
+          <div class="section-title">
+            Jets de mort
+            <span v-if="char.hpCurrent > 0" style="font-weight:400;color:var(--green);font-family:'Crimson Text',serif;font-size:11px;margin-left:8px;text-transform:none">
+              Conscient ({{ char.hpCurrent }} PV)
+            </span>
+            <span v-else style="font-weight:700;color:var(--red);font-family:'Crimson Text',serif;font-size:11px;margin-left:8px;text-transform:none">
+              ☠ À 0 PV — Lancer le dé !
+            </span>
+          </div>
+          <div class="death-saves-area">
+            <div class="death-save-row">
+              <span class="death-save-label success">✓ Succès</span>
+              <div class="death-save-pips">
+                <div v-for="i in 3" :key="'s'+i"
+                     class="death-pip success-pip" :class="{filled: i <= char.deathSaves.success}"
+                     @click="char.deathSaves.success = (i <= char.deathSaves.success ? i-1 : i)">
+                </div>
+              </div>
+            </div>
+            <div class="death-save-row">
+              <span class="death-save-label failure">✗ Échecs</span>
+              <div class="death-save-pips">
+                <div v-for="i in 3" :key="'f'+i"
+                     class="death-pip failure-pip" :class="{filled: i <= char.deathSaves.failure}"
+                     @click="char.deathSaves.failure = (i <= char.deathSaves.failure ? i-1 : i)">
+                </div>
+              </div>
+            </div>
+            <div class="death-save-actions">
+              <button class="save-btn" @click="rollDeathSave">🎲 Lancer (d20)</button>
+              <button class="save-btn" @click="resetDeathSaves" style="margin-left:6px">↺ Réinitialiser</button>
+            </div>
+            <div v-if="char.deathSaves.success >= 3" class="death-status" style="color:var(--green)">✓ Stabilisé !</div>
+            <div v-if="char.deathSaves.failure >= 3" class="death-status" style="color:var(--red)">☠ Mort...</div>
+          </div>
+        </div>
+
+        <!-- Conditions -->
+        <div class="section-box">
+          <div class="section-title">Conditions ({{ char.conditions.length }} active{{ char.conditions.length>1?'s':'' }})</div>
+          <div class="conditions-grid">
+            <button v-for="cond in allConditions" :key="cond.id"
+                    class="condition-btn" :class="{active: char.conditions.includes(cond.id)}"
+                    :title="cond.desc"
+                    @click="toggleCondition(cond.id)">
+              {{ cond.name }}
+            </button>
+          </div>
+          <div v-if="char.conditions.length > 0" class="active-conditions">
+            <div v-for="condId in char.conditions" :key="'desc-'+condId" class="active-condition-desc">
+              <strong>{{ allConditions.find(c=>c.id===condId)?.name }}</strong> :
+              {{ allConditions.find(c=>c.id===condId)?.desc }}
+            </div>
+          </div>
+        </div>
+
+        <!-- Monnaies + Harmonisation -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+          <div class="section-box">
+            <div class="section-title">Monnaies</div>
+            <div class="currency-row">
+              <div class="currency-box" v-for="c in [{key:'pp',label:'Platine'},{key:'gp',label:'Or'},{key:'ep',label:'Élec.'},{key:'sp',label:'Argent'},{key:'cp',label:'Cuivre'}]" :key="c.key">
+                <span class="currency-label">{{ c.label }}</span>
+                <input class="currency-input" type="number" v-model.number="char.currency[c.key]" min="0">
+                <span class="currency-code">{{ c.key.toUpperCase() }}</span>
+              </div>
+            </div>
+            <div class="currency-total">≈ {{ currencyInGP }} po</div>
+          </div>
+
+          <div class="section-box">
+            <div class="section-title">Harmonisation ({{ (char.attunedItems||[]).length }}/3)</div>
+            <div class="attunement-slots">
+              <div v-for="(item, i) in (char.attunedItems||[])" :key="'att-'+i" class="attunement-slot filled">
+                <span>✦ {{ item }}</span>
+                <button class="equip-delete" @click="removeAttunement(i)">✕</button>
+              </div>
+              <div v-for="n in (3 - (char.attunedItems||[]).length)" :key="'empty-'+n" class="attunement-slot empty">
+                — Emplacement libre —
+              </div>
+            </div>
+            <div class="add-form" v-if="(char.attunedItems||[]).length < 3">
+              <input class="add-input" type="text" v-model="newAttuned" placeholder="Objet magique harmonisé…" @keyup.enter="addAttunement">
+              <button class="add-btn" @click="addAttunement">+</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ════════════════════════════════════
+           TAB HISTOIRE
+           ════════════════════════════════════ -->
+      <div class="tab-content" :class="{active:activeTab==='histoire'}">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+
+          <!-- Col 1 : Personnalité -->
+          <div>
+            <div class="section-title">Personnalité</div>
+            <div class="trait-block" v-for="(trait, i) in char.traits" :key="'trait-'+i">
+              <span class="trait-label">Trait {{ i+1 }}</span>
+              <textarea class="trait-textarea" v-model="char.traits[i]" rows="2" spellcheck="false"></textarea>
+            </div>
+            <div class="trait-block">
+              <span class="trait-label">Idéal</span>
+              <textarea class="trait-textarea" v-model="char.ideal" rows="2" spellcheck="false"></textarea>
+            </div>
+            <div class="trait-block">
+              <span class="trait-label">Lien</span>
+              <textarea class="trait-textarea" v-model="char.bond" rows="2" spellcheck="false"></textarea>
+            </div>
+            <div class="trait-block">
+              <span class="trait-label">Défaut</span>
+              <textarea class="trait-textarea" v-model="char.flaw" rows="2" spellcheck="false"></textarea>
+            </div>
+          </div>
+
+          <!-- Col 2 : Phrases situationnelles -->
+          <div>
+            <div class="section-title" style="display:flex;justify-content:space-between;align-items:center">
+              Phrases situationnelles
+              <button class="save-btn" style="font-size:7px;padding:2px 8px;margin-bottom:4px" @click="addPhrase">+ Ajouter</button>
+            </div>
+            <div v-for="(phrase, i) in char.phrases" :key="'phrase-'+i" class="phrase-block">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px">
+                <input class="phrase-situation-input" type="text"
+                       v-model="char.phrases[i].situation" spellcheck="false" placeholder="Situation…">
+                <button class="equip-delete" @click="removePhrase(i)" title="Supprimer">✕</button>
+              </div>
+              <textarea class="phrase-textarea" v-model="char.phrases[i].text" rows="2" spellcheck="false"></textarea>
+            </div>
+            <!-- Réflexes universels -->
+            <div style="margin-top:10px;padding:10px;border:1px solid var(--border);background:rgba(92,61,30,.04)">
+              <div class="section-title" style="margin-bottom:6px">Réflexes universels</div>
+              <div style="font-family:'IM Fell English',serif;font-size:12px;color:var(--ink-mid);font-style:italic;line-height:1.9">
+                « Intéressant... j'avais lu quelque chose à ce sujet. »<br>
+                « Si vous me permettez une observation non sollicitée... »<br>
+                « Techniquement parlant... »<br>
+                « Ce n'est pas ce que j'aurais anticipé, mais bon. »
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Combos de combat -->
+        <div class="divider"><span>✦</span></div>
+        <div class="section-title">Combos de combat</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
+          <div>
+            <div class="combo-box">
+              <div class="combo-title">⚔ Round d'ouverture</div>
+              <ul class="combo-steps">
+                <li><strong>Action :</strong> Fléau sur 3 ennemis — DD Charisme {{ S(mods.cha+prof) }}</li>
+                <li><strong>Action bonus :</strong> Arme spirituelle (invoquer) — {{ S(spellAtk) }} / 1d8{{ S(mods.wis) }}</li>
+                <li>3 ennemis à −1d4, dégâts passifs chaque round</li>
+              </ul>
+            </div>
+            <div class="combo-box" style="border-color:var(--gold);background:rgba(122,92,30,.06)">
+              <div class="combo-title" style="color:var(--gold)">✦ Double debuff</div>
+              <ul class="combo-steps">
+                <li><strong>Bane actif</strong> (concentration, DD {{ S(mods.cha+prof) }})</li>
+                <li><strong>Action :</strong> Cécité/Surdité — sans concentration !</li>
+                <li><strong>Action bonus :</strong> Arme spirituelle ({{ S(spellAtk) }}, 1d8{{ S(mods.wis) }})</li>
+              </ul>
+            </div>
+          </div>
+          <div>
+            <div class="combo-box">
+              <div class="combo-title">🎯 Contre un boss</div>
+              <ul class="combo-steps">
+                <li><strong>Action :</strong> Immobilisation — DD {{ spellDC }} Sagesse</li>
+                <li><strong>Action bonus :</strong> Arme spirituelle</li>
+                <li>Alliés : avantage + critiques automatiques !</li>
+              </ul>
+            </div>
+            <div style="padding:10px;border:1px solid var(--border);background:rgba(92,61,30,.05)">
+              <div class="section-title">Urgence soins</div>
+              <div style="font-family:'Crimson Text',serif;font-size:13px;color:var(--ink-mid)">
+                <strong>Allié à 0 PV ?</strong> → <span style="color:var(--red);font-weight:600">Action BONUS</span> :
+                Mot de guérison (1d4{{ mods.wis >= 0 ? '+'+mods.wis : mods.wis }} PV)
+              </div>
+              <div style="font-family:'Crimson Text',serif;font-size:12px;color:var(--ink-light);margin-top:6px;font-style:italic">
+                Cantrip Glas des trépassés : {{ tollDamage }}
+                <br>Sorts mineurs : {{ cantripDice }} dé{{ cantripDice > 1 ? 's' : '' }} par sort mineur
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Lore / Background narratif -->
+        <div class="divider"><span>✦</span></div>
+        <div class="lore-section">
+          <div class="section-title">L'Origine de Torvin</div>
+          <div class="lore-body">
+            <div class="lore-col">
+              <p class="lore-text"><span class="lore-dropcap">T</span>orvin était artisan dans une guilde de bricoleurs gnomes — réparateur de mécanismes, démonteur de curiosités, restaurateur d'objets oubliés que d'autres auraient jetés. Quand un client lui apporta un boîtier de bronze cabossé dont les engrenages refusaient obstinément de tourner, il ne vit d'abord qu'un puzzle mécanique de plus.</p>
+              <p class="lore-text">En l'ouvrant, il découvrit des inscriptions arcanes azouthiennes nichées dans les rouages — des glyphes que personne n'avait dû lire depuis des générations. Par pure curiosité intellectuelle, il les activa.</p>
+              <p class="lore-text">Azouth le choisit. Involontairement.</p>
+              <blockquote class="lore-quote">«&nbsp;Je n'ai pas demandé à devenir clerc. J'ai juste posé une question à un mécanisme. Et il a répondu d'une façon que je n'avais pas anticipée.&nbsp;»</blockquote>
+            </div>
+            <div class="lore-col">
+              <p class="lore-text">Depuis, Torvin traite ses pouvoirs divins comme un mécanisme qu'il n'a pas encore entièrement démonté. Il prie Azouth comme il consulterait un manuel technique — méthodiquement, sans ferveur excessive, avec l'espoir sincère d'y trouver des instructions claires.</p>
+              <p class="lore-text">Jusqu'à présent, les instructions restent singulièrement cryptiques. La Relique d'Azouth demeure en sa possession — l'objet même qui a déclenché tout cela, son focaliseur d'incantation, son lien divin involontaire. Il ne sait pas encore ce qu'elle fait vraiment. Il prend des notes.</p>
+              <blockquote class="lore-quote">«&nbsp;La connaissance doit circuler librement. La garder pour soi est un crime contre l'humanité. Et contre la méthode scientifique.&nbsp;»</blockquote>
+              <p class="lore-epigraph">Gnome des Roches · Artisan de Guilde · Serviteur involontaire d'Azouth, Dieu des Magiciens</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ════════════════════════════════════
+           TAB NOTES
+           ════════════════════════════════════ -->
+      <div class="tab-content" :class="{active:activeTab==='notes'}">
+        <div class="section-title">Notes de session</div>
+        <textarea class="notes-area" v-model="char.notes"
+          placeholder="Notes de session, observations de Torvin, événements importants, noms de PNJ, indices, croquis mécaniques…"></textarea>
+        <div class="notes-hint">Sauvegardé automatiquement · inclus dans la sauvegarde GitHub · Exporter : bouton ⬇ JSON</div>
+      </div>
+
+      <!-- FOOTER -->
+      <div class="footer">
+        <p>{{ char.name }} · {{ char.subclass }} · {{ char.deity }} · Niveau {{ char.level }}</p>
+        <p style="margin-top:3px;opacity:.6">{{ nextLevelInfo }}</p>
+      </div>
+
+    </div><!-- /content -->
+  </div><!-- /page -->
+
+  <!-- FLOATING SAVE (mobile) -->
+  <button class="floating-save" @click="saveToGitHub" title="Sauvegarder sur GitHub">💾</button>
+
+</div><!-- /app -->
+
+<script src="https://cdn.jsdelivr.net/npm/vue@3/dist/vue.global.prod.js"></script>
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
