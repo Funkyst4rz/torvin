@@ -239,7 +239,9 @@ body {
   font-family:'Cinzel',serif;font-size:9px;font-weight:700;width:32px;
   text-align:center;background:rgba(160,130,74,.1);
   border:1px solid var(--border-light);color:var(--ink);outline:none;padding:1px 2px;
+  -moz-appearance:textfield;
 }
+.stat-base-input::-webkit-inner-spin-button,.stat-base-input::-webkit-outer-spin-button { display:none; }
 .stat-base-input:focus { border-color:var(--gold-light);background:rgba(196,152,48,.12); }
 .stat-asi-badge {
   font-family:'Cinzel',serif;font-size:6.5px;font-weight:700;
@@ -273,7 +275,9 @@ body {
   font-family:'Cinzel',serif;font-size:18px;font-weight:900;color:var(--ink);
   text-align:center;background:transparent;border:none;
   border-bottom:1px dashed transparent;width:100%;outline:none;
+  -moz-appearance:textfield;
 }
+.combat-input::-webkit-inner-spin-button,.combat-input::-webkit-outer-spin-button { display:none; }
 .combat-input:hover,.combat-input:focus { border-bottom-color:var(--gold-light); }
 
 /* Armor config row — compact strip below combat boxes */

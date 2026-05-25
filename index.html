@@ -187,6 +187,10 @@
               <div class="stat-base-row">
                 <span class="stat-base-label">base</span>
                 <input class="stat-base-input" type="number" v-model.number="char.base[st.key]" min="1" max="20" title="Modifier la valeur de base">
+                <div class="pv-spinners" style="padding-left:2px">
+                  <button class="pv-spin" @click="char.base[st.key] = Math.min(20, char.base[st.key] + 1)" tabindex="-1">▴</button>
+                  <button class="pv-spin" @click="char.base[st.key] = Math.max(1, char.base[st.key] - 1)" tabindex="-1">▾</button>
+                </div>
                 <span v-if="st.racial" class="stat-base-label" title="Bonus racial">+{{ st.racial }}R</span>
               </div>
               <span v-if="st.asi > 0" class="stat-asi-badge" title="Bonus ASI">+{{ st.asi }}✦</span>
@@ -224,7 +228,13 @@
               </div>
               <div class="combat-box">
                 <span class="combat-label">Vitesse</span>
-                <input class="combat-input" type="number" v-model.number="char.speed" min="0" max="99">
+                <div style="display:flex;align-items:center">
+                  <input class="combat-input" type="number" v-model.number="char.speed" min="0" max="99">
+                  <div class="pv-spinners">
+                    <button class="pv-spin" @click="char.speed = Math.min(99, char.speed + 1)" tabindex="-1">▴</button>
+                    <button class="pv-spin" @click="char.speed = Math.max(0, char.speed - 1)" tabindex="-1">▾</button>
+                  </div>
+                </div>
                 <span style="font-family:'Cinzel',serif;font-size:8px;color:var(--ink-light)">m</span>
                 <div v-if="effectiveSpeed !== char.speed" style="font-size:7px;color:var(--red);font-family:'Cinzel',serif">
                   eff: {{ effectiveSpeed }}m
@@ -257,7 +267,13 @@
               </div>
               <div class="pv-box">
                 <span class="pv-label">✦ PV temporaires</span>
-                <input class="pv-input" type="number" v-model.number="char.hpTemp" min="0" style="color:var(--ink-mid)">
+                <div class="pv-controls">
+                  <input class="pv-input" type="number" v-model.number="char.hpTemp" min="0" style="color:var(--ink-mid)">
+                  <div class="pv-spinners">
+                    <button class="pv-spin" @click="char.hpTemp++" tabindex="-1">▴</button>
+                    <button class="pv-spin" @click="char.hpTemp = Math.max(0, char.hpTemp - 1)" tabindex="-1">▾</button>
+                  </div>
+                </div>
                 <div class="pv-max">
                   Canalisation divine :
                   <span style="cursor:pointer;color:var(--gold);font-weight:700" @click="toggleCD">
@@ -682,7 +698,13 @@
             <div class="currency-row">
               <div class="currency-box" v-for="c in [{key:'pp',label:'Platine'},{key:'gp',label:'Or'},{key:'ep',label:'Élec.'},{key:'sp',label:'Argent'},{key:'cp',label:'Cuivre'}]" :key="c.key">
                 <span class="currency-label">{{ c.label }}</span>
-                <input class="currency-input" type="number" v-model.number="char.currency[c.key]" min="0">
+                <div style="display:flex;align-items:center">
+                  <input class="currency-input" type="number" v-model.number="char.currency[c.key]" min="0">
+                  <div class="pv-spinners" style="padding-left:2px">
+                    <button class="pv-spin" @click="char.currency[c.key]++" tabindex="-1">▴</button>
+                    <button class="pv-spin" @click="char.currency[c.key] = Math.max(0, char.currency[c.key] - 1)" tabindex="-1">▾</button>
+                  </div>
+                </div>
                 <span class="currency-code">{{ c.key.toUpperCase() }}</span>
               </div>
             </div>
