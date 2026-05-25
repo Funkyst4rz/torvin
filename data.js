@@ -23,24 +23,24 @@ const CLERIC_ASI_LEVELS = [4, 8];
 // Sorts de domaine Arcane (SCAG) — toujours préparés, ne comptent pas dans le quota
 const DOMAIN_SPELLS = {
   1: [
-    { name:'Détection de la magie', tag:'rituel', conc:true  },
-    { name:'Projectile magique',    tag:'auto',   conc:false },
+    { name:'Détection de la magie', tag:'rituel',     conc:true,  desc:"Détecte la présence de magie dans un rayon de 9 m pendant 10 min. Peut être lancé comme rituel. Identifie les auras magiques et les écoles de magie." },
+    { name:'Projectile magique',    tag:'auto',        conc:false, desc:"3 fléchettes de force (1d4+1 chacune, +1 fléchette par niveau d'emplacement supérieur). Ne rate jamais. Peut cibler plusieurs créatures." },
   ],
   3: [
-    { name:'Arme magique',          tag:'buff',    conc:true  },
-    { name:"Aura magique de Nystul",tag:'illusion',conc:true  },
+    { name:'Arme magique',          tag:'buff',        conc:true,  desc:"Une arme non magique devient magique : +1 aux jets d'attaque et dégâts (ou +2 si emplacement de niv.4+). Concentration, 1 heure." },
+    { name:"Aura magique de Nystul",tag:'illusion',    conc:true,  desc:"Modifie la détection magique d'un objet ou d'une créature pendant 24 heures. Peut masquer ou falsifier l'aura magique." },
   ],
   5: [
-    { name:'Dissipation de la magie',tag:'utilitaire', conc:false },
-    { name:'Cercle magique',         tag:'protection', conc:false },
+    { name:'Dissipation de la magie',tag:'utilitaire', conc:false, desc:"Annule les effets magiques dans un rayon de 9 m (DD = 10 + niveau du sort). Supprime automatiquement les sorts de niv.≤3." },
+    { name:'Cercle magique',         tag:'protection', conc:false, desc:"Cylindre de 3 m de rayon × 9 m de hauteur : protège contre un type de créature choisi (fiélons, morts-vivants…). Dure 1 heure." },
   ],
   7: [
-    { name:"Œil d'Arcane",    tag:'divination', conc:true  },
-    { name:'Coffre de Léomund',tag:'invocation', conc:false },
+    { name:"Œil d'Arcane",    tag:'divination', conc:true,  desc:"Crée un œil magique invisible se déplaçant à 9 m/tour. Vous percevez à travers lui (vision normale + vision dans le noir 9 m) pendant 1 heure." },
+    { name:'Coffre de Léomund', tag:'invocation', conc:false, desc:"Un coffre peut être caché sur le plan éthéré et rappelé avec un réplique miniature. Contenu conservé indéfiniment." },
   ],
   9: [
-    { name:'Lien planaire',         tag:'DD Cha', conc:true  },
-    { name:'Cercle de téléportation',tag:'rituel', conc:false },
+    { name:'Lien planaire',          tag:'DD Cha',  conc:true,  desc:"Soumet un céleste, fiélon ou élémentaire. JS Charisme. S'il échoue 3 fois, il est lié pendant 24 heures (renouvelable). Concentration." },
+    { name:'Cercle de téléportation', tag:'rituel', conc:false, desc:"Ouvre un portail vers un cercle de téléportation connu. Dure 1 minute. Peut être gravé définitivement (11 jours de travail, coût 50 po/j)." },
   ],
 };
 
@@ -272,10 +272,11 @@ const DEFAULT_CHAR = {
   hpTemp: 0,
 
   // ── Sorts ─────────────────────────────────────────────────────
-  slotsUsed:   { 1:0, 2:0, 3:0, 4:0, 5:0 },
-  spellChecks: {},
-  cdUsed:      0,
-  customSpells: { 1:[], 2:[], 3:[], 4:[], 5:[] },
+  slotsUsed:    { 1:0, 2:0, 3:0, 4:0, 5:0 },
+  spellChecks:  {},
+  cdUsed:       0,
+  customSpells:  { 1:[], 2:[], 3:[], 4:[], 5:[] },
+  removedSpells: [],  // IDs des sorts suggérés masqués par l'utilisateur
 
   // ── Concentration ─────────────────────────────────────────────
   concentration: null,   // null | nom du sort

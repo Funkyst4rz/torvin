@@ -16,6 +16,25 @@
   <div class="levelup-toast" id="toast"></div>
 
   <!-- ══════════════════════════════════════
+       SPELL DESCRIPTION MODAL
+       ══════════════════════════════════════ -->
+  <div class="spell-modal-overlay" v-if="spellModal" @click.self="closeSpellModal">
+    <div class="spell-modal">
+      <div class="spell-modal-header">
+        <span class="spell-modal-title">{{ spellModal.name }}</span>
+        <button class="conc-clear" @click="closeSpellModal">✕</button>
+      </div>
+      <div class="spell-modal-meta">
+        <span class="spell-tag">{{ spellModal.tag }}</span>
+        <span v-if="spellModal.conc" class="spell-conc" style="margin-left:6px">CONC.</span>
+        <span v-if="spellModal.bonus" class="spell-conc bonus" style="margin-left:6px">BON.</span>
+        <span v-if="spellModal.level" style="margin-left:auto;font-family:'Cinzel',serif;font-size:8px;color:var(--ink-light)">Niveau {{ spellModal.level }}</span>
+      </div>
+      <p class="spell-modal-desc">{{ spellModal.desc || 'Pas de description disponible pour ce sort.' }}</p>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
        ASI / FEAT MODAL
        ══════════════════════════════════════ -->
   <div class="asi-overlay" v-if="showASIModal" @click.self="dismissASI">
@@ -492,7 +511,7 @@
           </div>
           <div class="spell-row" v-for="c in cantrips" :key="c.id">
             <span class="spell-check" :class="{checked:isChecked(c.id)}" @click="toggleCheck(c.id)"></span>
-            <span class="spell-name"><strong>{{ c.name }}</strong></span>
+            <span class="spell-name spell-name-link" @click="openSpellModal(c)"><strong>{{ c.name }}</strong></span>
             <span class="spell-tag">{{ c.tag }}</span>
             <span class="spell-conc">{{ c.conc ? 'CONC.' : '—' }}</span>
           </div>
@@ -517,7 +536,7 @@
             <div v-for="(ds, di) in domainSpells[domainKeyForSlot(slotLvl)]" :key="'dom-'+slotLvl+'-'+di"
                  class="spell-row" :style="di%2===1 ? 'background:rgba(92,61,30,.05)' : ''">
               <span class="spell-check" :class="{checked:isChecked('sc-d'+slotLvl+'-'+di)}" @click="toggleCheck('sc-d'+slotLvl+'-'+di)"></span>
-              <span class="spell-name domain">{{ ds.name }} <em style="font-size:9px">[domaine]</em></span>
+              <span class="spell-name domain spell-name-link" @click="openSpellModal(ds, domainKeyForSlot(slotLvl))">{{ ds.name }} <em style="font-size:9px">[domaine]</em></span>
               <span class="spell-tag">{{ ds.tag }}</span>
               <span class="spell-conc"
                     :class="{ 'conc-active-badge': char.concentration===ds.name }"
@@ -531,9 +550,9 @@
 
           <!-- Sorts suggérés -->
           <div v-for="sp in (suggestedSpells[slotLvl]||[])" :key="sp.id"
-               class="spell-row" :style="sp.id==='sc-bane' ? 'background:rgba(139,26,26,.06)' : ''">
+               class="spell-row spell-row-suggested" :style="sp.id==='sc-bane' ? 'background:rgba(139,26,26,.06)' : ''">
             <span class="spell-check" :class="{checked:isChecked(sp.id)}" @click="toggleCheck(sp.id)"></span>
-            <span class="spell-name"><strong>{{ sp.name }}</strong></span>
+            <span class="spell-name spell-name-link" @click="openSpellModal(sp, slotLvl)"><strong>{{ sp.name }}</strong></span>
             <span class="spell-tag">{{ sp.tag }}</span>
             <span class="spell-conc"
                   :class="{ 'conc-active-badge': char.concentration===sp.name, bonus: sp.bonus && !sp.conc }"
@@ -542,13 +561,14 @@
                   :title="sp.conc ? (char.concentration===sp.name ? 'Rompre' : 'Activer concentration') : ''">
               {{ sp.conc ? (char.concentration===sp.name ? '◆ACT' : 'CONC.') : sp.bonus ? 'BON.' : '—' }}
             </span>
+            <button class="delete-btn" @click="removeSuggestedSpell(sp.id)" title="Retirer ce sort">×</button>
           </div>
 
           <!-- Sorts personnalisés -->
           <div v-for="cs in (char.customSpells[slotLvl]||[])" :key="cs.id"
                class="spell-row spell-row-custom" style="background:rgba(122,92,30,.05)">
             <span class="spell-check" :class="{checked:isChecked('cs-'+cs.id)}" @click="toggleCheck('cs-'+cs.id)"></span>
-            <span class="spell-name">{{ cs.name }}</span>
+            <span class="spell-name spell-name-link" @click="openSpellModal(cs, slotLvl)">{{ cs.name }}</span>
             <span class="spell-tag">{{ cs.tag }}</span>
             <span class="spell-conc"
                   :class="{ 'conc-active-badge': char.concentration===cs.name }"

@@ -466,15 +466,52 @@ body {
 
 .spell-row { display:grid;grid-template-columns:14px 1fr 60px 50px;align-items:center;gap:6px;padding:4px 6px;font-size:12px; }
 .spell-row:nth-child(even) { background:rgba(160,130,74,.05); }
-.spell-row-custom { grid-template-columns:14px 1fr 60px 50px 16px; }
+.spell-row-custom, .spell-row-suggested { grid-template-columns:14px 1fr 60px 50px 16px; }
 .spell-check { width:10px;height:10px;border:1.5px solid var(--border);cursor:pointer;background:transparent;transition:background .15s; }
 .spell-check.checked { background:var(--ink-mid); }
 .spell-name { font-family:'Crimson Text',serif;color:var(--ink); }
+.spell-name-link { cursor:pointer; }
+.spell-name-link:hover { color:var(--gold);text-decoration:underline;text-underline-offset:2px;text-decoration-color:var(--border); }
 .spell-tag { font-family:'Cinzel',serif;font-size:7.5px;font-weight:700;color:var(--ink-light); }
 .spell-conc { font-family:'Cinzel',serif;font-size:7.5px;color:var(--red);font-weight:700;text-align:center; }
 .spell-conc.bonus { color:var(--gold); }
 .spell-conc.conc-active-badge { color:var(--gold-light);font-size:8px;font-weight:900; }
 .spell-name.domain { font-style:italic;color:var(--ink-light); }
+
+/* Spell description modal */
+.spell-modal-overlay {
+  position:fixed;inset:0;z-index:200;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(24,12,4,.5);
+  animation:fadeIn .12s ease;
+}
+.spell-modal {
+  background:var(--parchment);
+  border:1.5px solid var(--border);
+  box-shadow:0 8px 32px rgba(0,0,0,.35);
+  padding:16px 18px;
+  max-width:400px;width:90%;
+  border-radius:2px;
+}
+.spell-modal-header {
+  display:flex;align-items:flex-start;justify-content:space-between;
+  gap:8px;margin-bottom:10px;
+}
+.spell-modal-title {
+  font-family:'Cinzel',serif;font-size:13px;font-weight:700;
+  color:var(--ink);flex:1;line-height:1.3;
+}
+.spell-modal-meta {
+  display:flex;align-items:center;flex-wrap:wrap;gap:6px;
+  padding:6px 0;
+  border-top:1px solid var(--border-light);
+  border-bottom:1px solid var(--border-light);
+  margin-bottom:12px;
+}
+.spell-modal-desc {
+  font-family:'Crimson Text',serif;font-size:14px;
+  color:var(--ink-mid);line-height:1.55;margin:0;
+}
 
 .spell-add-btn {
   font-family:'Cinzel',serif;font-size:7.5px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;

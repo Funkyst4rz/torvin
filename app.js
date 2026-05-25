@@ -57,6 +57,7 @@ function _loadInitialState() {
     if (!Array.isArray(merged.toolProfs))      merged.toolProfs    = [...DEFAULT_CHAR.toolProfs];
     if (!Array.isArray(merged.attunedItems))   merged.attunedItems = [];
     if (!Array.isArray(merged.phrases))        merged.phrases      = JSON.parse(JSON.stringify(DEFAULT_CHAR.phrases));
+    if (!Array.isArray(merged.removedSpells))  merged.removedSpells = [];
 
     return merged;
   } catch(e) {
@@ -96,6 +97,7 @@ createApp({
       // Spell UI
       openPickers: {},
       spellSearch: '',
+      spellModal: null,
 
       // Inline add forms
       newEquip: '',
@@ -306,7 +308,15 @@ createApp({
     statLabels()      { return STAT_LABELS; },
     allFeats()        { return FEATS; },
     domainSpells()    { return DOMAIN_SPELLS; },
-    suggestedSpells() { return SUGGESTED_SPELLS; },
+    suggestedSpells() {
+      const removed = new Set(this.char.removedSpells || []);
+      if (!removed.size) return SUGGESTED_SPELLS;
+      const result = {};
+      for (const [lvl, spells] of Object.entries(SUGGESTED_SPELLS)) {
+        result[lvl] = spells.filter(s => !removed.has(s.id));
+      }
+      return result;
+    },
     asiLevels()       { return CLERIC_ASI_LEVELS; },
     allConditions()   { return CONDITIONS; },
     exhaustionEffects(){ return EXHAUSTION_EFFECTS; },
@@ -603,6 +613,30 @@ createApp({
       const pickers = { ...this.openPickers };
       pickers[lvl] = !pickers[lvl];
       this.openPickers = pickers;
+    },
+
+    // ── Spell modal ──────────────────────────
+    openSpellModal(spell, level) {
+      let desc = spell.desc || null;
+      if (!desc) {
+        const clean = spell.name.replace(/[⭐★✦◆]/g, '').trim();
+        outer: for (const lvl of Object.keys(CLERIC_SPELLS)) {
+          for (const s of CLERIC_SPELLS[lvl]) {
+            if (s.name.replace(/[⭐★✦◆]/g, '').trim() === clean) {
+              desc = s.desc; break outer;
+            }
+          }
+        }
+      }
+      this.spellModal = { name: spell.name, tag: spell.tag || '—', conc: !!spell.conc, bonus: !!spell.bonus, desc, level: level || null };
+    },
+    closeSpellModal() { this.spellModal = null; },
+
+    // ── Suggested spells removal ─────────────
+    removeSuggestedSpell(id) {
+      if (!this.char.removedSpells) this.char.removedSpells = [];
+      if (!this.char.removedSpells.includes(id))
+        this.char.removedSpells = [...this.char.removedSpells, id];
     },
 
     // ── Custom spells ────────────────────────
