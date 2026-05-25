@@ -450,6 +450,7 @@ body {
 .spell-stat-val { font-weight:700;color:var(--ink); }
 .spell-prepared-bar { font-family:'Cinzel',serif;font-size:0.56rem;color:var(--ink-light);margin-left:auto; }
 .spell-prepared-count { font-size:0.75rem;font-weight:700;color:var(--gold); }
+.spell-prepared-count.prepared-over { color:var(--red); }
 
 .spell-level-block { margin-bottom:10px; }
 .spell-level-header {
@@ -535,6 +536,7 @@ body {
 }
 .spell-picker-add:hover { background:var(--green);color:white; }
 .spell-picker-empty { font-family:'Crimson Text',serif;font-size:0.69rem;color:var(--ink-light);font-style:italic;padding:8px; }
+.spell-picker-section { font-family:'Cinzel',serif;font-size:0.44rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--ink-light);padding:6px 8px 3px;background:rgba(160,130,74,.1);border-bottom:1px solid var(--border-light); }
 .new-badge {
   font-family:'Cinzel',serif;font-size:0.44rem;font-weight:700;color:white;background:var(--green);
   padding:1px 5px;border-radius:2px;margin-left:6px;text-transform:uppercase;letter-spacing:.5px;

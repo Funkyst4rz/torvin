@@ -72,15 +72,33 @@ const SUGGESTED_SPELLS = {
 // Liste complète des sorts de Clerc disponibles (pour le picker)
 const CLERIC_SPELLS = {
   0: [
-    { id:'guidance',    name:'Guidance',        tag:'utilitaire', conc:true,  desc:"Touchez une créature. Elle peut ajouter 1d4 à un jet de caractéristique pendant 1 minute." },
-    { id:'light',       name:'Lumière',          tag:'utilitaire', conc:false, desc:"Un objet émet une lumière vive sur 6 m et faible sur 6 m de plus pendant 1 heure." },
-    { id:'resistance',  name:'Résistance',       tag:'buff',       conc:true,  desc:"Touchez une créature. Elle peut ajouter 1d4 à un jet de sauvegarde pendant 1 minute." },
-    { id:'sacredflame', name:'Flamme sacrée',    tag:'DD Dex',     conc:false, desc:"JS Dextérité ou 1d8 dégâts radiants. Ignore les couvertures." },
-    { id:'sparedying',  name:'Stabilisation',    tag:'utilitaire', conc:false, desc:"Touchez une créature à 0 PV pour la stabiliser." },
-    { id:'thaumaturgy', name:'Thaumaturgie',      tag:'utilitaire', conc:false, desc:"Signe mineur de puissance divine (voix, lumière, tremblement) pendant 1 minute." },
-    { id:'tollDead',    name:'Glas des trépassés',tag:'DD Sag',    conc:false, desc:"1d8 nécrotique (ou 1d12 si la cible est blessée). Portée 18 m. Sort mineur de magicien." },
-    { id:'mageHand',    name:'Main du mage',     tag:'utilitaire', conc:false, desc:"Crée une main spectrale qui manipule des objets légers dans 9 m. Sort mineur de magicien." },
-    { id:'minorIllusion',name:'Illusion mineure',tag:'utilitaire', conc:false, desc:"Crée une image ou un son illusoire dans 9 m pendant 1 minute. Sort mineur de magicien." },
+    // ── Sorts mineurs de Clerc ──
+    { id:'guidance',    name:'Guidance',         tag:'utilitaire', conc:true,  desc:"Touchez une créature. Elle peut ajouter 1d4 à un jet de caractéristique pendant 1 minute." },
+    { id:'light',       name:'Lumière',           tag:'utilitaire', conc:false, desc:"Un objet émet une lumière vive sur 6 m et faible sur 6 m de plus pendant 1 heure." },
+    { id:'resistance',  name:'Résistance',        tag:'buff',       conc:true,  desc:"Touchez une créature. Elle peut ajouter 1d4 à un jet de sauvegarde pendant 1 minute." },
+    { id:'sacredflame', name:'Flamme sacrée',     tag:'DD Dex',     conc:false, desc:"JS Dextérité ou 1d8 dégâts radiants. Ignore les couvertures." },
+    { id:'sparedying',  name:'Stabilisation',     tag:'utilitaire', conc:false, desc:"Touchez une créature à 0 PV pour la stabiliser." },
+    { id:'thaumaturgy', name:'Thaumaturgie',       tag:'utilitaire', conc:false, desc:"Signe mineur de puissance divine (voix, lumière, tremblement) pendant 1 minute." },
+    // ── Sorts mineurs de Magicien (Arcane Initiate) ──
+    { id:'acidSplash',   name:'Aspersion d\'acide', tag:'DD Dex',     conc:false, wizard:true, desc:"Bulle d'acide : une ou deux créatures adjacentes subissent 1d6 acide (JS Dex pour annuler)." },
+    { id:'boomingBlade', name:'Lame retentissante', tag:'+atk/SCAG',  conc:false, wizard:true, desc:"Attaque de corps à corps : dégâts normaux + 1d8 tonnerre si la cible se déplace avant votre prochain tour. (SCAG)" },
+    { id:'chillTouch',   name:'Contact glacial',    tag:'DD Con',     conc:false, wizard:true, desc:"1d8 nécrotique, la cible ne peut pas regagner de PV jusqu'à votre prochain tour. Les morts-vivants ont désavantage contre vous." },
+    { id:'dancingLights',name:'Lumières dansantes', tag:'utilitaire', conc:true,  wizard:true, desc:"4 flammes flottantes dans un rayon de 18 m, mobiles à volonté. Lumière faible 3 m." },
+    { id:'fireBolt',     name:'Trait de feu',       tag:'+atk/1d10',  conc:false, wizard:true, desc:"Attaque sort à distance : 1d10 feu, portée 36 m. Peut enflammer des objets." },
+    { id:'friends',      name:'Amis',               tag:'utilitaire', conc:true,  wizard:true, desc:"Avantage aux jets de Charisme contre une créature non hostile pendant 1 minute. La cible réalise ensuite la manipulation." },
+    { id:'greenFlameBlade',name:'Lame à flamme verte',tag:'+atk/SCAG',conc:false, wizard:true, desc:"Attaque de corps à corps : dégâts normaux + flammes qui sautent sur une créature adjacente pour mod Cha feu. (SCAG)" },
+    { id:'lightningLure',name:'Lasso de foudre',    tag:'DD For',     conc:false, wizard:true, desc:"Attire une créature à portée 9 m vers vous de 3 m : 1d8 foudre si elle se retrouve dans un rayon de 1,5 m. (SCAG)" },
+    { id:'mageHand',     name:'Main du mage',       tag:'utilitaire', conc:false, wizard:true, desc:"Crée une main spectrale qui manipule des objets légers dans 9 m pendant 1 minute." },
+    { id:'mending',      name:'Réparation',         tag:'utilitaire', conc:false, wizard:true, desc:"Répare une cassure ou déchirure d'un objet (jusqu'à 30 cm). Incantation 1 minute." },
+    { id:'message',      name:'Message',            tag:'utilitaire', conc:false, wizard:true, desc:"Chuchotez un message à une créature à 36 m : elle peut vous répondre en chuchotant." },
+    { id:'minorIllusion',name:'Illusion mineure',   tag:'utilitaire', conc:false, wizard:true, desc:"Crée une image (1,5 m³) ou un son illusoire dans 9 m pendant 1 minute. Investigation DD 14 pour percer l'illusion." },
+    { id:'poisonSpray',  name:'Vaporisation de poison',tag:'DD Con',  conc:false, wizard:true, desc:"Portée 3 m : 1d12 poison si le JS Constitution échoue." },
+    { id:'prestidigitation',name:'Prestidigitation',tag:'utilitaire', conc:false, wizard:true, desc:"Effets magiques mineurs : allumer/éteindre, nettoyer, créer une sensation, une marque, un son ou une odeur." },
+    { id:'rayFrost',     name:'Rayon de givre',     tag:'+atk/1d8',   conc:false, wizard:true, desc:"Attaque sort à distance : 1d8 froid, vitesse −3 m jusqu'à votre prochain tour." },
+    { id:'shockingGrasp',name:'Choc électrique',    tag:'+atk/1d8',   conc:false, wizard:true, desc:"Attaque sort au contact : 1d8 foudre, la cible ne peut pas réagir jusqu'à votre prochain tour. Avantage si elle porte une armure métallique." },
+    { id:'swordBurst',   name:'Rafale d\'épée',     tag:'DD Dex/zone',conc:false, wizard:true, desc:"Rafale de force : toutes les créatures dans 1,5 m subissent 1d6 force (JS Dex pour annuler). (SCAG)" },
+    { id:'tollDead',     name:'Glas des trépassés', tag:'DD Sag',     conc:false, wizard:true, desc:"1d8 nécrotique (ou 1d12 si la cible est déjà blessée). Portée 18 m." },
+    { id:'trueStrike',   name:'Frappe assurée',     tag:'utilitaire', conc:true,  wizard:true, desc:"Avantage au prochain jet d'attaque contre la cible avant la fin de votre prochain tour." },
   ],
   1: [
     { id:'bane',        name:'Fléau',            tag:'DD Cha',   conc:true,  desc:"3 créatures subissent −1d4 à leurs jets d'attaque et de sauvegarde pendant 1 minute." },
@@ -299,7 +317,17 @@ const DEFAULT_CHAR = {
   slotsUsed:    { 1:0, 2:0, 3:0, 4:0, 5:0 },
   spellChecks:  {},
   cdUsed:       0,
-  customSpells:  { 1:[], 2:[], 3:[], 4:[], 5:[] },
+  customSpells: {
+    0: [
+      { id:'tollDead',      name:'Glas des trépassés', tag:'DD Sag',     conc:false },
+      { id:'mageHand',      name:'Main du mage',        tag:'utilitaire', conc:false },
+      { id:'minorIllusion', name:'Illusion mineure',    tag:'utilitaire', conc:false, racial:true },
+      { id:'guidance',      name:'Guidance',            tag:'utilitaire', conc:true  },
+      { id:'sacredflame',   name:'Flamme sacrée',       tag:'DD Dex',     conc:false },
+      { id:'resistance',    name:'Résistance',           tag:'buff',       conc:true  },
+    ],
+    1:[], 2:[], 3:[], 4:[], 5:[],
+  },
   removedSpells: [],  // IDs des sorts suggérés masqués par l'utilisateur
 
   // ── Compétences maîtrisées ────────────────────────────────────

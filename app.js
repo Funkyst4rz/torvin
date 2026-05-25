@@ -38,8 +38,14 @@ function _loadInitialState() {
     if (!merged.slotsUsed)    merged.slotsUsed   = { 1:0, 2:0, 3:0, 4:0, 5:0 };
     if (!merged.asi)          merged.asi          = {};
     if (!merged.spellChecks)  merged.spellChecks  = {};
-    if (!merged.customSpells) merged.customSpells = { 1:[], 2:[], 3:[], 4:[], 5:[] };
-    [1,2,3,4,5].forEach(l => { if (!merged.customSpells[l]) merged.customSpells[l] = []; });
+    if (!merged.customSpells) merged.customSpells = { 0:[], 1:[], 2:[], 3:[], 4:[], 5:[] };
+    [0,1,2,3,4,5].forEach(l => { if (!merged.customSpells[l]) merged.customSpells[l] = []; });
+
+    // Migration : ajoute les cantrips par défaut manquants (n'écrase pas les existants)
+    const existingIds = new Set(merged.customSpells[0].map(c => c.id));
+    for (const c of DEFAULT_CHAR.customSpells[0]) {
+      if (!existingIds.has(c.id)) merged.customSpells[0].push({ ...c });
+    }
 
     if (!Array.isArray(merged.traits))    merged.traits    = [...DEFAULT_CHAR.traits];
     if (!Array.isArray(merged.equipment)) merged.equipment = [...DEFAULT_CHAR.equipment];
@@ -211,6 +217,17 @@ createApp({
     },
 
     preparedMax()  { return Math.max(1, this.char.level + this.mods.wis); },
+
+    preparedCount() {
+      let count = 0;
+      for (const lvl of this.slotLevels) {
+        count += (this.suggestedSpells[lvl] || []).length;
+        count += (this.char.customSpells[lvl] || []).length;
+      }
+      return count;
+    },
+
+    preparedOver() { return this.preparedCount > this.preparedMax; },
     passivePerc()  { return 10 + this.mods.wis; },
     hitDice()      { return `${this.char.level}d8`; },
     levelData()    { return LEVELS[this.char.level]; },
@@ -244,13 +261,34 @@ createApp({
       return Object.keys(this.slots).map(Number).sort((a, b) => a - b);
     },
 
+    cantripMax() {
+      const base = this.char.level < 5 ? 3 : 4;
+      return base + 2; // +2 Arcane Initiate (domaine arcane niv.1)
+    },
+
+    cantripCount() {
+      return (this.char.customSpells[0] || []).filter(c => !c.racial).length;
+    },
+
     cantrips() {
-      return [
-        { id:'toll-dead',    name:'Glas des trépassés', tag:`DD ${this.spellDC} Sag`, conc: false },
-        { id:'mage-hand',    name:'Main du mage',        tag:'utilitaire',             conc: false },
-        { id:'min-illusion', name:'Illusion mineure',    tag:'utilitaire',             conc: false },
-        ...(this.char.customSpells[0] || []),
-      ];
+      const defs = new Map((CLERIC_SPELLS[0] || []).map(s => [s.id, s]));
+      return (this.char.customSpells[0] || []).map(c => {
+        const def = defs.get(c.id) || {};
+        return {
+          ...c,
+          racial: def.racial || c.racial || false,
+          tag: c.id === 'tollDead' ? `DD ${this.spellDC} Sag` : c.tag,
+        };
+      });
+    },
+
+    availableCantrips() {
+      const alreadyAdded = new Set((this.char.customSpells[0] || []).map(s => s.id));
+      const all = (CLERIC_SPELLS[0] || []).filter(s => !alreadyAdded.has(s.id));
+      return {
+        cleric: all.filter(s => !s.wizard),
+        wizard: all.filter(s =>  s.wizard),
+      };
     },
 
     filteredClericSpells() {

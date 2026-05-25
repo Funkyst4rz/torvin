@@ -496,23 +496,68 @@
         <div class="spell-stats-bar">
           <span class="spell-stat-item">DD sorts : <strong class="spell-stat-val">{{ spellDC }}</strong></span>
           <span class="spell-stat-item">Bonus attaque : <strong class="spell-stat-val">{{ S(spellAtk) }}</strong></span>
-          <span class="spell-stat-item">Sorts mineurs : <strong class="spell-stat-val">3 (×{{ cantripDice }} dés)</strong></span>
+          <span class="spell-stat-item">Sorts mineurs : <strong class="spell-stat-val">{{ cantrips.length }} (×{{ cantripDice }} dés)</strong></span>
           <span class="spell-prepared-bar">
-            Sorts préparés : <span class="spell-prepared-count">—/{{ preparedMax }}</span>
-            <span style="font-size:0.5rem;color:var(--ink-light)"> (niv.{{ char.level }} + mod Sag)</span>
+            Sorts préparés :
+            <span class="spell-prepared-count" :class="{ 'prepared-over': preparedOver }">
+              {{ preparedCount }}/{{ preparedMax }}
+            </span>
+            <span style="font-size:0.5rem;color:var(--ink-light)"> (niv.{{ char.level }} + mod Sag {{ S(mods.wis) }})</span>
+            <span v-if="preparedOver" style="font-size:0.5rem;color:var(--red);font-weight:700;margin-left:4px">
+              ⚠ limite dépassée de {{ preparedCount - preparedMax }}
+            </span>
           </span>
         </div>
 
         <!-- Sorts mineurs -->
         <div class="spell-level-block">
           <div class="spell-level-header">
-            <span class="spell-level-num">Sorts mineurs — à volonté (×{{ cantripDice }} dés)</span>
+            <span class="spell-level-num">
+              Sorts mineurs — à volonté (×{{ cantripDice }} dés)
+              <span class="prepared-level-count" :class="{ 'prepared-over': cantripCount > cantripMax }">
+                · {{ cantripCount }}/{{ cantripMax }}
+              </span>
+            </span>
           </div>
           <div class="spell-row" v-for="c in cantrips" :key="c.id">
             <span class="spell-check" :class="{checked:isChecked(c.id)}" @click="toggleCheck(c.id)"></span>
-            <span class="spell-name spell-name-link" @click="openSpellModal(c)"><strong>{{ c.name }}</strong></span>
+            <span class="spell-name spell-name-link" @click="openSpellModal(c)">
+              <strong>{{ c.name }}</strong>
+              <em v-if="c.racial" style="font-size:0.56rem;margin-left:4px">[racial]</em>
+            </span>
             <span class="spell-tag">{{ c.tag }}</span>
             <span class="spell-conc">{{ c.conc ? 'CONC.' : '—' }}</span>
+            <button class="delete-btn" @click="removeCustomSpell(0, c.id)" title="Retirer ce sort mineur">×</button>
+          </div>
+          <button class="spell-add-btn" :class="{active:openPickers[0]}" @click="togglePicker(0)">
+            {{ openPickers[0] ? '▲ Fermer' : '+ Choisir un sort mineur' }}
+          </button>
+          <div class="spell-picker" :class="{open:openPickers[0]}">
+            <template v-if="availableCantrips.cleric.length === 0 && availableCantrips.wizard.length === 0">
+              <div class="spell-picker-empty">Tous les sorts mineurs disponibles sont déjà ajoutés.</div>
+            </template>
+            <template v-if="availableCantrips.cleric.length > 0">
+              <div class="spell-picker-section">Sorts de clerc</div>
+              <div v-for="av in availableCantrips.cleric" :key="av.id" class="spell-picker-row">
+                <div class="spell-picker-info">
+                  <span class="spell-picker-name">{{ av.name }}</span>
+                  <span class="spell-picker-tags">{{ av.tag }}{{ av.conc ? ' · CONC.' : '' }}</span>
+                  <div class="spell-picker-desc">{{ av.desc }}</div>
+                </div>
+                <button class="spell-picker-add" @click="addCustomSpell(0, av.id)">+</button>
+              </div>
+            </template>
+            <template v-if="availableCantrips.wizard.length > 0">
+              <div class="spell-picker-section">Sorts de magicien — Arcane Initiate</div>
+              <div v-for="av in availableCantrips.wizard" :key="av.id" class="spell-picker-row">
+                <div class="spell-picker-info">
+                  <span class="spell-picker-name">{{ av.name }}</span>
+                  <span class="spell-picker-tags">{{ av.tag }}{{ av.conc ? ' · CONC.' : '' }}</span>
+                  <div class="spell-picker-desc">{{ av.desc }}</div>
+                </div>
+                <button class="spell-picker-add" @click="addCustomSpell(0, av.id)">+</button>
+              </div>
+            </template>
           </div>
         </div>
 
