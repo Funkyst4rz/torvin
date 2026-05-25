@@ -22,6 +22,7 @@ createApp({
       activeTab: 'main',
       showConfig: false,
       showDice: false,
+      showPortrait: false,
       diceResult: null,
       diceSides: null,
       diceFlash: false,

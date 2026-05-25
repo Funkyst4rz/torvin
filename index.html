@@ -16,6 +16,13 @@
   <div class="levelup-toast" id="toast"></div>
 
   <!-- ══════════════════════════════════════
+       PORTRAIT MODAL
+       ══════════════════════════════════════ -->
+  <div class="portrait-overlay" v-if="showPortrait" @click="showPortrait = false">
+    <img src="characters/torvin.jpg" alt="Portrait de Torvin" class="portrait-enlarged">
+  </div>
+
+  <!-- ══════════════════════════════════════
        SPELL DESCRIPTION MODAL
        ══════════════════════════════════════ -->
   <div class="spell-modal-overlay" v-if="spellModal" @click.self="closeSpellModal">
@@ -922,7 +929,7 @@
               <p class="lore-text">Autour du cou, une chaîne avec un petit boîtier de bronze gravé qu'il tripote machinalement sans s'en apercevoir. C'est la Relique. Ne lui demandez pas ce qu'elle fait — il vous répondra pendant vingt minutes.</p>
             </div>
             <div class="lore-portrait-col">
-              <div class="lore-portrait-frame">
+              <div class="lore-portrait-frame" @click="showPortrait = true" title="Cliquer pour agrandir">
                 <img src="characters/torvin.jpg" alt="Portrait de Torvin" class="lore-portrait">
               </div>
             </div>
