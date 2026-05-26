@@ -24,6 +24,12 @@ jobs:
       - name: Check JS syntax — app.js
         run: node --check app.js
 
+      - name: Check JS syntax — computed.js
+        run: node --check computed.js
+
+      - name: Check JS syntax — storage.js
+        run: node --check storage.js
+
       - name: Check JS syntax — data.js
         run: node --check data.js
 
@@ -39,7 +45,7 @@ jobs:
       # ── Required files presence ────────────────────────────────
       - name: Check required files exist
         run: |
-          for f in index.html style.css app.js data.js strings.js engine.js characters/torvin.js; do
+          for f in index.html style.css app.js computed.js storage.js data.js strings.js engine.js characters/torvin.js; do
             if [ ! -f "$f" ]; then
               echo "ERROR: Missing required file: $f"
               exit 1
@@ -51,7 +57,7 @@ jobs:
       - name: Check for accidental token exposure
         run: |
           # Match real GitHub tokens: ghp_ followed by 30+ alphanumeric chars (not placeholders)
-          if grep -rEn "ghp_[A-Za-z0-9]{30,}" index.html app.js data.js engine.js style.css characters/ 2>/dev/null; then
+          if grep -rEn "ghp_[A-Za-z0-9]{30,}" index.html app.js computed.js storage.js data.js engine.js style.css characters/ 2>/dev/null; then
             echo "ERROR: Real GitHub token found in source files!"
             exit 1
           fi
@@ -89,8 +95,8 @@ jobs:
 
       - name: Verify security function (token deletion before save)
         run: |
-          if ! grep -q "delete state.ghToken" app.js; then
-            echo "ERROR: _serializeState() must delete ghToken before any save"
+          if ! grep -q "delete state.ghToken" storage.js; then
+            echo "ERROR: _serializeState() in storage.js must delete ghToken before any save"
             exit 1
           fi
           echo "OK: ghToken is deleted before serialization"

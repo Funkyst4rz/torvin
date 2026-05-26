@@ -1,0 +1,144 @@
+﻿/* â”€â”€ SORTS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.spell-stats-bar {
+  display:flex;gap:12px;padding:8px 12px;
+  background:rgba(160,130,74,.07);border:1px solid var(--border);
+  margin-bottom:14px;flex-wrap:wrap;
+}
+.spell-stat-item { font-family:'Nunito', sans-serif;font-size:0.69rem;color:var(--ink-light); }
+.spell-stat-val { font-weight:700;color:var(--ink); }
+.spell-prepared-bar { font-family:'Nunito', sans-serif;font-size:0.69rem;color:var(--ink-light);margin-left:auto; }
+.spell-prepared-count { font-size:0.75rem;font-weight:700;color:var(--gold); }
+.spell-prepared-count.prepared-over { color:var(--red); }
+
+.spell-level-block { margin-bottom:10px; }
+.spell-level-header {
+  display:flex;justify-content:space-between;align-items:center;
+  background:var(--parchment-dark);border:1px solid var(--border);
+  padding:5px 10px;margin-bottom:4px;
+}
+.spell-level-num { font-family:'Nunito', sans-serif;font-size:0.72rem;font-weight:600;color:var(--ink-mid); }
+.spell-slots { display:flex;gap:4px;align-items:center; }
+.slot-bubble {
+  width:20px;height:20px;border:1.5px solid var(--border);
+  border-radius:50%;cursor:pointer;
+  background:var(--parchment);transition:background .2s;
+}
+.slot-bubble.used { background:var(--ink-mid); }
+
+.spell-row { display:grid;grid-template-columns:14px 1fr 60px 50px 16px;align-items:center;gap:6px;padding:4px 6px;font-size:0.75rem; }
+.spell-row:nth-child(even) { background:rgba(160,130,74,.05); }
+.spell-check { width:10px;height:10px;border:1.5px solid var(--border);cursor:pointer;background:transparent;transition:background .15s; }
+.spell-check.checked { background:var(--ink-mid); }
+.spell-name { font-family:'Nunito', sans-serif;color:var(--ink); }
+.spell-name-link { cursor:pointer; }
+.spell-name-link:hover { color:var(--gold);text-decoration:underline;text-underline-offset:2px;text-decoration-color:var(--border); }
+.spell-tag { font-family:'Nunito', sans-serif;font-size:0.59rem;font-weight:600;color:var(--ink-light); }
+.spell-conc { font-family:'Nunito', sans-serif;font-size:0.59rem;color:var(--red);font-weight:700;text-align:center; }
+.spell-conc.bonus { color:var(--gold); }
+.spell-conc.conc-active-badge { color:var(--gold-light);font-size:0.5rem;font-weight:900; }
+.spell-name.domain { font-style:italic;color:var(--ink-light); }
+
+/* Spell description modal */
+.spell-modal-overlay {
+  position:fixed;inset:0;z-index:200;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(24,12,4,.5);
+  animation:fadeIn .12s ease;
+}
+.spell-modal {
+  background:var(--parchment);
+  border:1.5px solid var(--border);
+  box-shadow:0 8px 32px rgba(0,0,0,.35);
+  padding:16px 18px;
+  max-width:400px;width:90%;
+  border-radius:2px;
+}
+.spell-modal-header {
+  display:flex;align-items:flex-start;justify-content:space-between;
+  gap:8px;margin-bottom:10px;
+}
+.spell-modal-title {
+  font-family:'Nunito', sans-serif;font-size:0.81rem;font-weight:700;
+  color:var(--ink);flex:1;line-height:1.3;
+}
+.spell-modal-meta {
+  display:flex;align-items:center;flex-wrap:wrap;gap:6px;
+  padding:6px 0;
+  border-top:1px solid var(--border-light);
+  border-bottom:1px solid var(--border-light);
+  margin-bottom:12px;
+}
+.spell-modal-desc {
+  font-family:'Nunito', sans-serif;font-size:0.875rem;
+  color:var(--ink-mid);line-height:1.55;margin:0;
+}
+.spell-modal-upcast {
+  font-family:'Nunito', sans-serif;font-size:0.81rem;
+  color:var(--ink-mid);line-height:1.55;
+  border-top:1px dashed var(--border-light);
+  margin-top:10px;padding-top:10px;
+}
+.upcast-label {
+  font-family:'Nunito', sans-serif;font-size:0.63rem;font-weight:600;
+  color:var(--gold);text-transform:uppercase;letter-spacing:.5px;
+  margin-right:4px;
+}
+
+/* Info tooltip modal */
+.info-btn {
+  display:inline-flex;align-items:center;justify-content:center;
+  width:13px;height:13px;
+  font-size:0.45rem;font-family:'Nunito', sans-serif;font-weight:700;font-style:normal;
+  color:var(--gold);border:1px solid var(--gold-light);border-radius:50%;
+  cursor:pointer;opacity:.65;margin-left:3px;vertical-align:middle;
+  transition:opacity .15s;user-select:none;flex-shrink:0;line-height:1;
+}
+.info-btn:hover { opacity:1; }
+.info-modal-body {
+  font-family:'Nunito', sans-serif;font-size:0.875rem;
+  color:var(--ink-mid);line-height:1.65;
+}
+.info-modal-body strong { color:var(--ink); }
+.info-modal-body em { color:var(--ink-light); }
+
+.spell-add-btn {
+  font-family:'Nunito', sans-serif;font-size:0.59rem;font-weight:600;text-transform:uppercase;letter-spacing:.5px;
+  width:100%;padding:7px;border:1px dashed var(--border);
+  background:transparent;color:var(--ink-light);cursor:pointer;transition:all .2s;margin-top:2px;
+}
+.spell-add-btn:hover,.spell-add-btn.active { background:rgba(160,130,74,.08);color:var(--gold);border-color:var(--gold);border-style:solid; }
+.spell-picker { display:none;border-top:1px dashed var(--border);max-height:260px;overflow-y:auto;background:rgba(247,240,226,.7); }
+.spell-picker.open { display:block; }
+.spell-picker-row { display:flex;align-items:flex-start;gap:8px;padding:6px 8px;border-bottom:1px dashed rgba(160,130,74,.2); }
+.spell-picker-row:hover { background:rgba(138,110,32,.06); }
+.spell-picker-info { flex:1;min-width:0; }
+.spell-picker-name { font-family:'Nunito', sans-serif;font-size:0.66rem;font-weight:700;color:var(--ink);display:block; }
+.spell-picker-tags { font-family:'Nunito', sans-serif;font-size:0.56rem;color:var(--gold);display:block;margin-top:1px; }
+.spell-picker-desc { font-family:'Nunito', sans-serif;font-size:0.72rem;color:var(--ink-mid);line-height:1.4;margin-top:2px;font-style:italic; }
+.spell-picker-add {
+  font-family:'Nunito', sans-serif;font-size:0.81rem;font-weight:700;width:22px;height:22px;
+  border:1.5px solid var(--green);background:transparent;color:var(--green);
+  cursor:pointer;flex-shrink:0;transition:all .2s;padding:0;border-radius:2px;
+}
+.spell-picker-add:hover { background:var(--green);color:white; }
+.spell-picker-empty { font-family:'Nunito', sans-serif;font-size:0.69rem;color:var(--ink-light);font-style:italic;padding:8px; }
+.spell-picker-section { font-family:'Nunito', sans-serif;font-size:0.56rem;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--ink-light);padding:6px 8px 3px;background:rgba(160,130,74,.1);border-bottom:1px solid var(--border-light); }
+.new-badge {
+  font-family:'Nunito', sans-serif;font-size:0.56rem;font-weight:600;color:white;background:var(--green);
+  padding:1px 6px;border-radius:2px;margin-left:6px;text-transform:uppercase;letter-spacing:.5px;
+}
+
+/* Concentration banner */
+.conc-banner {
+  display:flex;align-items:center;gap:12px;padding:8px 14px;
+  background:rgba(138,110,32,.1);border:1.5px solid var(--gold);
+  margin-bottom:12px;flex-wrap:wrap;
+}
+.conc-banner strong { font-family:'Nunito', sans-serif;font-size:0.625rem;font-weight:700;color:var(--ink); }
+.conc-clear {
+  font-family:'Nunito', sans-serif;font-size:0.5rem;font-weight:700;padding:4px 10px;
+  border:1.5px solid var(--red);background:transparent;color:var(--red);
+  cursor:pointer;transition:all .2s;margin-left:auto;border-radius:2px;
+}
+.conc-clear:hover { background:var(--red);color:white; }
+
