@@ -119,7 +119,7 @@ const app = createApp({
       let base = total + this.mods.con * this.char.level;
       if (this.activeFeatIds.includes('tough')) base += 2 * this.char.level;
       if ((this.char.exhaustion || 0) >= 4) base = Math.floor(base / 2);
-      return base;
+      return base + (this.char.hpMaxBonus || 0);
     },
 
     hdSummary() {

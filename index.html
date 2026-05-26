@@ -318,20 +318,28 @@
                        :style="{ width: Math.min(100, Math.max(0, char.hpCurrent / hpMax * 100)) + '%' }"></div>
                 </div>
               </div>
-              <div class="pv-box">
-                <span class="pv-label">✦ PV temporaires <span class="info-btn" @click.stop="showInfo('hpTemp')">ⓘ</span></span>
-                <div class="pv-controls">
-                  <input class="pv-input" type="number" v-model.number="char.hpTemp" min="0" style="color:var(--ink-mid)">
-                  <div class="pv-spinners">
-                    <button class="pv-spin" @click="char.hpTemp++" tabindex="-1">▴</button>
-                    <button class="pv-spin" @click="char.hpTemp = Math.max(0, char.hpTemp - 1)" tabindex="-1">▾</button>
+              <div class="pv-box pv-box-split">
+                <div class="pv-half">
+                  <span class="pv-label">✦ PV temporaires <span class="info-btn" @click.stop="showInfo('hpTemp')">ⓘ</span></span>
+                  <div class="pv-controls">
+                    <input class="pv-input" type="number" v-model.number="char.hpTemp" min="0" style="color:var(--ink-mid)">
+                    <div class="pv-spinners">
+                      <button class="pv-spin" @click="char.hpTemp++" tabindex="-1">▴</button>
+                      <button class="pv-spin" @click="char.hpTemp = Math.max(0, char.hpTemp - 1)" tabindex="-1">▾</button>
+                    </div>
                   </div>
+                  <div class="pv-max">Ne se cumulent pas</div>
                 </div>
-                <div class="pv-max">
-                  Canalisation divine <span class="info-btn" @click.stop="showInfo('channelDivine', spellDC)">ⓘ</span> :
-                  <span style="cursor:pointer;color:var(--gold);font-weight:700" @click="toggleCD">
-                    {{ char.cdUsed }}/{{ levelData.cd }} utilisée{{ char.cdUsed > 1 ? 's' : '' }}
-                  </span>
+                <div class="pv-half pv-half-sep">
+                  <span class="pv-label">⬆ Bonus HP max</span>
+                  <div class="pv-controls">
+                    <input class="pv-input" type="number" v-model.number="char.hpMaxBonus" min="0" style="color:var(--green)">
+                    <div class="pv-spinners">
+                      <button class="pv-spin" @click="char.hpMaxBonus = (char.hpMaxBonus||0)+1" tabindex="-1">▴</button>
+                      <button class="pv-spin" @click="char.hpMaxBonus = Math.max(0,(char.hpMaxBonus||0)-1)" tabindex="-1">▾</button>
+                    </div>
+                  </div>
+                  <div class="pv-max">ex. Aide +5, Festin +2d10</div>
                 </div>
               </div>
             </div>
@@ -541,6 +549,7 @@
           <span class="spell-stat-item" style="cursor:pointer" @click="showInfo('spellDC', prof, mods.wis, spellDC)">DD sorts : <strong class="spell-stat-val">{{ spellDC }}</strong> <span class="info-btn">ⓘ</span></span>
           <span class="spell-stat-item" style="cursor:pointer" @click="showInfo('spellAtk', prof, mods.wis, S(spellAtk))">Bonus attaque : <strong class="spell-stat-val">{{ S(spellAtk) }}</strong> <span class="info-btn">ⓘ</span></span>
           <span class="spell-stat-item" style="cursor:pointer" @click="showInfo('cantrips', cantripDice, char.level)">Sorts mineurs : <strong class="spell-stat-val">{{ cantrips.length }} (×{{ cantripDice }} dés)</strong> <span class="info-btn">ⓘ</span></span>
+          <span class="spell-stat-item">Canal. divine <span class="info-btn" @click.stop="showInfo('channelDivine', spellDC)">ⓘ</span> : <strong class="spell-stat-val" style="cursor:pointer;color:var(--gold)" @click="toggleCD">{{ char.cdUsed }}/{{ levelData.cd }}</strong></span>
           <span class="spell-prepared-bar" style="cursor:pointer" @click="showInfo('prepared', char.level, mods.wis, preparedMax)">
             Sorts préparés <span class="info-btn">ⓘ</span> :
             <span class="spell-prepared-count" :class="{ 'prepared-over': preparedOver }">

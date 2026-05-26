@@ -114,6 +114,7 @@ const DEFAULT_CHAR = {
   hpRolls: [0, 8, 6, 6, 0, 0, 0, 0, 0, 0, 0],
   hpCurrent: 26,
   hpTemp: 0,
+  hpMaxBonus: 0,
 
   // ── Sorts ─────────────────────────────────────────────────────
   slotsUsed:    { 1:0, 2:0, 3:0, 4:0, 5:0 },
