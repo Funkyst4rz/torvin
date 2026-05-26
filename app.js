@@ -1,7 +1,7 @@
 // ══════════════════════════════════════════════════════════════
 // app.js — Torvin "Trois-Parchemins"
 // Application Vue 3 (CDN global build)
-// Dépend de : data.js · characters/torvin.js · engine.js
+// Dépend de : data.js · strings.js · characters/torvin.js · engine.js
 // ══════════════════════════════════════════════════════════════
 'use strict';
 
@@ -9,7 +9,7 @@ const { createApp } = Vue;
 
 // ─────────────────────────────────────────────────────────────
 
-createApp({
+const app = createApp({
   // ──────────────────────────────────────────
   // DATA
   // ──────────────────────────────────────────
@@ -30,6 +30,7 @@ createApp({
       diceFlash: false,
       saveStatus: '',
       saveStatusType: '',
+      toastMsg: '',
 
       // ASI modal
       showASIModal: false,
@@ -62,33 +63,7 @@ createApp({
   // COMPUTED
   // ──────────────────────────────────────────
   computed: {
-    // Total stats (base + racial + ASI/feats)
-    stats() {
-      const b = this.char.base;
-      const r = this.char.racial;
-      const bonus = { str:0, dex:0, con:0, int:0, wis:0, cha:0 };
-      for (const [lvl, choice] of Object.entries(this.char.asi)) {
-        if (!choice || parseInt(lvl) > this.char.level) continue;
-        if (choice.type === 'asi') {
-          for (const [stat, val] of Object.entries(choice.bonuses))
-            bonus[stat] = (bonus[stat] || 0) + (val || 0);
-        } else if (choice.type === 'feat') {
-          const feat = FEATS.find(f => f.id === choice.feat);
-          if (feat?.statBonus) bonus[feat.statBonus.stat] = (bonus[feat.statBonus.stat] || 0) + feat.statBonus.val;
-        }
-      }
-      // Tough feat: no stat bonus, but hp bonus handled in hpMax
-      return {
-        str: b.str + r.str + bonus.str,
-        dex: b.dex + r.dex + bonus.dex,
-        con: b.con + r.con + bonus.con,
-        int: b.int + r.int + bonus.int,
-        wis: b.wis + r.wis + bonus.wis,
-        cha: b.cha + r.cha + bonus.cha,
-      };
-    },
-
-    // ASI bonus per stat (for display)
+    // Bonus ASI+dons par stat (source unique, réutilisée par stats)
     asiBonus() {
       const bonus = { str:0, dex:0, con:0, int:0, wis:0, cha:0 };
       for (const [lvl, choice] of Object.entries(this.char.asi)) {
@@ -104,6 +79,19 @@ createApp({
       return bonus;
     },
 
+    // Total stats (base + racial + ASI) — utilise asiBonus pour éviter la duplication
+    stats() {
+      const b = this.char.base, r = this.char.racial, a = this.asiBonus;
+      return {
+        str: b.str + r.str + a.str,
+        dex: b.dex + r.dex + a.dex,
+        con: b.con + r.con + a.con,
+        int: b.int + r.int + a.int,
+        wis: b.wis + r.wis + a.wis,
+        cha: b.cha + r.cha + a.cha,
+      };
+    },
+
     mods() {
       const m = v => Math.floor((v - 10) / 2);
       const s = this.stats;
@@ -114,17 +102,13 @@ createApp({
     spellDC()  { return 8 + this.prof + this.mods.wis; },
     spellAtk() { return this.prof + this.mods.wis; },
 
-    // CA saisie manuellement par le joueur
     ca() { return this.char.caManual; },
 
-    // PV maximum (intègre l'exhaustion niveau 4 et le don Robuste)
     hpMax() {
       let total = 0;
       for (let i = 1; i <= this.char.level; i++) total += this.char.hpRolls[i] || 0;
       let base = total + this.mods.con * this.char.level;
-      // Don Robuste : +2 PV par niveau
       if (this.activeFeatIds.includes('tough')) base += 2 * this.char.level;
-      // Épuisement niv.4 : PV max réduit de moitié
       if ((this.char.exhaustion || 0) >= 4) base = Math.floor(base / 2);
       return base;
     },
@@ -136,7 +120,6 @@ createApp({
       return `dés: ${dice} + CON: ${con} = ${dice + con}`;
     },
 
-    // Vitesse effective (épuisement)
     effectiveSpeed() {
       const e = this.char.exhaustion || 0;
       if (e >= 5) return 0;
@@ -144,7 +127,6 @@ createApp({
       return this.char.speed;
     },
 
-    // Nombre de dés pour les sorts mineurs (D&D 5e scaling)
     cantripDice() {
       const lvl = this.char.level;
       if (lvl < 5)  return 1;
@@ -200,7 +182,7 @@ createApp({
 
     cantripMax() {
       const base = this.char.level < 5 ? 3 : 4;
-      return base + 2; // +2 Arcane Initiate (domaine arcane niv.1)
+      return base + 2;
     },
 
     cantripCount() {
@@ -253,17 +235,14 @@ createApp({
       return result;
     },
 
-    // Bonus de JS de concentration
     concentrationSaveBonus() {
       const base = this.mods.con;
-      const hasResilientCon = this.activeFeatIds.includes('resilient-con');
-      return hasResilientCon ? base + this.prof : base;
+      return this.activeFeatIds.includes('resilient-con') ? base + this.prof : base;
     },
     concentrationHasAdvantage() {
       return this.activeFeatIds.includes('war-caster');
     },
 
-    // Total PO estimé
     currencyInGP() {
       const c = this.char.currency || {};
       return Math.round(((c.pp||0)*10 + (c.gp||0) + (c.ep||0)*0.5 + (c.sp||0)*0.1 + (c.cp||0)*0.01) * 100) / 100;
@@ -300,11 +279,9 @@ createApp({
       ];
     },
 
-    // Jets de sauvegarde — Clerc : Sagesse + Charisme
     savingThrows() {
       const { str, dex, con, int, wis, cha } = this.mods;
       const p = this.prof;
-      // Resilient (Con) feat adds Con save proficiency
       const conProf = this.activeFeatIds.includes('resilient-con');
       return [
         { name:'Sagesse ✓',     key:'wis', bonus:wis+p,              prof:true     },
@@ -346,21 +323,18 @@ createApp({
       return next ? next.info : 'Niveau maximum atteint.';
     },
 
-    // Masse d'armes : Force (pour finesse on pourrait changer)
     maceAttack() { return this.sign(this.mods.str + this.prof); },
     maceDamage() {
       const m = this.mods.str;
       return `1d6${m > 0 ? '+'+m : m < 0 ? m : ''} contondant`;
     },
 
-    // Glas des trépassés avec scaling cantrip
     tollDamage() {
       const d = this.cantripDice;
       const bonus = this.char.level >= 8 ? `+${this.mods.wis}` : '';
       return `${d}d8${bonus} / ${d}d12${bonus} nécrotique`;
     },
 
-    // HP en pourcentage (pour affichage éventuel)
     hpPercent() {
       if (!this.hpMax) return 0;
       return Math.round((this.char.hpCurrent / this.hpMax) * 100);
@@ -377,18 +351,26 @@ createApp({
   },
 
   // ──────────────────────────────────────────
+  // CREATED — propriétés non-réactives
+  // ──────────────────────────────────────────
+  created() {
+    this._saveTimer  = null;
+    this._toastTimer = null;
+  },
+
+  // ──────────────────────────────────────────
   // MOUNTED
   // ──────────────────────────────────────────
   mounted() {
     const token = localStorage.getItem('torvin-gh-token');
     if (token) {
       this.char.ghToken = token;
-      this.setStatus('Token configuré — prêt', 'ok');
+      this.setStatus(STRINGS.status.tokenConfigured, 'ok');
     } else {
-      this.setStatus('Non configuré — cliquez sur ⚙ Config');
+      this.setStatus(STRINGS.status.tokenMissing);
     }
     if (this.pendingASI.length > 0) {
-      this.setStatus(`⚠ ASI non attribuée au niveau ${this.pendingASI[0]} — cliquez sur ce niveau`, 'err');
+      this.setStatus(STRINGS.status.asiPending(this.pendingASI[0]), 'err');
     }
   },
 
@@ -400,10 +382,6 @@ createApp({
     // ── Helpers ──────────────────────────────
     sign(n) { return (n >= 0 ? '+' : '') + n; },
     statLabel(k) { return STAT_LABELS[k] || k; },
-    _statLabel(k) {
-      const labels = { str:'Force', dex:'Dextérité', con:'Constitution', int:'Intelligence', wis:'Sagesse', cha:'Charisme' };
-      return labels[k] || k;
-    },
 
     // ── Navigation ───────────────────────────
     switchTab(tab) { this.activeTab = tab; },
@@ -420,7 +398,7 @@ createApp({
         this.char.hpRolls = rolls;
         const gain = this.hpMax - this._hpMaxAt(prev, rolls);
         this.char.hpCurrent = Math.min(this.hpMax, (this.char.hpCurrent || 0) + gain);
-        this._toast(`✦ Niveau ${n} ! d8: ${this.char.hpRolls[n]} + ${this.mods.con} CON = +${this.char.hpRolls[n] + this.mods.con} PV · ${this.levelData.info}`);
+        this._toast(STRINGS.toast.levelUp(n, this.char.hpRolls[n], this.mods.con, this.char.hpRolls[n] + this.mods.con, this.levelData.info));
       }
       const pending = CLERIC_ASI_LEVELS.find(l => l === n && !this.char.asi[l]);
       if (pending) this.openASIModal(pending);
@@ -441,9 +419,8 @@ createApp({
       const roll = Math.ceil(Math.random() * 8);
       const heal = Math.max(1, roll + this.mods.con);
       this.char.hpCurrent = Math.min(this.hpMax, (this.char.hpCurrent || 0) + heal);
-      // Canalisation divine se récupère sur un repos court
       this.char.cdUsed = 0;
-      this._toast(`⬋ Repos court — d8: ${roll} + ${this.mods.con} CON = +${heal} PV · Canalisation récupérée`);
+      this._toast(STRINGS.toast.shortRest(roll, this.mods.con, heal));
     },
 
     longRest() {
@@ -456,10 +433,9 @@ createApp({
       this.char.deathSaves   = { success:0, failure:0 };
       const prevExhaustion   = this.char.exhaustion || 0;
       if (prevExhaustion > 0) this.char.exhaustion = prevExhaustion - 1;
-      const msg = prevExhaustion > 0
-        ? `☀ Repos long — PV max, slots récupérés · Épuisement : ${prevExhaustion} → ${this.char.exhaustion}`
-        : '☀ Repos long — PV au maximum, emplacements et canalisation récupérés';
-      this._toast(msg);
+      this._toast(prevExhaustion > 0
+        ? STRINGS.toast.longRestExhaust(prevExhaustion, this.char.exhaustion)
+        : STRINGS.toast.longRest);
     },
 
     // ── HP Dice ──────────────────────────────
@@ -496,10 +472,10 @@ createApp({
     toggleConcentration(spellName) {
       if (this.char.concentration === spellName) {
         this.char.concentration = null;
-        this._toast('Concentration rompue');
+        this._toast(STRINGS.toast.concBroken);
       } else {
         this.char.concentration = spellName;
-        this._toast(`◆ Concentration : ${spellName}`);
+        this._toast(STRINGS.toast.concSet(spellName));
       }
     },
     setConcentration() {
@@ -507,11 +483,11 @@ createApp({
       if (!name) return;
       this.char.concentration = name;
       this.newConcentration = '';
-      this._toast(`◆ Concentration : ${name}`);
+      this._toast(STRINGS.toast.concSet(name));
     },
     clearConcentration() {
       this.char.concentration = null;
-      this._toast('Concentration rompue');
+      this._toast(STRINGS.toast.concBroken);
     },
 
     // ── Canalisation divine ──────────────────
@@ -534,23 +510,21 @@ createApp({
       const roll = Math.ceil(Math.random() * 20);
       let msg;
       if (roll === 20) {
-        // Natural 20: stabilize at 1 HP
         this.char.hpCurrent = 1;
         this.char.deathSaves = { success:0, failure:0 };
-        msg = `🎲 d20 : ${roll} — CRITIQUE ! Torvin reprend conscience à 1 PV !`;
+        msg = STRINGS.toast.deathCrit(roll);
       } else if (roll === 1) {
-        // Natural 1: two failures
         const f = Math.min(3, (this.char.deathSaves.failure || 0) + 2);
         this.char.deathSaves = { ...this.char.deathSaves, failure: f };
-        msg = `🎲 d20 : ${roll} — 1 naturel ! Deux échecs.`;
+        msg = STRINGS.toast.deathCritFail(roll);
       } else if (roll >= 10) {
         const s = Math.min(3, (this.char.deathSaves.success || 0) + 1);
         this.char.deathSaves = { ...this.char.deathSaves, success: s };
-        msg = `🎲 d20 : ${roll} — Succès (${s}/3)`;
+        msg = STRINGS.toast.deathSuccess(roll, s);
       } else {
         const f = Math.min(3, (this.char.deathSaves.failure || 0) + 1);
         this.char.deathSaves = { ...this.char.deathSaves, failure: f };
-        msg = `🎲 d20 : ${roll} — Échec (${f}/3)`;
+        msg = STRINGS.toast.deathFailure(roll, f);
       }
       this._toast(msg);
     },
@@ -597,36 +571,32 @@ createApp({
     openInfo(title, body) { this.infoModal = { title, body }; },
     closeInfo() { this.infoModal = null; },
 
+    // Résout une clé dans STRINGS.info et ouvre le modal
+    showInfo(key, ...args) {
+      const entry = STRINGS.info[key];
+      const { title, body } = typeof entry === 'function' ? entry(...args) : entry;
+      this.openInfo(title, body);
+    },
+
     openStatInfo(key) {
-      const names = { str:'Force (FOR)', dex:'Dextérité (DEX)', con:'Constitution (CON)', int:'Intelligence (INT)', wis:'Sagesse (SAG) ★', cha:'Charisme (CHA)' };
-      const uses = {
-        str: ["Jets d'attaque au corps à corps (armes physiques)", "Compétence : Athlétisme", "Sauts, soulever, pousser, tirer (cap. de charge : " + ((this.char.base.str + (this.char.racial.str||0)) * 15) + " kg max)", "Peu utile pour un clerc — Torvin préfère les sorts"],
-        dex: ["Initiative au combat (actuellement " + this.S(this.mods.dex) + ")", "Compétences : Acrobaties, Discrétion, Tour de main", "CA si armure légère ou sans armure", "Jets d'attaque à distance et armes finesse"],
-        con: ["PV max (mod. CON × niveau inclus — total actuel : " + this.hpMax + " PV)", "JS Constitution — maintenir la concentration (DD 10 ou ½ des dégâts)", "Résistance aux poisons, maladies, effets physiques", "Pas de compétences liées"],
-        int: ["Compétences : Arcanes ★, Histoire, Investigation, Nature, Religion ★", "Ruse gnome : avantage sur tous les JS d'Intelligence contre la magie", "Savoir d'artisan : double maîtrise pour Histoire (objets magiques / technologiques)"],
-        wis: ["DD sorts (" + this.spellDC + ") et bonus d'attaque de sort (" + this.S(this.spellAtk) + ")", "Compétences : Médecine ★, Perspicacité ★, Perception, Dressage, Survie", "Sagesse passive : " + this.passivePerc + " (perception discrète)", "Ruse gnome : avantage sur tous les JS de Sagesse contre la magie"],
-        cha: ["Compétences : Persuasion ★, Duperie, Intimidation, Représentation", "DD Renvoi des Morts-Vivants et Abjuration Arcanique : " + this.S(this.mods.cha + this.prof), "Moins critique pour Torvin que la Sagesse"],
-      };
       const stat = this.statsDisplay.find(s => s.key === key);
-      const body = '<strong>Score :</strong> ' + stat.total + ' &nbsp;→&nbsp; Modificateur : <strong>' + this.S(this.mods[key]) + '</strong>'
-        + (stat.racial ? '<br><span style="font-size:0.8em;color:var(--ink-light)">Base ' + stat.base + ' + racial ' + stat.racial + (stat.asi ? ' + ASI ' + stat.asi : '') + '</span>' : '')
-        + '<br><br><strong>Utilisée pour :</strong><br>'
-        + uses[key].map(u => '• ' + u).join('<br>');
-      this.openInfo(names[key], body);
+      const argMap = {
+        str: [(this.char.base.str + (this.char.racial.str || 0)) * 15],
+        dex: [this.S(this.mods.dex)],
+        con: [this.hpMax],
+        int: [],
+        wis: [this.spellDC, this.S(this.spellAtk), this.passivePerc],
+        cha: [this.S(this.mods.cha + this.prof)],
+      };
+      const { title, uses } = STRINGS.info.stat[key](...(argMap[key] || []));
+      const header = `<strong>Score :</strong> ${stat.total} &nbsp;→&nbsp; Modificateur : <strong>${this.S(this.mods[key])}</strong>`
+        + (stat.racial ? `<br><span style="font-size:0.8em;color:var(--ink-light)">Base ${stat.base} + racial ${stat.racial}${stat.asi ? ' + ASI ' + stat.asi : ''}</span>` : '');
+      this.openInfo(title, header + '<br><br><strong>Utilisée pour :</strong><br>' + uses.map(u => '• ' + u).join('<br>'));
     },
 
     openSaveInfo(sv) {
-      const triggers = {
-        wis: 'Charme, Peur, Immobilisation de personne, Domination, Motif hypnotique. <em>Ruse gnome : avantage sur JS de SAG contre la magie.</em>',
-        cha: 'Bannissement (important : Abjuration Arcanique utilise ce DD), Geôle argentée, sorts fiélons.',
-        con: '<strong>Maintien de la concentration</strong> — DD = max(10, ½ des dégâts reçus). Poisons, maladies, pétrification.',
-        int: 'Illusions mentales, Confusion, certaines variantes de Domination. <em>Ruse gnome : avantage sur JS d\'INT contre la magie.</em>',
-        dex: 'Explosions et zones (Boule de feu, Appel de la foudre), pièges à déclenchement.',
-        str: 'Contention physique, Vague tonnante, saisissement magique.',
-      };
-      const formula = '1d20 + ' + this.S(this.mods[sv.key]) + (sv.prof ? ' + ' + this.S(this.prof) + ' (maîtrise)' : '') + ' = <strong>' + this.S(sv.bonus) + '</strong>';
-      const body = '<strong>Formule :</strong> ' + formula + (sv.prof ? ' <em>(maîtrise clerc ✓)</em>' : '')
-        + '<br><br><strong>Déclenché par :</strong><br>' + triggers[sv.key];
+      const formula = `1d20 + ${this.S(this.mods[sv.key])}${sv.prof ? ` + ${this.S(this.prof)} (maîtrise)` : ''} = <strong>${this.S(sv.bonus)}</strong>`;
+      const body = `<strong>Formule :</strong> ${formula}${sv.prof ? ' <em>(maîtrise clerc ✓)</em>' : ''}<br><br><strong>Déclenché par :</strong><br>${STRINGS.info.savingThrow[sv.key]}`;
       this.openInfo('JS ' + sv.name.replace(' ✓', ''), body);
     },
 
@@ -692,7 +662,7 @@ createApp({
       this.char.customAttacks = list;
     },
 
-    // ── Skill proficiencies ──────────────────────────────────────
+    // ── Skill proficiencies ──────────────────
     toggleSkillProf(key) {
       const profs = [...(this.char.skillProfs || [])];
       const idx = profs.indexOf(key);
@@ -766,7 +736,7 @@ createApp({
       } else return;
       this.showASIModal = false;
       this.asiModalLevel = null;
-      this._toast(`✦ ASI niv.${lvl} confirmée !`);
+      this._toast(STRINGS.toast.asiConfirmed(lvl));
     },
 
     dismissASI() { this.showASIModal = false; },
@@ -796,7 +766,7 @@ createApp({
         const feat = FEATS.find(f => f.id === choice.feat);
         return feat ? `Don : ${feat.name.split('(')[0].trim()}` : 'Don';
       }
-      return Object.entries(choice.bonuses).map(([stat, val]) => `+${val} ${this._statLabel(stat)}`).join(', ');
+      return Object.entries(choice.bonuses).map(([stat, val]) => `+${val} ${this.statLabel(stat)}`).join(', ');
     },
 
     // ── Export / Import JSON ─────────────────
@@ -809,7 +779,7 @@ createApp({
       a.download = `${this.char.name.replace(/[^\w\s-]/gi, '').trim().replace(/\s+/g,'_')}_${new Date().toISOString().split('T')[0]}.json`;
       a.click();
       URL.revokeObjectURL(url);
-      this.setStatus('Export téléchargé', 'ok');
+      this.setStatus(STRINGS.status.exportDone, 'ok');
     },
 
     importJSON() {
@@ -820,26 +790,27 @@ createApp({
         const file = e.target.files[0];
         if (!file) return;
         try {
-          const text  = await file.text();
-          const state = JSON.parse(text);
-          const ghToken = this.char.ghToken;
-          const loaded  = _deepMerge(JSON.parse(JSON.stringify(DEFAULT_CHAR)), state);
-          Object.assign(this.char, loaded);
-          this.char.ghToken = ghToken;
-          this.setStatus('Import réussi', 'ok');
-          this._toast('✦ Personnage importé depuis JSON !');
-        } catch(err) { this.setStatus('Erreur import JSON', 'err'); }
+          const state = JSON.parse(await file.text());
+          this._applyState(state);
+          this.setStatus(STRINGS.status.importDone, 'ok');
+          this._toast(STRINGS.toast.imported);
+        } catch(err) { this.setStatus(STRINGS.status.importError, 'err'); }
       };
       input.click();
     },
 
     // ── Save / Load ──────────────────────────
+    // Debounce : évite d'écrire dans localStorage à chaque frappe/spinner
     _autoSave() {
-      try {
-        const state = this._serializeState();
-        localStorage.setItem('torvin-state', JSON.stringify(state));
-        if (this.char.ghToken) localStorage.setItem('torvin-gh-token', this.char.ghToken);
-      } catch(e) {}
+      if (this._saveTimer) clearTimeout(this._saveTimer);
+      this._saveTimer = setTimeout(() => {
+        try {
+          const state = this._serializeState();
+          localStorage.setItem('torvin-state', JSON.stringify(state));
+          if (this.char.ghToken) localStorage.setItem('torvin-gh-token', this.char.ghToken);
+        } catch(e) {}
+        this._saveTimer = null;
+      }, 300);
     },
 
     _serializeState() {
@@ -848,10 +819,21 @@ createApp({
       return state;
     },
 
+    // Applique un état importé en préservant le token en mémoire
+    _applyState(state) {
+      const ghToken = this.char.ghToken;
+      const loaded  = _deepMerge(JSON.parse(JSON.stringify(DEFAULT_CHAR)), state);
+      Object.assign(this.char, loaded);
+      this.char.ghToken = ghToken;
+    },
+
     async saveToGitHub() {
       const token = this.char.ghToken;
-      if (!token) { this.setStatus('Token manquant — cliquez sur ⚙ Config', 'err'); return; }
-      const content = btoa(unescape(encodeURIComponent(JSON.stringify(this._serializeState(), null, 2))));
+      if (!token) { this.setStatus(STRINGS.status.tokenNeeded, 'err'); return; }
+      const json = JSON.stringify(this._serializeState(), null, 2);
+      let binary = '';
+      new TextEncoder().encode(json).forEach(b => { binary += String.fromCharCode(b); });
+      const content = btoa(binary);
       let sha = '';
       try {
         const r = await fetch(
@@ -861,36 +843,35 @@ createApp({
         if (r.ok) { const d = await r.json(); sha = d.sha; }
       } catch(e) {}
       try {
-        this.setStatus('Sauvegarde en cours…');
+        this.setStatus(STRINGS.status.saving);
         const body = { message:`save: ${new Date().toLocaleString('fr-FR')}`, content, branch: this.char.ghBranch };
         if (sha) body.sha = sha;
         const r = await fetch(
           `https://api.github.com/repos/${this.char.ghRepo}/contents/${this.char.ghFile}`,
           { method:'PUT', headers:{ Authorization:`token ${token}`, 'Content-Type':'application/json', Accept:'application/vnd.github.v3+json' }, body:JSON.stringify(body) }
         );
-        if (r.ok) this.setStatus(`✓ Sauvegardé — ${new Date().toLocaleTimeString('fr-FR')}`, 'ok');
-        else { const err = await r.json(); this.setStatus(`Erreur: ${err.message}`, 'err'); }
-      } catch(e) { this.setStatus('Erreur réseau', 'err'); }
+        if (r.ok) this.setStatus(STRINGS.status.saved(new Date().toLocaleTimeString('fr-FR')), 'ok');
+        else { const err = await r.json(); this.setStatus(STRINGS.status.saveError(err.message), 'err'); }
+      } catch(e) { this.setStatus(STRINGS.status.networkError, 'err'); }
     },
 
     async loadFromGitHub() {
       const token = this.char.ghToken;
-      if (!token) { this.setStatus('Token manquant', 'err'); return; }
+      if (!token) { this.setStatus(STRINGS.status.tokenNeededShort, 'err'); return; }
       try {
-        this.setStatus('Chargement…');
+        this.setStatus(STRINGS.status.loading);
         const r = await fetch(
           `https://api.github.com/repos/${this.char.ghRepo}/contents/${this.char.ghFile}`,
           { headers: { Authorization:`token ${token}`, Accept:'application/vnd.github.v3+json' } }
         );
-        if (!r.ok) { this.setStatus('Fichier introuvable', 'err'); return; }
+        if (!r.ok) { this.setStatus(STRINGS.status.loadNotFound, 'err'); return; }
         const d = await r.json();
-        const state = JSON.parse(decodeURIComponent(escape(atob(d.content.replace(/\n/g,'')))));
-        const ghToken = this.char.ghToken;
-        const loaded  = _deepMerge(JSON.parse(JSON.stringify(DEFAULT_CHAR)), state);
-        Object.assign(this.char, loaded);
-        this.char.ghToken = ghToken;
-        this.setStatus(`✓ Chargé — ${new Date().toLocaleTimeString('fr-FR')}`, 'ok');
-      } catch(e) { this.setStatus('Erreur chargement', 'err'); }
+        const binary = atob(d.content.replace(/\n/g, ''));
+        const bytes  = Uint8Array.from(binary, c => c.charCodeAt(0));
+        const state  = JSON.parse(new TextDecoder().decode(bytes));
+        this._applyState(state);
+        this.setStatus(STRINGS.status.loaded(new Date().toLocaleTimeString('fr-FR')), 'ok');
+      } catch(e) { this.setStatus(STRINGS.status.loadError, 'err'); }
     },
 
     setStatus(msg, type = '') { this.saveStatus = msg; this.saveStatusType = type; },
@@ -898,22 +879,51 @@ createApp({
     saveConfig() {
       if (this.char.ghToken) localStorage.setItem('torvin-gh-token', this.char.ghToken);
       this.showConfig = false;
-      this.setStatus('Token configuré — prêt', 'ok');
+      this.setStatus(STRINGS.status.tokenSaved, 'ok');
     },
 
     clearConfig() {
       this.char.ghToken = '';
       localStorage.removeItem('torvin-gh-token');
-      this.setStatus('Token effacé');
+      this.setStatus(STRINGS.status.tokenCleared);
     },
 
-    // ── Toast ────────────────────────────────
+    // ── Toast (réactif) ──────────────────────
     _toast(msg) {
-      const el = document.getElementById('toast');
-      if (!el) return;
-      el.textContent = msg;
-      el.classList.add('show');
-      setTimeout(() => el.classList.remove('show'), 3500);
+      if (this._toastTimer) clearTimeout(this._toastTimer);
+      this.toastMsg = msg;
+      this._toastTimer = setTimeout(() => { this.toastMsg = ''; this._toastTimer = null; }, 3500);
     },
   },
-}).mount('#app');
+});
+
+// ── Composants Vue réutilisables ─────────────────────────────
+
+// Overlay générique pour les modaux (spell, info, ASI)
+app.component('modal-overlay', {
+  props: {
+    overlayClass: { type: String, default: 'spell-modal-overlay' },
+    boxClass:     { type: String, default: 'spell-modal' },
+  },
+  emits: ['close'],
+  template: '#tpl-modal-overlay',
+});
+
+// Ligne de sort (cantrip, domaine, suggéré, personnalisé)
+app.component('spell-row', {
+  props: {
+    spell:      { type: Object,  required: true },
+    checked:    { type: Boolean, default: false },
+    concActive: { type: Boolean, default: false },
+    label:      { type: String,  default: null  },
+    bold:       { type: Boolean, default: false },
+    removable:  { type: Boolean, default: true  },
+    rowClass:   { type: String,  default: ''    },
+    rowStyle:   { type: String,  default: ''    },
+    nameClass:  { type: String,  default: ''    },
+  },
+  emits: ['toggle-check', 'open-modal', 'toggle-conc', 'remove'],
+  template: '#tpl-spell-row',
+});
+
+app.mount('#app');

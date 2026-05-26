@@ -33,10 +33,13 @@ jobs:
       - name: Check JS syntax — characters/torvin.js
         run: node --check characters/torvin.js
 
+      - name: Check JS syntax — strings.js
+        run: node --check strings.js
+
       # ── Required files presence ────────────────────────────────
       - name: Check required files exist
         run: |
-          for f in index.html style.css app.js data.js engine.js characters/torvin.js; do
+          for f in index.html style.css app.js data.js strings.js engine.js characters/torvin.js; do
             if [ ! -f "$f" ]; then
               echo "ERROR: Missing required file: $f"
               exit 1

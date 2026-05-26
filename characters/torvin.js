@@ -7,6 +7,17 @@
 // Niveaux d'ASI pour le Clerc (dans la plage niv.1–10)
 const CLERIC_ASI_LEVELS = [4, 8];
 
+// Migrations de données appliquées par engine.js au chargement.
+// Ajouter ici les correctifs spécifiques à ce personnage.
+const CHARACTER_MIGRATIONS = [
+  // v1 → v2 : minorIllusion était incorrectement marqué comme sort racial
+  state => {
+    state.customSpells[0] = state.customSpells[0].map(c =>
+      c.id === 'minorIllusion' ? { ...c, racial: false } : c
+    );
+  },
+];
+
 // Sorts de domaine Arcane (SCAG) — toujours préparés, ne comptent pas dans le quota
 const DOMAIN_SPELLS = {
   1: [

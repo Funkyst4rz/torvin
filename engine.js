@@ -43,10 +43,10 @@ function _loadInitialState() {
       if (!existingIds.has(c.id)) merged.customSpells[0].push({ ...c });
     }
 
-    // Migration : supprime le flag racial incorrectement attribué à Illusion mineure (Gnome des Roches 2014)
-    merged.customSpells[0] = merged.customSpells[0].map(c =>
-      c.id === 'minorIllusion' ? { ...c, racial: false } : c
-    );
+    // Applique les migrations déclarées dans characters/*.js
+    if (typeof CHARACTER_MIGRATIONS !== 'undefined') {
+      for (const migrate of CHARACTER_MIGRATIONS) migrate(merged);
+    }
 
     if (!Array.isArray(merged.traits))    merged.traits    = [...DEFAULT_CHAR.traits];
     if (!Array.isArray(merged.equipment)) merged.equipment = [...DEFAULT_CHAR.equipment];

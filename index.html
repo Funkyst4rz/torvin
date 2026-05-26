@@ -10,10 +10,21 @@
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
+<!-- SVG symbol partagé — les 4 coins l'utilisent via CSS transform -->
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+  <symbol id="corner-svg" viewBox="0 0 60 60">
+    <path d="M5 55L5 5L55 5" stroke="#5c3d1e" stroke-width="2" fill="none"/>
+    <circle cx="5" cy="5" r="3" fill="#7a5c1e"/>
+    <path d="M8 20Q12 16 16 20Q20 24 16 28" stroke="#7a5c1e" stroke-width="1" fill="none"/>
+    <path d="M20 8Q24 12 20 16Q16 20 20 24" stroke="#7a5c1e" stroke-width="1" fill="none"/>
+  </symbol>
+</svg>
+
 <div id="app">
 
   <!-- TOAST -->
-  <div class="levelup-toast" id="toast"></div>
+  <div class="levelup-toast" :class="{show: toastMsg}">{{ toastMsg }}</div>
 
   <!-- ══════════════════════════════════════
        PORTRAIT MODAL
@@ -25,100 +36,94 @@
   <!-- ══════════════════════════════════════
        SPELL DESCRIPTION MODAL
        ══════════════════════════════════════ -->
-  <div class="spell-modal-overlay" v-if="spellModal" @click.self="closeSpellModal">
-    <div class="spell-modal">
-      <div class="spell-modal-header">
-        <span class="spell-modal-title">{{ spellModal.name }}</span>
-        <button class="conc-clear" @click="closeSpellModal">✕</button>
-      </div>
-      <div class="spell-modal-meta">
-        <span class="spell-tag">{{ spellModal.tag }}</span>
-        <span v-if="spellModal.conc" class="spell-conc" style="margin-left:6px">CONC.</span>
-        <span v-if="spellModal.bonus" class="spell-conc bonus" style="margin-left:6px">BON.</span>
-        <span v-if="spellModal.level" style="margin-left:auto;font-family:'Cinzel',serif;font-size:0.5rem;color:var(--ink-light)">Niveau {{ spellModal.level }}</span>
-      </div>
-      <p class="spell-modal-desc">{{ spellModal.desc || 'Pas de description disponible pour ce sort.' }}</p>
+  <modal-overlay v-if="spellModal" @close="closeSpellModal">
+    <div class="spell-modal-header">
+      <span class="spell-modal-title">{{ spellModal.name }}</span>
+      <button class="conc-clear" @click="closeSpellModal">✕</button>
     </div>
-  </div>
+    <div class="spell-modal-meta">
+      <span class="spell-tag">{{ spellModal.tag }}</span>
+      <span v-if="spellModal.conc" class="spell-conc" style="margin-left:6px">CONC.</span>
+      <span v-if="spellModal.bonus" class="spell-conc bonus" style="margin-left:6px">BON.</span>
+      <span v-if="spellModal.level" style="margin-left:auto;font-family:'Cinzel',serif;font-size:0.5rem;color:var(--ink-light)">Niveau {{ spellModal.level }}</span>
+    </div>
+    <p class="spell-modal-desc">{{ spellModal.desc || 'Pas de description disponible pour ce sort.' }}</p>
+  </modal-overlay>
 
   <!-- ══════════════════════════════════════
        INFO MODAL
        ══════════════════════════════════════ -->
-  <div class="spell-modal-overlay" v-if="infoModal" @click.self="closeInfo">
-    <div class="spell-modal">
-      <div class="spell-modal-header">
-        <span class="spell-modal-title">{{ infoModal.title }}</span>
-        <button class="conc-clear" @click="closeInfo">✕</button>
-      </div>
-      <div class="info-modal-body" v-html="infoModal.body"></div>
+  <modal-overlay v-if="infoModal" @close="closeInfo">
+    <div class="spell-modal-header">
+      <span class="spell-modal-title">{{ infoModal.title }}</span>
+      <button class="conc-clear" @click="closeInfo">✕</button>
     </div>
-  </div>
+    <div class="info-modal-body" v-html="infoModal.body"></div>
+  </modal-overlay>
 
   <!-- ══════════════════════════════════════
        ASI / FEAT MODAL
        ══════════════════════════════════════ -->
-  <div class="asi-overlay" v-if="showASIModal" @click.self="dismissASI">
-    <div class="asi-modal">
-      <div class="asi-modal-header">
-        <span class="asi-modal-title">⬆ Amélioration — Niveau {{ asiModalLevel }}</span>
-        <button class="save-btn" style="padding:3px 10px;font-size:0.5rem" @click="dismissASI">✕ Plus tard</button>
+  <modal-overlay v-if="showASIModal" overlay-class="asi-overlay" box-class="asi-modal" @close="dismissASI">
+    <div class="asi-modal-header">
+      <span class="asi-modal-title">⬆ Amélioration — Niveau {{ asiModalLevel }}</span>
+      <button class="save-btn" style="padding:3px 10px;font-size:0.5rem" @click="dismissASI">✕ Plus tard</button>
+    </div>
+    <div class="asi-modal-body">
+      <p class="asi-desc">À ce niveau, Torvin gagne une amélioration. Choisissez comment utiliser cette progression.</p>
+      <div class="asi-existing" v-if="char.asi[asiModalLevel]">
+        <div class="asi-existing-label">Choix actuel</div>
+        <div class="asi-existing-val">{{ asiSummary(asiModalLevel) }}</div>
       </div>
-      <div class="asi-modal-body">
-        <p class="asi-desc">À ce niveau, Torvin gagne une amélioration. Choisissez comment utiliser cette progression.</p>
-        <div class="asi-existing" v-if="char.asi[asiModalLevel]">
-          <div class="asi-existing-label">Choix actuel</div>
-          <div class="asi-existing-val">{{ asiSummary(asiModalLevel) }}</div>
+      <div class="asi-options">
+        <div class="asi-option" :class="{selected: asiMode==='one'}" @click="asiMode='one'">
+          <div class="asi-option-title">▶ +2 à une caractéristique</div>
+          <div v-if="asiMode==='one'" class="asi-stat-row">
+            <select class="asi-select" v-model="asiStat1">
+              <option v-for="k in statKeys" :key="k" :value="k">
+                {{ statLabels[k] }} (actuellement {{ stats[k] }} → {{ stats[k]+2 }})
+              </option>
+            </select>
+          </div>
         </div>
-        <div class="asi-options">
-          <div class="asi-option" :class="{selected: asiMode==='one'}" @click="asiMode='one'">
-            <div class="asi-option-title">▶ +2 à une caractéristique</div>
-            <div v-if="asiMode==='one'" class="asi-stat-row">
-              <select class="asi-select" v-model="asiStat1">
-                <option v-for="k in statKeys" :key="k" :value="k">
-                  {{ statLabels[k] }} (actuellement {{ stats[k] }} → {{ stats[k]+2 }})
-                </option>
-              </select>
-            </div>
+        <div class="asi-option" :class="{selected: asiMode==='two'}" @click="asiMode='two'">
+          <div class="asi-option-title">▶ +1 à deux caractéristiques</div>
+          <div v-if="asiMode==='two'" class="asi-stat-row">
+            <select class="asi-select" v-model="asiStat1">
+              <option v-for="k in statKeys" :key="k" :value="k">{{ statLabels[k] }} ({{ stats[k] }} → {{ stats[k]+1 }})</option>
+            </select>
+            <select class="asi-select" v-model="asiStat2">
+              <option v-for="k in statKeys" :key="k" :value="k">{{ statLabels[k] }} ({{ stats[k] }} → {{ stats[k]+1 }})</option>
+            </select>
           </div>
-          <div class="asi-option" :class="{selected: asiMode==='two'}" @click="asiMode='two'">
-            <div class="asi-option-title">▶ +1 à deux caractéristiques</div>
-            <div v-if="asiMode==='two'" class="asi-stat-row">
-              <select class="asi-select" v-model="asiStat1">
-                <option v-for="k in statKeys" :key="k" :value="k">{{ statLabels[k] }} ({{ stats[k] }} → {{ stats[k]+1 }})</option>
-              </select>
-              <select class="asi-select" v-model="asiStat2">
-                <option v-for="k in statKeys" :key="k" :value="k">{{ statLabels[k] }} ({{ stats[k] }} → {{ stats[k]+1 }})</option>
-              </select>
-            </div>
-          </div>
-          <div class="asi-option" :class="{selected: asiMode==='feat'}" @click="asiMode='feat'">
-            <div class="asi-option-title">▶ Prendre un don (Feat)</div>
-            <div v-if="asiMode==='feat'" class="feat-list">
-              <div v-for="feat in allFeats" :key="feat.id"
-                   class="feat-card" :class="{ selected: asiFeatId===feat.id, recommended: feat.recommended }"
-                   @click.stop="asiFeatId=feat.id">
-                <div class="feat-name">{{ feat.name }}</div>
-                <div class="feat-desc">{{ feat.desc }}</div>
-              </div>
+        </div>
+        <div class="asi-option" :class="{selected: asiMode==='feat'}" @click="asiMode='feat'">
+          <div class="asi-option-title">▶ Prendre un don (Feat)</div>
+          <div v-if="asiMode==='feat'" class="feat-list">
+            <div v-for="feat in allFeats" :key="feat.id"
+                 class="feat-card" :class="{ selected: asiFeatId===feat.id, recommended: feat.recommended }"
+                 @click.stop="asiFeatId=feat.id">
+              <div class="feat-name">{{ feat.name }}</div>
+              <div class="feat-desc">{{ feat.desc }}</div>
             </div>
           </div>
         </div>
-        <div class="asi-actions">
-          <button class="save-btn" @click="dismissASI">Annuler</button>
-          <button class="save-btn primary" @click="confirmASI">✓ Confirmer</button>
-        </div>
+      </div>
+      <div class="asi-actions">
+        <button class="save-btn" @click="dismissASI">Annuler</button>
+        <button class="save-btn primary" @click="confirmASI">✓ Confirmer</button>
       </div>
     </div>
-  </div>
+  </modal-overlay>
 
   <!-- ══════════════════════════════════════
        PAGE PARCHEMIN
        ══════════════════════════════════════ -->
   <div class="page">
-    <div class="corner corner-tl"><svg viewBox="0 0 60 60" fill="none"><path d="M5 55L5 5L55 5" stroke="#5c3d1e" stroke-width="2"/><circle cx="5" cy="5" r="3" fill="#7a5c1e"/><path d="M8 20Q12 16 16 20Q20 24 16 28" stroke="#7a5c1e" stroke-width="1" fill="none"/><path d="M20 8Q24 12 20 16Q16 20 20 24" stroke="#7a5c1e" stroke-width="1" fill="none"/></svg></div>
-    <div class="corner corner-tr"><svg viewBox="0 0 60 60" fill="none"><path d="M5 55L5 5L55 5" stroke="#5c3d1e" stroke-width="2"/><circle cx="5" cy="5" r="3" fill="#7a5c1e"/><path d="M8 20Q12 16 16 20Q20 24 16 28" stroke="#7a5c1e" stroke-width="1" fill="none"/><path d="M20 8Q24 12 20 16Q16 20 20 24" stroke="#7a5c1e" stroke-width="1" fill="none"/></svg></div>
-    <div class="corner corner-bl"><svg viewBox="0 0 60 60" fill="none"><path d="M5 55L5 5L55 5" stroke="#5c3d1e" stroke-width="2"/><circle cx="5" cy="5" r="3" fill="#7a5c1e"/><path d="M8 20Q12 16 16 20Q20 24 16 28" stroke="#7a5c1e" stroke-width="1" fill="none"/><path d="M20 8Q24 12 20 16Q16 20 20 24" stroke="#7a5c1e" stroke-width="1" fill="none"/></svg></div>
-    <div class="corner corner-br"><svg viewBox="0 0 60 60" fill="none"><path d="M5 55L5 5L55 5" stroke="#5c3d1e" stroke-width="2"/><circle cx="5" cy="5" r="3" fill="#7a5c1e"/><path d="M8 20Q12 16 16 20Q20 24 16 28" stroke="#7a5c1e" stroke-width="1" fill="none"/><path d="M20 8Q24 12 20 16Q16 20 20 24" stroke="#7a5c1e" stroke-width="1" fill="none"/></svg></div>
+    <div class="corner corner-tl"><svg viewBox="0 0 60 60" fill="none"><use href="#corner-svg"/></svg></div>
+    <div class="corner corner-tr"><svg viewBox="0 0 60 60" fill="none"><use href="#corner-svg"/></svg></div>
+    <div class="corner corner-bl"><svg viewBox="0 0 60 60" fill="none"><use href="#corner-svg"/></svg></div>
+    <div class="corner corner-br"><svg viewBox="0 0 60 60" fill="none"><use href="#corner-svg"/></svg></div>
 
     <div class="content">
 
@@ -239,7 +244,7 @@
               </div>
               <span v-if="st.asi > 0" class="stat-asi-badge" title="Bonus ASI">+{{ st.asi }}✦</span>
             </div>
-            <div class="passive-box" style="cursor:pointer" @click="openInfo('Sagesse passive', '= 10 + bonus de Perception.<br><strong>Actuellement : ' + passivePerc + '</strong><br><br>Utilisée par le MJ pour vérifier discrètement si vous remarquez quelque chose — sans jet de dés de votre part. Plus c\'est haut, plus Torvin perçoit l\'environnement même distrait.')">
+            <div class="passive-box" style="cursor:pointer" @click="showInfo('passivePerc', passivePerc)">
               <div class="passive-val">{{ passivePerc }}</div>
               <span class="passive-label">Sagesse passive <span class="info-btn">ⓘ</span></span>
             </div>
@@ -250,7 +255,7 @@
             <div class="section-title">Combat</div>
             <div class="combat-row">
               <div class="combat-box">
-                <span class="combat-label">CA <span class="info-btn" @click="openInfo('Classe d\'Armure (CA)', 'Les attaquants doivent obtenir ≥ votre CA pour vous toucher.<br><br><strong>Références rapides :</strong><br>• Cuir : 11 + mod. DEX<br>• Cuir clouté : 12 + mod. DEX<br>• Chemise de mailles : 13 + mod. DEX (max +2)<br>• Cotte de mailles : 16 (pas de DEX, nécessite maîtrise)<br><br>La CA est saisie manuellement dans cette fiche.')">ⓘ</span></span>
+                <span class="combat-label">CA <span class="info-btn" @click="showInfo('ca')">ⓘ</span></span>
                 <div style="display:flex;align-items:center">
                   <input class="combat-input" type="number" v-model.number="char.caManual" min="0" max="30" title="Classe d'Armure — saisir manuellement">
                   <div class="pv-spinners">
@@ -259,12 +264,12 @@
                   </div>
                 </div>
               </div>
-              <div class="combat-box" style="cursor:pointer" @click="openInfo('Initiative', 'Détermine l\'ordre d\'action au combat.<br><strong>= 1d20 + Mod. DEX (' + S(mods.dex) + ')</strong><br><br>En cas d\'égalité : le MJ tranche, ou jet supplémentaire. Agir en premier peut être décisif — Immobilisation avant que les ennemis n\'agissent !')">
+              <div class="combat-box" style="cursor:pointer" @click="showInfo('initiative', S(mods.dex))">
                 <span class="combat-label">Initiative <span class="info-btn">ⓘ</span></span>
                 <span class="combat-val">{{ S(mods.dex) }}</span>
               </div>
               <div class="combat-box">
-                <span class="combat-label">Vitesse <span class="info-btn" @click.stop="openInfo('Vitesse de déplacement', 'Distance max de déplacement par tour (action de déplacement).<br><br><strong>7,5 m (25 pieds)</strong> — vitesse de base du Gnome des Roches.<br><br>Peut être réduite de moitié par : terrain difficile, conditions (entravé, exténué niv.2…). Certaines conditions l\'annulent totalement (paralysé, pétrifié).')">ⓘ</span></span>
+                <span class="combat-label">Vitesse <span class="info-btn" @click.stop="showInfo('speed')">ⓘ</span></span>
                 <div class="combat-val-wrap">
                   <div style="display:flex;align-items:center">
                     <input class="combat-input" type="number" v-model.number="char.speed" min="0" max="99">
@@ -279,7 +284,7 @@
                   </div>
                 </div>
               </div>
-              <div class="combat-box" style="cursor:pointer" @click="openInfo('Bonus de Maîtrise', 'Ajouté aux jets où vous avez la maîtrise : attaques, compétences, sorts, outils.<br><br><strong>Progression par niveau :</strong><br>• Niv. 1–4 : +2<br>• Niv. 5–8 : +3<br>• Niv. 9–12 : +4<br>• Niv. 13–16 : +5<br>• Niv. 17–20 : +6<br><br>Actuellement niveau ' + char.level + ' → <strong>' + S(prof) + '</strong>')">
+              <div class="combat-box" style="cursor:pointer" @click="showInfo('proficiency', char.level, S(prof))">
                 <span class="combat-label">Maîtrise <span class="info-btn">ⓘ</span></span>
                 <span class="combat-val">{{ S(prof) }}</span>
               </div>
@@ -288,7 +293,7 @@
             <!-- PV -->
             <div class="pv-section">
               <div class="pv-box">
-                <span class="pv-label">❤ Points de vie actuels <span class="info-btn" @click.stop="openInfo('Points de vie', '<strong>Maximum actuel : ' + hpMax + ' PV</strong><br>= somme des dés de vie + Mod. CON × niveau.<br><br><strong>À 0 PV :</strong> inconscient → jets de mort (d20 ≥ 10 = succès). 3 succès : stabilisé. 3 échecs : mort.<br><br>Si l\'excédent de dégâts en un coup ≥ PV max : mort instantanée.')">ⓘ</span></span>
+                <span class="pv-label">❤ Points de vie actuels <span class="info-btn" @click.stop="showInfo('hp', hpMax)">ⓘ</span></span>
                 <div class="pv-controls">
                   <input class="pv-input" type="number" v-model.number="char.hpCurrent" :min="0" :max="hpMax">
                   <div class="pv-spinners">
@@ -301,7 +306,7 @@
                 </div>
               </div>
               <div class="pv-box">
-                <span class="pv-label">✦ PV temporaires <span class="info-btn" @click.stop="openInfo('PV temporaires', 'Absorbent les dégâts <strong>avant</strong> les PV réels.<br><br>• Ne se cumulent pas : si deux sources vous en donnent, gardez le plus élevé.<br>• Ne se récupèrent pas avec les sorts de soin.<br>• Disparaissent après un repos long.<br><br>Exemple : 5 PVT + 12 PV → 7 dégâts → 0 PVT, 12 PV.')">ⓘ</span></span>
+                <span class="pv-label">✦ PV temporaires <span class="info-btn" @click.stop="showInfo('hpTemp')">ⓘ</span></span>
                 <div class="pv-controls">
                   <input class="pv-input" type="number" v-model.number="char.hpTemp" min="0" style="color:var(--ink-mid)">
                   <div class="pv-spinners">
@@ -310,7 +315,7 @@
                   </div>
                 </div>
                 <div class="pv-max">
-                  Canalisation divine <span class="info-btn" @click.stop="openInfo('Canalisation divine', '<strong>Se recharge à chaque repos court ou long.</strong><br><br>Utilisations par repos :<br>• Niv. 2–5 : 1×<br>• Niv. 6–17 : 2×<br><br><strong>Usages disponibles pour Torvin :</strong><br>• <em>Renvoi des morts-vivants</em> — JS CHA (DD ' + S(mods.cha + prof) + ') ou renvoi<br>• <em>Abjuration Arcanique</em> (domaine) — bannit célestes, élémentaires, fées, fiélons (FP ≤ ½ niveau à partir du niv.5)')">ⓘ</span> :
+                  Canalisation divine <span class="info-btn" @click.stop="showInfo('channelDivine', S(mods.cha+prof))">ⓘ</span> :
                   <span style="cursor:pointer;color:var(--gold);font-weight:700" @click="toggleCD">
                     {{ char.cdUsed }}/{{ levelData.cd }} utilisée{{ char.cdUsed > 1 ? 's' : '' }}
                   </span>
@@ -321,9 +326,9 @@
             <!-- Repos -->
             <div class="rest-bar">
               <button class="rest-btn short" @click="shortRest">⬋ Repos court — 1d8 PV + CD</button>
-              <span class="info-btn" style="margin-right:6px" @click="openInfo('Repos court (~1 heure)', 'Récupère :<br>• Dés de vie dépensés (0 à ' + char.level + ' dés, 1d8 + Mod. CON par dé)<br>• Canalisation divine<br><br>Ne récupère PAS : emplacements de sorts, PV max.')">ⓘ</span>
+              <span class="info-btn" style="margin-right:6px" @click="showInfo('shortRest', char.level)">ⓘ</span>
               <button class="rest-btn long"  @click="longRest">☀ Repos long — tout récupérer</button>
-              <span class="info-btn" @click="openInfo('Repos long (~8 heures)', 'Récupère :<br>• <strong>Tous les PV</strong><br>• La moitié des dés de vie max (arrondi haut) — actuellement ' + Math.ceil(char.level / 2) + ' dés<br>• <strong>Tous les emplacements de sorts</strong><br>• Canalisation divine<br><br>Nécessite au moins 6 heures de sommeil sur les 8 heures de repos.')">ⓘ</span>
+              <span class="info-btn" @click="showInfo('longRest', char.level)">ⓘ</span>
             </div>
 
             <!-- HP dice tracker -->
@@ -510,7 +515,7 @@
 
         <!-- Bannière de concentration active -->
         <div v-if="char.concentration" class="conc-banner">
-          ◆ Concentration active <span class="info-btn" @click.stop="openInfo('Concentration', 'Un seul sort de concentration à la fois.<br><br><strong>Se brise si :</strong><br>• Vous prenez des dégâts → JS CON DD max(10, ½ dégâts)<br>• Vous êtes incapacité, pétrifié ou mort<br>• Vous lancez un autre sort de concentration<br>• Vous le choisissez (bouton ✕)<br><br>Actuellement : <strong>' + char.concentration + '</strong><br>JS CON : ' + S(concentrationSaveBonus) + (concentrationHasAdvantage ? ' + avantage (War Caster)' : ''))">ⓘ</span> :
+          ◆ Concentration active <span class="info-btn" @click.stop="showInfo('concentration', char.concentration, S(concentrationSaveBonus), concentrationHasAdvantage)">ⓘ</span> :
           <strong>{{ char.concentration }}</strong>
           <span style="margin-left:10px;font-size:0.56rem">
             JS Con : {{ S(concentrationSaveBonus) }}{{ concentrationHasAdvantage ? ' + avantage (War Caster)' : '' }}
@@ -520,10 +525,10 @@
 
         <!-- Stat bar -->
         <div class="spell-stats-bar">
-          <span class="spell-stat-item" style="cursor:pointer" @click="openInfo('DD sorts', '= 8 + Maîtrise + Mod. Sagesse<br>= 8 + ' + prof + ' + ' + mods.wis + ' = <strong>' + spellDC + '</strong><br><br>Les ennemis font un jet de sauvegarde contre ce DD pour résister à vos sorts. Il n\'y a pas de jet d\'attaque de votre côté — c\'est eux qui doivent dépasser ' + spellDC + '.')">DD sorts : <strong class="spell-stat-val">{{ spellDC }}</strong> <span class="info-btn">ⓘ</span></span>
-          <span class="spell-stat-item" style="cursor:pointer" @click="openInfo('Bonus d\'attaque de sort', '= Maîtrise + Mod. Sagesse<br>= ' + prof + ' + ' + mods.wis + ' = <strong>' + S(spellAtk) + '</strong><br><br>Ajouté au d20 pour les sorts qui nécessitent un <strong>jet d\'attaque</strong> (pas un JS ennemi). Exemples : Arme spirituelle, Fléau de flammes.<br><br>Différence clé : vous lancez le d20 et espérez dépasser la CA cible.')">Bonus attaque : <strong class="spell-stat-val">{{ S(spellAtk) }}</strong> <span class="info-btn">ⓘ</span></span>
-          <span class="spell-stat-item" style="cursor:pointer" @click="openInfo('Sorts mineurs', 'Gratuits et à volonté — pas d\'emplacement consommé.<br><br><strong>Scaling par niveau de personnage :</strong><br>• Niv. 1–4 : ×1 dé <span style=\'color:var(--gold)\'>← vous êtes là</span><br>• Niv. 5–10 : ×2 dés<br>• Niv. 11–16 : ×3 dés<br>• Niv. 17+ : ×4 dés<br><br>Exemple : Glas des trépassés fait actuellement ' + cantripDice + 'd8 (ou ' + cantripDice + 'd12 si la cible a déjà perdu des PV).')">Sorts mineurs : <strong class="spell-stat-val">{{ cantrips.length }} (×{{ cantripDice }} dés)</strong> <span class="info-btn">ⓘ</span></span>
-          <span class="spell-prepared-bar" style="cursor:pointer" @click="openInfo('Sorts préparés', '= Niveau de clerc + Mod. Sagesse<br>= ' + char.level + ' + ' + mods.wis + ' = <strong>' + (char.level + mods.wis) + ' sorts max</strong><br><br>• Les <strong>sorts de domaine</strong> (Arcane) ne comptent pas dans ce quota — ils sont toujours préparés.<br>• Vous pouvez changer votre liste après un repos long.<br>• Les sorts mineurs ne comptent pas non plus.')">
+          <span class="spell-stat-item" style="cursor:pointer" @click="showInfo('spellDC', prof, mods.wis, spellDC)">DD sorts : <strong class="spell-stat-val">{{ spellDC }}</strong> <span class="info-btn">ⓘ</span></span>
+          <span class="spell-stat-item" style="cursor:pointer" @click="showInfo('spellAtk', prof, mods.wis, S(spellAtk))">Bonus attaque : <strong class="spell-stat-val">{{ S(spellAtk) }}</strong> <span class="info-btn">ⓘ</span></span>
+          <span class="spell-stat-item" style="cursor:pointer" @click="showInfo('cantrips', cantripDice, char.level)">Sorts mineurs : <strong class="spell-stat-val">{{ cantrips.length }} (×{{ cantripDice }} dés)</strong> <span class="info-btn">ⓘ</span></span>
+          <span class="spell-prepared-bar" style="cursor:pointer" @click="showInfo('prepared', char.level, mods.wis, preparedMax)">
             Sorts préparés <span class="info-btn">ⓘ</span> :
             <span class="spell-prepared-count" :class="{ 'prepared-over': preparedOver }">
               {{ preparedCount }}/{{ preparedMax }}
@@ -545,22 +550,18 @@
               </span>
             </span>
           </div>
-          <div class="spell-row" v-for="c in cantrips" :key="c.id">
-            <span class="spell-check" :class="{checked:isChecked(c.id)}" @click="toggleCheck(c.id)"></span>
-            <span class="spell-name spell-name-link" @click="openSpellModal(c)">
-              <strong>{{ c.name }}</strong>
-              <em v-if="c.racial" style="font-size:0.56rem;margin-left:4px">[racial]</em>
-            </span>
-            <span class="spell-tag">{{ c.tag }}</span>
-            <span class="spell-conc"
-                  :class="{ 'conc-active-badge': char.concentration===c.name }"
-                  :style="c.conc ? 'cursor:pointer' : ''"
-                  @click="c.conc && toggleConcentration(c.name)"
-                  :title="c.conc ? (char.concentration===c.name ? 'Rompre la concentration' : 'Activer la concentration') : ''">
-              {{ c.conc ? (char.concentration===c.name ? '◆ACT' : 'CONC.') : '—' }}
-            </span>
-            <button class="delete-btn" @click="removeCustomSpell(0, c.id)" title="Retirer ce sort mineur">×</button>
-          </div>
+          <spell-row
+            v-for="c in cantrips" :key="c.id"
+            :spell="c"
+            :checked="isChecked(c.id)"
+            :conc-active="char.concentration===c.name"
+            :label="c.racial ? '[racial]' : null"
+            :bold="true"
+            @toggle-check="toggleCheck(c.id)"
+            @open-modal="openSpellModal(c)"
+            @toggle-conc="toggleConcentration(c.name)"
+            @remove="removeCustomSpell(0, c.id)"
+          ></spell-row>
           <button class="spell-add-btn" :class="{active:openPickers[0]}" @click="togglePicker(0)">
             {{ openPickers[0] ? '▲ Fermer' : '+ Choisir un sort mineur' }}
           </button>
@@ -598,7 +599,7 @@
           <div class="spell-level-header">
             <span class="spell-level-num">
               Niveau {{ slotLvl }} — {{ slots[slotLvl] }} emplacement{{ slots[slotLvl]>1?'s':'' }}
-              <span class="info-btn" @click.stop="openInfo('Emplacements de sorts — Niveau ' + slotLvl, 'Vous avez <strong>' + slots[slotLvl] + ' emplacement' + (slots[slotLvl]>1?'s':'') + '</strong> de niveau ' + slotLvl + '.<br><br>Un sort de niveau X consomme un emplacement de niveau ≥ X. Lancer dans un emplacement supérieur peut amplifier l\'effet (ex: Soins dans un slot niv.2 guérit plus).<br><br><strong>Récupération :</strong> tous les emplacements reviennent après un repos long.')">ⓘ</span>
+              <span class="info-btn" @click.stop="showInfo('slotLevel', slotLvl, slots[slotLvl])">ⓘ</span>
             </span>
             <div class="spell-slots">
               <span v-for="i in slots[slotLvl]" :key="i"
@@ -610,52 +611,49 @@
 
           <!-- Sorts de domaine -->
           <template v-if="domainSpells[domainKeyForSlot(slotLvl)]">
-            <div v-for="(ds, di) in domainSpells[domainKeyForSlot(slotLvl)]" :key="'dom-'+slotLvl+'-'+di"
-                 class="spell-row" :style="di%2===1 ? 'background:rgba(92,61,30,.05)' : ''">
-              <span class="spell-check" :class="{checked:isChecked('sc-d'+slotLvl+'-'+di)}" @click="toggleCheck('sc-d'+slotLvl+'-'+di)"></span>
-              <span class="spell-name domain spell-name-link" @click="openSpellModal(ds, domainKeyForSlot(slotLvl))">{{ ds.name }} <em style="font-size:0.56rem">[domaine]</em></span>
-              <span class="spell-tag">{{ ds.tag }}</span>
-              <span class="spell-conc"
-                    :class="{ 'conc-active-badge': char.concentration===ds.name }"
-                    :style="ds.conc ? 'cursor:pointer' : ''"
-                    @click="ds.conc && toggleConcentration(ds.name)"
-                    :title="ds.conc ? (char.concentration===ds.name ? 'Rompre la concentration' : 'Activer la concentration') : ''">
-                {{ ds.conc ? (char.concentration===ds.name ? '◆ACT' : 'CONC.') : '—' }}
-              </span>
-            </div>
+            <spell-row
+              v-for="(ds, di) in domainSpells[domainKeyForSlot(slotLvl)]" :key="'dom-'+slotLvl+'-'+di"
+              :spell="ds"
+              :checked="isChecked('sc-d'+slotLvl+'-'+di)"
+              :conc-active="char.concentration===ds.name"
+              label="[domaine]"
+              name-class="domain"
+              :removable="false"
+              :row-style="di%2===1 ? 'background:rgba(92,61,30,.05)' : ''"
+              @toggle-check="toggleCheck('sc-d'+slotLvl+'-'+di)"
+              @open-modal="openSpellModal(ds, domainKeyForSlot(slotLvl))"
+              @toggle-conc="toggleConcentration(ds.name)"
+            ></spell-row>
           </template>
 
           <!-- Sorts suggérés -->
-          <div v-for="sp in (suggestedSpells[slotLvl]||[])" :key="sp.id"
-               class="spell-row spell-row-suggested" :style="sp.id==='sc-bane' ? 'background:rgba(139,26,26,.06)' : ''">
-            <span class="spell-check" :class="{checked:isChecked(sp.id)}" @click="toggleCheck(sp.id)"></span>
-            <span class="spell-name spell-name-link" @click="openSpellModal(sp, slotLvl)"><strong>{{ sp.name }}</strong></span>
-            <span class="spell-tag">{{ sp.tag }}</span>
-            <span class="spell-conc"
-                  :class="{ 'conc-active-badge': char.concentration===sp.name, bonus: sp.bonus && !sp.conc }"
-                  :style="sp.conc ? 'cursor:pointer' : ''"
-                  @click="sp.conc && toggleConcentration(sp.name)"
-                  :title="sp.conc ? (char.concentration===sp.name ? 'Rompre' : 'Activer concentration') : ''">
-              {{ sp.conc ? (char.concentration===sp.name ? '◆ACT' : 'CONC.') : sp.bonus ? 'BON.' : '—' }}
-            </span>
-            <button class="delete-btn" @click="removeSuggestedSpell(sp.id)" title="Retirer ce sort">×</button>
-          </div>
+          <spell-row
+            v-for="sp in (suggestedSpells[slotLvl]||[])" :key="sp.id"
+            :spell="sp"
+            :checked="isChecked(sp.id)"
+            :conc-active="char.concentration===sp.name"
+            :bold="true"
+            row-class="spell-row-suggested"
+            :row-style="sp.id==='sc-bane' ? 'background:rgba(139,26,26,.06)' : ''"
+            @toggle-check="toggleCheck(sp.id)"
+            @open-modal="openSpellModal(sp, slotLvl)"
+            @toggle-conc="toggleConcentration(sp.name)"
+            @remove="removeSuggestedSpell(sp.id)"
+          ></spell-row>
 
           <!-- Sorts personnalisés -->
-          <div v-for="cs in (char.customSpells[slotLvl]||[])" :key="cs.id"
-               class="spell-row spell-row-custom" style="background:rgba(122,92,30,.05)">
-            <span class="spell-check" :class="{checked:isChecked('cs-'+cs.id)}" @click="toggleCheck('cs-'+cs.id)"></span>
-            <span class="spell-name spell-name-link" @click="openSpellModal(cs, slotLvl)">{{ cs.name }}</span>
-            <span class="spell-tag">{{ cs.tag }}</span>
-            <span class="spell-conc"
-                  :class="{ 'conc-active-badge': char.concentration===cs.name }"
-                  :style="cs.conc ? 'cursor:pointer' : ''"
-                  @click="cs.conc && toggleConcentration(cs.name)"
-                  :title="cs.conc ? (char.concentration===cs.name ? 'Rompre' : 'Activer concentration') : ''">
-              {{ cs.conc ? (char.concentration===cs.name ? '◆ACT' : 'CONC.') : '—' }}
-            </span>
-            <button class="delete-btn" @click="removeCustomSpell(slotLvl, cs.id)" title="Retirer">×</button>
-          </div>
+          <spell-row
+            v-for="cs in (char.customSpells[slotLvl]||[])" :key="cs.id"
+            :spell="cs"
+            :checked="isChecked('cs-'+cs.id)"
+            :conc-active="char.concentration===cs.name"
+            row-class="spell-row-custom"
+            row-style="background:rgba(122,92,30,.05)"
+            @toggle-check="toggleCheck('cs-'+cs.id)"
+            @open-modal="openSpellModal(cs, slotLvl)"
+            @toggle-conc="toggleConcentration(cs.name)"
+            @remove="removeCustomSpell(slotLvl, cs.id)"
+          ></spell-row>
 
           <!-- Picker -->
           <button class="spell-add-btn" :class="{active:openPickers[slotLvl]}" @click="togglePicker(slotLvl)">
@@ -687,7 +685,7 @@
 
           <!-- Concentration -->
           <div class="section-box conc-section">
-            <div class="section-title">◆ Concentration <span class="info-btn" @click="openInfo('Concentration — Comment elle se rompt', 'Un seul sort de concentration à la fois.<br><br><strong>⚔ Dégâts reçus</strong><br>Lancer 1d20 + mod. CON contre DD = max(10, ½ dégâts reçus en un coup).<br>Torvin : 1d20 <strong>' + S(concentrationSaveBonus) + '</strong>' + (concentrationHasAdvantage ? ' avec avantage (War Caster)' : '') + '<br><br><strong>Ruptures automatiques</strong><br>• Lancer un autre sort de concentration<br>• Être <em>incapacité</em>, pétrifié ou tué<br>• Choisir de la rompre volontairement (action gratuite)<br><br><strong>Astuce :</strong> War Caster donne l\'avantage au JS. Résistant (Con) ajoute la maîtrise.')">ⓘ</span></div>
+            <div class="section-title">◆ Concentration <span class="info-btn" @click="showInfo('concentrationCombat', S(concentrationSaveBonus), concentrationHasAdvantage)">ⓘ</span></div>
             <div v-if="char.concentration" class="conc-active-area">
               <div class="conc-spell-name">{{ char.concentration }}</div>
               <div class="conc-dc-info">
@@ -970,8 +968,39 @@
 
 </div><!-- /app -->
 
+<!-- ── Templates des composants Vue ──────────────────────────── -->
+
+<script type="text/x-template" id="tpl-modal-overlay">
+  <div :class="overlayClass" @click.self="$emit('close')">
+    <div :class="boxClass">
+      <slot></slot>
+    </div>
+  </div>
+</script>
+
+<script type="text/x-template" id="tpl-spell-row">
+  <div class="spell-row" :class="rowClass" :style="rowStyle">
+    <span class="spell-check" :class="{checked}" @click="$emit('toggle-check')"></span>
+    <span class="spell-name spell-name-link" :class="nameClass" @click="$emit('open-modal')">
+      <strong v-if="bold">{{ spell.name }}</strong>
+      <template v-else>{{ spell.name }}</template>
+      <em v-if="label" style="font-size:0.56rem;margin-left:4px">{{ label }}</em>
+    </span>
+    <span class="spell-tag">{{ spell.tag }}</span>
+    <span class="spell-conc"
+          :class="{ 'conc-active-badge': concActive, bonus: spell.bonus && !spell.conc }"
+          :style="spell.conc ? 'cursor:pointer' : ''"
+          @click="spell.conc && $emit('toggle-conc')"
+          :title="spell.conc ? (concActive ? 'Rompre la concentration' : 'Activer la concentration') : ''">
+      {{ spell.conc ? (concActive ? '◆ACT' : 'CONC.') : spell.bonus ? 'BON.' : '—' }}
+    </span>
+    <button v-if="removable" class="delete-btn" @click="$emit('remove')" title="Retirer">×</button>
+  </div>
+</script>
+
 <script src="https://cdn.jsdelivr.net/npm/vue@3/dist/vue.global.prod.js"></script>
 <script src="data.js"></script>
+<script src="strings.js"></script>
 <script src="characters/torvin.js"></script>
 <script src="engine.js"></script>
 <script src="app.js"></script>
