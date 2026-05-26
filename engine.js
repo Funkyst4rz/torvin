@@ -67,7 +67,8 @@ function _loadInitialState() {
     if (!Array.isArray(merged.attunedItems))   merged.attunedItems = [];
     if (!Array.isArray(merged.phrases))        merged.phrases      = JSON.parse(JSON.stringify(DEFAULT_CHAR.phrases));
     if (!Array.isArray(merged.removedSpells))  merged.removedSpells = [];
-    if (typeof merged.caManual !== 'number')   merged.caManual = 14;
+    if (typeof merged.caManual    !== 'number') merged.caManual    = 14;
+    if (typeof merged.hpMaxBonus  !== 'number') merged.hpMaxBonus  = 0;
     if (!Array.isArray(merged.skillProfs))
       merged.skillProfs = ['arcanes', 'religion', 'medecine', 'intuition', 'persuasion'];
 

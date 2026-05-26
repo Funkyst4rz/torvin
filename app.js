@@ -258,7 +258,6 @@ const app = createApp({
     },
 
     // Helpers exposés au template
-    S() { return n => (n >= 0 ? '+' : '') + n; },
     statKeys()        { return ['str','dex','con','int','wis','cha']; },
     statLabels()      { return STAT_LABELS; },
     allFeats()        { return FEATS; },
@@ -397,6 +396,12 @@ const app = createApp({
     // ── Helpers ──────────────────────────────
     sign(n) { return (n >= 0 ? '+' : '') + n; },
     statLabel(k) { return STAT_LABELS[k] || k; },
+    /** Supprime l'élément à l'index i dans char[field] (immutable) */
+    _removeAt(field, i) {
+      const list = [...(this.char[field] || [])];
+      list.splice(i, 1);
+      this.char[field] = list;
+    },
 
     // ── Navigation ───────────────────────────
     switchTab(tab) { this.activeTab = tab; },
@@ -422,12 +427,18 @@ const app = createApp({
     _hpMaxAt(lvl, rolls) {
       let total = 0;
       for (let i = 1; i <= lvl; i++) total += (rolls || this.char.hpRolls)[i] || 0;
-      return total + this.mods.con * lvl;
+      return total + this.mods.con * lvl + (this.char.hpMaxBonus || 0);
     },
 
     // ── HP / Rests ───────────────────────────
     adjustHP(delta) {
       this.char.hpCurrent = Math.max(0, Math.min(this.hpMax, (this.char.hpCurrent || 0) + delta));
+    },
+    adjustHPTemp(delta) {
+      this.char.hpTemp = Math.max(0, (this.char.hpTemp || 0) + delta);
+    },
+    adjustHPMaxBonus(delta) {
+      this.char.hpMaxBonus = Math.max(0, (this.char.hpMaxBonus || 0) + delta);
     },
 
     shortRest() {
@@ -521,7 +532,7 @@ const app = createApp({
       const total   = roll + this.concentrationSaveBonus;
       const success = total >= dc;
       this.concCheckResult = { rollDisplay, total, dc, success };
-      const sign = this.S(this.concentrationSaveBonus);
+      const sign = this.sign(this.concentrationSaveBonus);
       this._toast(success
         ? `✓ Conc. maintenue ! ${rollDisplay}${sign} = ${total} ≥ DD${dc}`
         : `✗ Conc. rompue ! ${rollDisplay}${sign} = ${total} < DD${dc}`
@@ -570,12 +581,21 @@ const app = createApp({
     resetDeathSaves() {
       this.char.deathSaves = { success:0, failure:0 };
     },
+    /** Clic sur un pip : sélectionner i, ou désélectionner si déjà i */
+    setDeathSave(type, i) {
+      const cur = this.char.deathSaves[type] || 0;
+      this.char.deathSaves = { ...this.char.deathSaves, [type]: i <= cur ? i - 1 : i };
+    },
+    /** Clic sur un niveau d'exhaustion : toggle (clic même valeur = retire 1) */
+    setExhaustion(n) {
+      this.char.exhaustion = (n === (this.char.exhaustion || 0) ? n - 1 : n);
+    },
 
     // ── Initiative ───────────────────────────
     rollInitiative() {
       const roll = Math.ceil(Math.random() * 20);
       this.initiativeRoll = roll + this.initiativeBonus;
-      this._toast(`🎲 Initiative : d20(${roll}) ${this.S(this.initiativeBonus)} = ${this.initiativeRoll}`);
+      this._toast(`🎲 Initiative : d20(${roll}) ${this.sign(this.initiativeBonus)} = ${this.initiativeRoll}`);
     },
 
     // ── Dice roller ──────────────────────────
@@ -631,20 +651,20 @@ const app = createApp({
       const stat = this.statsDisplay.find(s => s.key === key);
       const argMap = {
         str: [(this.char.base.str + (this.char.racial.str || 0)) * 15],
-        dex: [this.S(this.mods.dex)],
+        dex: [this.sign(this.mods.dex)],
         con: [this.hpMax],
         int: [],
-        wis: [this.spellDC, this.S(this.spellAtk), this.passivePerc],
-        cha: [this.S(this.mods.cha + this.prof)],
+        wis: [this.spellDC, this.sign(this.spellAtk), this.passivePerc],
+        cha: [this.sign(this.mods.cha + this.prof)],
       };
       const { title, uses } = STRINGS.info.stat[key](...(argMap[key] || []));
-      const header = `<strong>Score :</strong> ${stat.total} &nbsp;→&nbsp; Modificateur : <strong>${this.S(this.mods[key])}</strong>`
+      const header = `<strong>Score :</strong> ${stat.total} &nbsp;→&nbsp; Modificateur : <strong>${this.sign(this.mods[key])}</strong>`
         + (stat.racial ? `<br><span style="font-size:0.8em;color:var(--ink-light)">Base ${stat.base} + racial ${stat.racial}${stat.asi ? ' + ASI ' + stat.asi : ''}</span>` : '');
       this.openInfo(title, header + '<br><br><strong>Utilisée pour :</strong><br>' + uses.map(u => '• ' + u).join('<br>'));
     },
 
     openSaveInfo(sv) {
-      const formula = `1d20 + ${this.S(this.mods[sv.key])}${sv.prof ? ` + ${this.S(this.prof)} (maîtrise)` : ''} = <strong>${this.S(sv.bonus)}</strong>`;
+      const formula = `1d20 + ${this.sign(this.mods[sv.key])}${sv.prof ? ` + ${this.sign(this.prof)} (maîtrise)` : ''} = <strong>${this.sign(sv.bonus)}</strong>`;
       const body = `<strong>Formule :</strong> ${formula}${sv.prof ? ' <em>(maîtrise clerc ✓)</em>' : ''}<br><br><strong>Déclenché par :</strong><br>${STRINGS.info.savingThrow[sv.key]}`;
       this.openInfo('JS ' + sv.name.replace(' ✓', ''), body);
     },
@@ -695,14 +715,6 @@ const app = createApp({
       this.char.customEquipment = [...this.char.customEquipment, this.newEquip.trim()];
       this.newEquip = '';
     },
-    removeCustomEquip(i) {
-      const list = [...this.char.customEquipment]; list.splice(i, 1);
-      this.char.customEquipment = list;
-    },
-    removeBaseEquip(i) {
-      const list = [...this.char.equipment]; list.splice(i, 1);
-      this.char.equipment = list;
-    },
 
     // ── Custom attacks ───────────────────────
     addCustomAttack() {
@@ -711,10 +723,6 @@ const app = createApp({
         name: this.newAtkName || '—', bonus: this.newAtkBonus || '—', damage: this.newAtkDmg || '—',
       }];
       this.newAtkName = ''; this.newAtkBonus = ''; this.newAtkDmg = '';
-    },
-    removeCustomAttack(i) {
-      const list = [...this.char.customAttacks]; list.splice(i, 1);
-      this.char.customAttacks = list;
     },
 
     // ── Skill proficiencies ──────────────────
@@ -732,20 +740,12 @@ const app = createApp({
       this.char.languages = [...(this.char.languages || []), this.newLanguage.trim()];
       this.newLanguage = '';
     },
-    removeLanguage(i) {
-      const list = [...this.char.languages]; list.splice(i, 1);
-      this.char.languages = list;
-    },
 
     // ── Tool proficiencies ───────────────────
     addToolProf() {
       if (!this.newToolProf.trim()) return;
       this.char.toolProfs = [...(this.char.toolProfs || []), this.newToolProf.trim()];
       this.newToolProf = '';
-    },
-    removeToolProf(i) {
-      const list = [...this.char.toolProfs]; list.splice(i, 1);
-      this.char.toolProfs = list;
     },
 
     // ── Attunement ───────────────────────────
@@ -755,18 +755,10 @@ const app = createApp({
       this.char.attunedItems = [...(this.char.attunedItems || []), this.newAttuned.trim()];
       this.newAttuned = '';
     },
-    removeAttunement(i) {
-      const list = [...this.char.attunedItems]; list.splice(i, 1);
-      this.char.attunedItems = list;
-    },
 
     // ── Phrases situationnelles ──────────────
     addPhrase() {
       this.char.phrases = [...(this.char.phrases || []), { situation: 'Nouvelle situation', text: '« ... »' }];
-    },
-    removePhrase(i) {
-      const list = [...this.char.phrases]; list.splice(i, 1);
-      this.char.phrases = list;
     },
 
     // ── ASI Modal ────────────────────────────

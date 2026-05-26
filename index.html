@@ -236,7 +236,7 @@
             <div v-for="st in statsDisplay" :key="st.key" class="stat-box" :class="{'stat-main': st.primary}">
               <span class="stat-name">{{ st.label }} <span class="info-btn" @click="openStatInfo(st.key)">ⓘ</span></span>
               <span class="stat-score">{{ st.total }}</span>
-              <span class="stat-mod">{{ S(st.mod) }}</span>
+              <span class="stat-mod">{{ sign(st.mod) }}</span>
               <div class="stat-base-row">
                 <span class="stat-base-label">base</span>
                 <input class="stat-base-input" type="number" v-model.number="char.base[st.key]" min="1" max="20" title="Modifier la valeur de base">
@@ -269,9 +269,9 @@
                 </div>
               </div>
               <div class="combat-box">
-                <span class="combat-label">Initiative <span class="info-btn" @click.stop="showInfo('initiative', S(initiativeBonus))">ⓘ</span></span>
+                <span class="combat-label">Initiative <span class="info-btn" @click.stop="showInfo('initiative', sign(initiativeBonus))">ⓘ</span></span>
                 <div style="display:flex;align-items:center;gap:4px;justify-content:center">
-                  <span class="combat-val">{{ S(initiativeBonus) }}</span>
+                  <span class="combat-val">{{ sign(initiativeBonus) }}</span>
                   <button class="dice-count-btn" style="font-size:0.75rem;padding:3px 8px" @click="rollInitiative" title="Lancer l'initiative">🎲</button>
                 </div>
                 <div v-if="initiativeRoll !== null" class="initiative-roll">{{ initiativeRoll }}</div>
@@ -292,9 +292,9 @@
                   </div>
                 </div>
               </div>
-              <div class="combat-box" style="cursor:pointer" @click="showInfo('proficiency', char.level, S(prof))">
+              <div class="combat-box" style="cursor:pointer" @click="showInfo('proficiency', char.level, sign(prof))">
                 <span class="combat-label">Maîtrise <span class="info-btn">ⓘ</span></span>
-                <span class="combat-val">{{ S(prof) }}</span>
+                <span class="combat-val">{{ sign(prof) }}</span>
               </div>
             </div>
 
@@ -324,8 +324,8 @@
                   <div class="pv-controls">
                     <input class="pv-input" type="number" v-model.number="char.hpTemp" min="0" style="color:var(--ink-mid)">
                     <div class="pv-spinners">
-                      <button class="pv-spin" @click="char.hpTemp++" tabindex="-1">▴</button>
-                      <button class="pv-spin" @click="char.hpTemp = Math.max(0, char.hpTemp - 1)" tabindex="-1">▾</button>
+                      <button class="pv-spin" @click="adjustHPTemp(1)" tabindex="-1">▴</button>
+                      <button class="pv-spin" @click="adjustHPTemp(-1)" tabindex="-1">▾</button>
                     </div>
                   </div>
                 </div>
@@ -334,8 +334,8 @@
                   <div class="pv-controls">
                     <input class="pv-input" type="number" v-model.number="char.hpMaxBonus" min="0" style="color:var(--green)">
                     <div class="pv-spinners">
-                      <button class="pv-spin" @click="char.hpMaxBonus = (char.hpMaxBonus||0)+1" tabindex="-1">▴</button>
-                      <button class="pv-spin" @click="char.hpMaxBonus = Math.max(0,(char.hpMaxBonus||0)-1)" tabindex="-1">▾</button>
+                      <button class="pv-spin" @click="adjustHPMaxBonus(1)" tabindex="-1">▴</button>
+                      <button class="pv-spin" @click="adjustHPMaxBonus(-1)" tabindex="-1">▾</button>
                     </div>
                   </div>
                 </div>
@@ -376,7 +376,7 @@
                      style="cursor:pointer" @click="openSaveInfo(sv)" title="Cliquer pour en savoir plus">
                   <span class="skill-prof" :class="{ filled: sv.prof }"></span>
                   <span class="skill-name">{{ sv.name }}</span>
-                  <span class="skill-bonus" :class="{ high: sv.prof }">{{ S(sv.bonus) }}</span>
+                  <span class="skill-bonus" :class="{ high: sv.prof }">{{ sign(sv.bonus) }}</span>
                 </div>
               </div>
             </div>
@@ -392,7 +392,7 @@
                     <td>{{ atk.bonus }}</td>
                     <td style="display:flex;justify-content:space-between;align-items:center">
                       {{ atk.damage }}
-                      <button class="delete-btn" @click="removeCustomAttack(i)" title="Supprimer">×</button>
+                      <button class="delete-btn" @click="_removeAt('customAttacks', i)" title="Supprimer">×</button>
                     </td>
                   </tr>
                 </tbody>
@@ -411,11 +411,11 @@
               <ul class="equip-list">
                 <li v-for="(item, i) in char.equipment" :key="'base-'+i">
                   <span style="flex:1">{{ item }}</span>
-                  <button class="equip-delete" @click="removeBaseEquip(i)" title="Supprimer">✕</button>
+                  <button class="equip-delete" @click="_removeAt('equipment', i)" title="Supprimer">✕</button>
                 </li>
                 <li v-for="(item, i) in char.customEquipment" :key="'custom-'+i">
                   <span style="flex:1">{{ item }}</span>
-                  <button class="equip-delete" @click="removeCustomEquip(i)" title="Supprimer">✕</button>
+                  <button class="equip-delete" @click="_removeAt('customEquipment', i)" title="Supprimer">✕</button>
                 </li>
               </ul>
               <div class="add-form">
@@ -452,7 +452,7 @@
                        :title="sk.prof ? 'Retirer la maîtrise' : 'Ajouter la maîtrise'">
                     <span class="skill-prof" :class="sk.prof"></span>
                     <span class="skill-name">{{ sk.name }}</span>
-                    <span class="skill-bonus" :class="{ high: !!sk.prof }">{{ S(sk.bonus) }}</span>
+                    <span class="skill-bonus" :class="{ high: !!sk.prof }">{{ sign(sk.bonus) }}</span>
                   </div>
                 </template>
               </div>
@@ -463,7 +463,7 @@
               <ul class="equip-list">
                 <li v-for="(lang, i) in char.languages" :key="'lang-'+i">
                   <span style="flex:1;font-size:0.75rem">{{ lang }}</span>
-                  <button class="equip-delete" @click="removeLanguage(i)" title="Supprimer">✕</button>
+                  <button class="equip-delete" @click="_removeAt('languages', i)" title="Supprimer">✕</button>
                 </li>
               </ul>
               <div class="add-form">
@@ -477,7 +477,7 @@
               <ul class="equip-list">
                 <li v-for="(tool, i) in char.toolProfs" :key="'tool-'+i">
                   <span style="flex:1;font-size:0.75rem">{{ tool }}</span>
-                  <button class="equip-delete" @click="removeToolProf(i)" title="Supprimer">✕</button>
+                  <button class="equip-delete" @click="_removeAt('toolProfs', i)" title="Supprimer">✕</button>
                 </li>
               </ul>
               <div class="add-form">
@@ -534,10 +534,10 @@
 
         <!-- Bannière de concentration active -->
         <div v-if="char.concentration" class="conc-banner">
-          ◆ Concentration active <span class="info-btn" @click.stop="showInfo('concentration', char.concentration, S(concentrationSaveBonus), concentrationHasAdvantage)">ⓘ</span> :
+          ◆ Concentration active <span class="info-btn" @click.stop="showInfo('concentration', char.concentration, sign(concentrationSaveBonus), concentrationHasAdvantage)">ⓘ</span> :
           <strong>{{ char.concentration }}</strong>
           <span style="margin-left:10px;font-size:0.56rem">
-            JS Con : {{ S(concentrationSaveBonus) }}{{ concentrationHasAdvantage ? ' + avantage (War Caster)' : '' }}
+            JS Con : {{ sign(concentrationSaveBonus) }}{{ concentrationHasAdvantage ? ' + avantage (War Caster)' : '' }}
           </span>
           <button class="conc-clear" @click="clearConcentration">✕</button>
         </div>
@@ -545,7 +545,7 @@
         <!-- Stat bar -->
         <div class="spell-stats-bar">
           <span class="spell-stat-item" style="cursor:pointer" @click="showInfo('spellDC', prof, mods.wis, spellDC)">DD sorts : <strong class="spell-stat-val">{{ spellDC }}</strong> <span class="info-btn">ⓘ</span></span>
-          <span class="spell-stat-item" style="cursor:pointer" @click="showInfo('spellAtk', prof, mods.wis, S(spellAtk))">Bonus attaque : <strong class="spell-stat-val">{{ S(spellAtk) }}</strong> <span class="info-btn">ⓘ</span></span>
+          <span class="spell-stat-item" style="cursor:pointer" @click="showInfo('spellAtk', prof, mods.wis, sign(spellAtk))">Bonus attaque : <strong class="spell-stat-val">{{ sign(spellAtk) }}</strong> <span class="info-btn">ⓘ</span></span>
           <span class="spell-stat-item" style="cursor:pointer" @click="showInfo('cantrips', cantripDice, char.level)">Sorts mineurs : <strong class="spell-stat-val">{{ cantrips.length }} (×{{ cantripDice }} dés)</strong> <span class="info-btn">ⓘ</span></span>
           <span class="spell-stat-item">Canal. divine <span class="info-btn" @click.stop="showInfo('channelDivine', spellDC)">ⓘ</span> : <strong class="spell-stat-val" style="cursor:pointer;color:var(--gold)" @click="toggleCD">{{ char.cdUsed }}/{{ levelData.cd }}</strong></span>
           <span class="spell-prepared-bar" style="cursor:pointer" @click="showInfo('prepared', char.level, mods.wis, preparedMax)">
@@ -553,7 +553,7 @@
             <span class="spell-prepared-count" :class="{ 'prepared-over': preparedOver }">
               {{ preparedCount }}/{{ preparedMax }}
             </span>
-            <span style="font-size:0.5rem;color:var(--ink-light)"> (niv.{{ char.level }} + mod Sag {{ S(mods.wis) }})</span>
+            <span style="font-size:0.5rem;color:var(--ink-light)"> (niv.{{ char.level }} + mod Sag {{ sign(mods.wis) }})</span>
             <span v-if="preparedOver" style="font-size:0.5rem;color:var(--red);font-weight:700;margin-left:4px">
               ⚠ limite dépassée de {{ preparedCount - preparedMax }}
             </span>
@@ -705,12 +705,12 @@
 
           <!-- Concentration -->
           <div class="section-box conc-section">
-            <div class="section-title">◆ Concentration <span class="info-btn" @click="showInfo('concentrationCombat', S(concentrationSaveBonus), concentrationHasAdvantage)">ⓘ</span></div>
+            <div class="section-title">◆ Concentration <span class="info-btn" @click="showInfo('concentrationCombat', sign(concentrationSaveBonus), concentrationHasAdvantage)">ⓘ</span></div>
             <div v-if="char.concentration" class="conc-active-area">
               <div class="conc-spell-name">{{ char.concentration }}</div>
               <div class="conc-dc-info">
                 JS Constitution si blessé : max(10, dégâts ÷ 2)
-                <span class="conc-save-bonus">{{ S(concentrationSaveBonus) }}{{ concentrationHasAdvantage ? ' · avantage (War Caster)' : '' }}</span>
+                <span class="conc-save-bonus">{{ sign(concentrationSaveBonus) }}{{ concentrationHasAdvantage ? ' · avantage (War Caster)' : '' }}</span>
               </div>
               <div class="conc-check-row">
                 <input class="add-input add-input-xs" type="number" v-model.number="concCheckDamage"
@@ -719,7 +719,7 @@
                 <span v-if="concCheckResult" class="conc-check-result"
                       :class="{success: concCheckResult.success, fail: !concCheckResult.success}">
                   {{ concCheckResult.success ? '✓' : '✗' }}
-                  {{ concCheckResult.rollDisplay }}{{ S(concentrationSaveBonus) }} = {{ concCheckResult.total }}
+                  {{ concCheckResult.rollDisplay }}{{ sign(concentrationSaveBonus) }} = {{ concCheckResult.total }}
                   <em style="font-size:.85em"> vs DD{{ concCheckResult.dc }}</em>
                 </span>
               </div>
@@ -752,7 +752,7 @@
             <div class="exhaustion-track">
               <div v-for="n in 6" :key="n"
                    class="exhaustion-pip" :class="{active: n <= char.exhaustion}"
-                   @click="char.exhaustion = (n === char.exhaustion ? n-1 : n)"
+                   @click="setExhaustion(n)"
                    :title="exhaustionEffects[n]">{{ n }}</div>
             </div>
             <div class="exhaustion-label">{{ exhaustionEffects[char.exhaustion] }}</div>
@@ -776,7 +776,7 @@
               <div class="death-save-pips">
                 <div v-for="i in 3" :key="'s'+i"
                      class="death-pip success-pip" :class="{filled: i <= char.deathSaves.success}"
-                     @click="char.deathSaves.success = (i <= char.deathSaves.success ? i-1 : i)">
+                     @click="setDeathSave('success', i)">
                 </div>
               </div>
             </div>
@@ -785,7 +785,7 @@
               <div class="death-save-pips">
                 <div v-for="i in 3" :key="'f'+i"
                      class="death-pip failure-pip" :class="{filled: i <= char.deathSaves.failure}"
-                     @click="char.deathSaves.failure = (i <= char.deathSaves.failure ? i-1 : i)">
+                     @click="setDeathSave('failure', i)">
                 </div>
               </div>
             </div>
@@ -823,7 +823,7 @@
           <div class="attunement-slots">
             <div v-for="(item, i) in (char.attunedItems||[])" :key="'att-'+i" class="attunement-slot filled">
               <span>✦ {{ item }}</span>
-              <button class="equip-delete" @click="removeAttunement(i)">✕</button>
+              <button class="equip-delete" @click="_removeAt('attunedItems', i)">✕</button>
             </div>
             <div v-for="n in (3 - (char.attunedItems||[]).length)" :key="'empty-'+n" class="attunement-slot empty">
               — Emplacement libre —
@@ -844,7 +844,7 @@
               <div class="combo-title">⚔ Round d'ouverture</div>
               <ul class="combo-steps">
                 <li><strong>Action :</strong> Fléau sur 3 ennemis — JS Cha DD {{ spellDC }}</li>
-                <li><strong>Action bonus :</strong> Arme spirituelle (invoquer) — {{ S(spellAtk) }} / 1d8{{ S(mods.wis) }}</li>
+                <li><strong>Action bonus :</strong> Arme spirituelle (invoquer) — {{ sign(spellAtk) }} / 1d8{{ sign(mods.wis) }}</li>
                 <li>3 ennemis à −1d4, dégâts passifs chaque round</li>
               </ul>
             </div>
@@ -853,7 +853,7 @@
               <ul class="combo-steps">
                 <li><strong>Bane actif</strong> (concentration, JS Cha DD {{ spellDC }})</li>
                 <li><strong>Action :</strong> Cécité/Surdité — sans concentration !</li>
-                <li><strong>Action bonus :</strong> Arme spirituelle ({{ S(spellAtk) }}, 1d8{{ S(mods.wis) }})</li>
+                <li><strong>Action bonus :</strong> Arme spirituelle ({{ sign(spellAtk) }}, 1d8{{ sign(mods.wis) }})</li>
               </ul>
             </div>
           </div>
@@ -918,7 +918,7 @@
               <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px">
                 <input class="phrase-situation-input" type="text"
                        v-model="char.phrases[i].situation" spellcheck="false" placeholder="Situation…">
-                <button class="equip-delete" @click="removePhrase(i)" title="Supprimer">✕</button>
+                <button class="equip-delete" @click="_removeAt('phrases', i)" title="Supprimer">✕</button>
               </div>
               <textarea class="phrase-textarea" v-model="char.phrases[i].text" rows="2" spellcheck="false"></textarea>
             </div>
