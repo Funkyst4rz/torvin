@@ -73,7 +73,38 @@
   },
   "cdUsed": 0,
   "customSpells": {
-    "0": [],
+    "0": [
+      {
+        "id": "tollDead",
+        "name": "Glas des trépassés",
+        "tag": "DD Sag",
+        "conc": false
+      },
+      {
+        "id": "mageHand",
+        "name": "Main du mage",
+        "tag": "utilitaire",
+        "conc": false
+      },
+      {
+        "id": "minorIllusion",
+        "name": "Illusion mineure",
+        "tag": "utilitaire",
+        "conc": false
+      },
+      {
+        "id": "rayFrost",
+        "name": "Rayon de givre",
+        "tag": "+atk/1d8",
+        "conc": false
+      },
+      {
+        "id": "guidance",
+        "name": "Guidance",
+        "tag": "utilitaire",
+        "conc": true
+      }
+    ],
     "1": [
       {
         "id": "bane",
