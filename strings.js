@@ -102,13 +102,13 @@ const STRINGS = {
            + 'Exemple : 5 PVT + 12 PV → 7 dégâts → 0 PVT, 12 PV.',
     },
 
-    channelDivine: chaSign => ({
+    channelDivine: spellDC => ({
       title: 'Canalisation divine',
       body:  '<strong>Se recharge à chaque repos court ou long.</strong><br><br>'
            + 'Utilisations par repos :<br>• Niv. 2–5 : 1×<br>• Niv. 6–17 : 2×<br><br>'
            + '<strong>Usages disponibles pour Torvin :</strong><br>'
-           + `• <em>Renvoi des morts-vivants</em> — JS CHA (DD ${chaSign}) ou renvoi<br>`
-           + '• <em>Abjuration Arcanique</em> (domaine) — bannit célestes, élémentaires, fées, fiélons '
+           + `• <em>Renvoi des morts-vivants</em> — JS <strong>Sagesse</strong> DD ${spellDC} ou renvoi<br>`
+           + `• <em>Abjuration Arcanique</em> (domaine) — JS <strong>Sagesse</strong> DD ${spellDC} — bannit célestes, élémentaires, fées, fiélons `
            + '(FP ≤ ½ niveau à partir du niv.5)',
     }),
 

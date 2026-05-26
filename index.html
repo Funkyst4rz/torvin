@@ -315,7 +315,7 @@
                   </div>
                 </div>
                 <div class="pv-max">
-                  Canalisation divine <span class="info-btn" @click.stop="showInfo('channelDivine', S(mods.cha+prof))">ⓘ</span> :
+                  Canalisation divine <span class="info-btn" @click.stop="showInfo('channelDivine', spellDC)">ⓘ</span> :
                   <span style="cursor:pointer;color:var(--gold);font-weight:700" @click="toggleCD">
                     {{ char.cdUsed }}/{{ levelData.cd }} utilisée{{ char.cdUsed > 1 ? 's' : '' }}
                   </span>
@@ -812,7 +812,7 @@
             <div class="combo-box">
               <div class="combo-title">⚔ Round d'ouverture</div>
               <ul class="combo-steps">
-                <li><strong>Action :</strong> Fléau sur 3 ennemis — DD Charisme {{ S(mods.cha+prof) }}</li>
+                <li><strong>Action :</strong> Fléau sur 3 ennemis — JS Cha DD {{ spellDC }}</li>
                 <li><strong>Action bonus :</strong> Arme spirituelle (invoquer) — {{ S(spellAtk) }} / 1d8{{ S(mods.wis) }}</li>
                 <li>3 ennemis à −1d4, dégâts passifs chaque round</li>
               </ul>
@@ -820,7 +820,7 @@
             <div class="combo-box" style="border-color:var(--gold);background:rgba(122,92,30,.06)">
               <div class="combo-title" style="color:var(--gold)">✦ Double debuff</div>
               <ul class="combo-steps">
-                <li><strong>Bane actif</strong> (concentration, DD {{ S(mods.cha+prof) }})</li>
+                <li><strong>Bane actif</strong> (concentration, JS Cha DD {{ spellDC }})</li>
                 <li><strong>Action :</strong> Cécité/Surdité — sans concentration !</li>
                 <li><strong>Action bonus :</strong> Arme spirituelle ({{ S(spellAtk) }}, 1d8{{ S(mods.wis) }})</li>
               </ul>
