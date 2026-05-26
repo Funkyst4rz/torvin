@@ -264,9 +264,13 @@
                   </div>
                 </div>
               </div>
-              <div class="combat-box" style="cursor:pointer" @click="showInfo('initiative', S(mods.dex))">
-                <span class="combat-label">Initiative <span class="info-btn">ⓘ</span></span>
-                <span class="combat-val">{{ S(mods.dex) }}</span>
+              <div class="combat-box">
+                <span class="combat-label">Initiative <span class="info-btn" @click.stop="showInfo('initiative', S(initiativeBonus))">ⓘ</span></span>
+                <div style="display:flex;align-items:center;gap:4px;justify-content:center">
+                  <span class="combat-val">{{ S(initiativeBonus) }}</span>
+                  <button class="dice-count-btn" style="font-size:0.75rem;padding:3px 8px" @click="rollInitiative" title="Lancer l'initiative">🎲</button>
+                </div>
+                <div v-if="initiativeRoll !== null" class="initiative-roll">{{ initiativeRoll }}</div>
               </div>
               <div class="combat-box">
                 <span class="combat-label">Vitesse <span class="info-btn" @click.stop="showInfo('speed')">ⓘ</span></span>

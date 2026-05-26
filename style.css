@@ -274,6 +274,9 @@ body {
 .combat-val {
   font-family:'Cinzel',serif;font-size:1.25rem;font-weight:900;color:var(--ink);
 }
+.initiative-roll {
+  font-family:'Cinzel',serif;font-size:1.375rem;font-weight:900;color:var(--gold);line-height:1;
+}
 .combat-input {
   font-family:'Cinzel',serif;font-size:1.125rem;font-weight:900;color:var(--ink);
   text-align:center;background:transparent;border:none;

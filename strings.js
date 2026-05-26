@@ -61,11 +61,13 @@ const STRINGS = {
            + 'La CA est saisie manuellement dans cette fiche.',
     },
 
-    initiative: dexSign => ({
+    initiative: bonusSign => ({
       title: 'Initiative',
-      body:  `Détermine l'ordre d'action au combat.<br><strong>= 1d20 + Mod. DEX (${dexSign})</strong><br><br>`
-           + 'En cas d\'égalité : le MJ tranche, ou jet supplémentaire. '
-           + 'Agir en premier peut être décisif — Immobilisation avant que les ennemis n\'agissent !',
+      body:  `Détermine l'ordre d'action au combat.<br><strong>= 1d20 + Mod. DEX (+ 5 si Don Alerte)</strong><br>`
+           + `Bonus actuel : <strong>${bonusSign}</strong><br><br>`
+           + 'En cas d\'égalité : le MJ tranche ou jet supplémentaire.<br>'
+           + 'Agir en premier peut être décisif — Immobilisation avant que les ennemis n\'agissent !<br><br>'
+           + '🎲 Bouton dé dans la case Initiative pour lancer 1d20 + bonus.',
     }),
 
     speed: {

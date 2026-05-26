@@ -28,6 +28,7 @@ const app = createApp({
       diceRolls: [],
       diceCount: 1,
       diceFlash: false,
+      initiativeRoll: null,
       saveStatus: '',
       saveStatusType: '',
       toastMsg: '',
@@ -101,6 +102,9 @@ const app = createApp({
     prof()     { return LEVELS[this.char.level].prof; },
     spellDC()  { return 8 + this.prof + this.mods.wis; },
     spellAtk() { return this.prof + this.mods.wis; },
+    initiativeBonus() {
+      return this.mods.dex + (this.activeFeatIds.includes('alert') ? 5 : 0);
+    },
 
     ca() { return this.char.caManual; },
 
@@ -530,6 +534,13 @@ const app = createApp({
     },
     resetDeathSaves() {
       this.char.deathSaves = { success:0, failure:0 };
+    },
+
+    // ── Initiative ───────────────────────────
+    rollInitiative() {
+      const roll = Math.ceil(Math.random() * 20);
+      this.initiativeRoll = roll + this.initiativeBonus;
+      this._toast(`🎲 Initiative : d20(${roll}) ${this.S(this.initiativeBonus)} = ${this.initiativeRoll}`);
     },
 
     // ── Dice roller ──────────────────────────
