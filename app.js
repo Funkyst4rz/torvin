@@ -47,6 +47,10 @@ const app = createApp({
       spellModal: null,
       infoModal: null,
 
+      // Concentration check
+      concCheckDamage: 0,
+      concCheckResult: null,
+
       // Inline add forms
       newEquip: '',
       newAtkName: '', newAtkBonus: '', newAtkDmg: '',
@@ -352,6 +356,7 @@ const app = createApp({
   // ──────────────────────────────────────────
   watch: {
     char: { deep: true, handler() { this._autoSave(); } },
+    'char.concentration'() { this.concCheckResult = null; },
   },
 
   // ──────────────────────────────────────────
@@ -492,6 +497,30 @@ const app = createApp({
     clearConcentration() {
       this.char.concentration = null;
       this._toast(STRINGS.toast.concBroken);
+    },
+
+    // ── JS de concentration ──────────────────
+    rollConcCheck() {
+      const dmg = parseInt(this.concCheckDamage) || 0;
+      const dc  = Math.max(10, Math.ceil(dmg / 2));
+      const r1  = Math.ceil(Math.random() * 20);
+      const hasAdv = this.concentrationHasAdvantage;
+      let roll = r1;
+      let rollDisplay = `${r1}`;
+      if (hasAdv) {
+        const r2 = Math.ceil(Math.random() * 20);
+        roll = Math.max(r1, r2);
+        rollDisplay = `${r1}/${r2}`;
+      }
+      const total   = roll + this.concentrationSaveBonus;
+      const success = total >= dc;
+      this.concCheckResult = { rollDisplay, total, dc, success };
+      const sign = this.S(this.concentrationSaveBonus);
+      this._toast(success
+        ? `✓ Conc. maintenue ! ${rollDisplay}${sign} = ${total} ≥ DD${dc}`
+        : `✗ Conc. rompue ! ${rollDisplay}${sign} = ${total} < DD${dc}`
+      );
+      if (!success) this.char.concentration = null;
     },
 
     // ── Canalisation divine ──────────────────

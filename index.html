@@ -699,6 +699,17 @@
                 JS Constitution si blessé : max(10, dégâts ÷ 2)
                 <span class="conc-save-bonus">{{ S(concentrationSaveBonus) }}{{ concentrationHasAdvantage ? ' · avantage (War Caster)' : '' }}</span>
               </div>
+              <div class="conc-check-row">
+                <input class="add-input add-input-xs" type="number" v-model.number="concCheckDamage"
+                       placeholder="Dégâts" min="0" style="flex:0 0 64px;text-align:center">
+                <button class="save-btn" @click="rollConcCheck">🎲 JS Conc.</button>
+                <span v-if="concCheckResult" class="conc-check-result"
+                      :class="{success: concCheckResult.success, fail: !concCheckResult.success}">
+                  {{ concCheckResult.success ? '✓' : '✗' }}
+                  {{ concCheckResult.rollDisplay }}{{ S(concentrationSaveBonus) }} = {{ concCheckResult.total }}
+                  <em style="font-size:.85em"> vs DD{{ concCheckResult.dc }}</em>
+                </span>
+              </div>
               <button class="save-btn" style="margin-top:6px;font-size:0.5rem" @click="clearConcentration">✕ Rompre la concentration</button>
             </div>
             <div v-else class="conc-empty">
