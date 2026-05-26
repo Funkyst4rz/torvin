@@ -37,10 +37,12 @@ function _loadInitialState() {
     if (!merged.customSpells) merged.customSpells = { 0:[], 1:[], 2:[], 3:[], 4:[], 5:[] };
     [0,1,2,3,4,5].forEach(l => { if (!merged.customSpells[l]) merged.customSpells[l] = []; });
 
-    // Migration : ajoute les cantrips par défaut manquants (n'écrase pas les existants)
+    // Migration : ajoute les cantrips par défaut manquants (n'écrase pas les existants
+    // ni les suppressions volontaires trackées dans removedSpells)
     const existingIds = new Set(merged.customSpells[0].map(c => c.id));
+    const removedIds  = new Set(merged.removedSpells || []);
     for (const c of DEFAULT_CHAR.customSpells[0]) {
-      if (!existingIds.has(c.id)) merged.customSpells[0].push({ ...c });
+      if (!existingIds.has(c.id) && !removedIds.has(c.id)) merged.customSpells[0].push({ ...c });
     }
 
     // Applique les migrations déclarées dans characters/*.js

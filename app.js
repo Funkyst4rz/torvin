@@ -681,6 +681,12 @@ const app = createApp({
 
     removeCustomSpell(lvl, id) {
       this.char.customSpells[lvl] = (this.char.customSpells[lvl] || []).filter(s => s.id !== id);
+      // Si c'est un cantrip par défaut, on le mémorise pour que la migration ne le réinjecte pas
+      if (lvl === 0 && DEFAULT_CHAR.customSpells[0].some(c => c.id === id)) {
+        if (!this.char.removedSpells) this.char.removedSpells = [];
+        if (!this.char.removedSpells.includes(id))
+          this.char.removedSpells = [...this.char.removedSpells, id];
+      }
     },
 
     // ── Custom equipment ─────────────────────
