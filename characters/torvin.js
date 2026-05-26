@@ -22,7 +22,7 @@ const CHARACTER_MIGRATIONS = [
 const DOMAIN_SPELLS = {
   1: [
     { name:'Détection de la magie', tag:'rituel',     conc:true,  desc:"Détecte la présence de magie dans un rayon de 9 m pendant 10 min. Peut être lancé comme rituel. Identifie les auras magiques et les écoles de magie." },
-    { name:'Projectile magique',    tag:'auto',        conc:false, desc:"3 fléchettes de force (1d4+1 chacune, +1 fléchette par niveau d'emplacement supérieur). Ne rate jamais. Peut cibler plusieurs créatures." },
+    { name:'Projectile magique',    tag:'auto',        conc:false, desc:"3 fléchettes de force (1d4+1 chacune, +1 fléchette par niveau d'emplacement supérieur). Ne rate jamais. Peut cibler plusieurs créatures.", upcast:"+1 fléchette (1d4+1) par niveau d'emplacement supérieur au niv.1 (niv.2 = 4, niv.3 = 5…)." },
   ],
   3: [
     { name:'Arme magique',          tag:'buff',        conc:true,  desc:"Une arme non magique devient magique : +1 aux jets d'attaque et dégâts (ou +2 si emplacement de niv.4+). Concentration, 1 heure." },

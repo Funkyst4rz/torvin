@@ -563,18 +563,21 @@ const app = createApp({
 
     // ── Spell modal ──────────────────────────
     openSpellModal(spell, level) {
-      let desc = spell.desc || null;
-      if (!desc) {
+      let desc   = spell.desc   || null;
+      let upcast = spell.upcast || null;
+      if (!desc || !upcast) {
         const clean = spell.name.replace(/[⭐★✦◆]/g, '').trim();
         outer: for (const lvl of Object.keys(CLERIC_SPELLS)) {
           for (const s of CLERIC_SPELLS[lvl]) {
             if (s.name.replace(/[⭐★✦◆]/g, '').trim() === clean) {
-              desc = s.desc; break outer;
+              if (!desc)   desc   = s.desc;
+              if (!upcast) upcast = s.upcast || null;
+              break outer;
             }
           }
         }
       }
-      this.spellModal = { name: spell.name, tag: spell.tag || '—', conc: !!spell.conc, bonus: !!spell.bonus, desc, level: level || null };
+      this.spellModal = { name: spell.name, tag: spell.tag || '—', conc: !!spell.conc, bonus: !!spell.bonus, desc, upcast, level: level || null };
     },
     closeSpellModal() { this.spellModal = null; },
 

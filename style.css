@@ -519,6 +519,17 @@ body {
   font-family:'Crimson Text',serif;font-size:0.875rem;
   color:var(--ink-mid);line-height:1.55;margin:0;
 }
+.spell-modal-upcast {
+  font-family:'Crimson Text',serif;font-size:0.81rem;
+  color:var(--ink-mid);line-height:1.55;
+  border-top:1px dashed var(--border-light);
+  margin-top:10px;padding-top:10px;
+}
+.upcast-label {
+  font-family:'Cinzel',serif;font-size:0.5rem;font-weight:700;
+  color:var(--gold);text-transform:uppercase;letter-spacing:.5px;
+  margin-right:4px;
+}
 
 /* Info tooltip modal */
 .info-btn {

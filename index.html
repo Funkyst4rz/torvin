@@ -48,6 +48,9 @@
       <span v-if="spellModal.level" style="margin-left:auto;font-family:'Cinzel',serif;font-size:0.5rem;color:var(--ink-light)">Niveau {{ spellModal.level }}</span>
     </div>
     <p class="spell-modal-desc">{{ spellModal.desc || 'Pas de description disponible pour ce sort.' }}</p>
+    <div v-if="spellModal.upcast && spellModal.level" class="spell-modal-upcast">
+      <span class="upcast-label">✦ À niveau supérieur :</span> {{ spellModal.upcast }}
+    </div>
   </modal-overlay>
 
   <!-- ══════════════════════════════════════
