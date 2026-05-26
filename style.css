@@ -585,6 +585,10 @@ body {
   cursor:pointer;transition:all .2s;border-radius:2px;
 }
 .dice-btn:hover { background:var(--gold);border-color:var(--gold);color:white; }
+.dice-count-ctrl { display:flex;align-items:center;gap:3px;margin-right:4px;border-right:1px solid var(--border-light);padding-right:8px; }
+.dice-count-btn { font-family:'Cinzel',serif;font-size:.75rem;font-weight:700;background:var(--parchment-dark);border:1.5px solid var(--border);color:var(--ink);border-radius:2px;cursor:pointer;padding:3px 8px;line-height:1.4;transition:all .2s; }
+.dice-count-btn:hover { background:var(--gold);border-color:var(--gold);color:white; }
+.dice-count-val { font-family:'Cinzel',serif;font-size:.9rem;font-weight:900;color:var(--ink);min-width:20px;text-align:center; }
 .dice-result { font-family:'Cinzel',serif;font-size:1.375rem;font-weight:900;color:var(--ink);min-width:32px;text-align:center;transition:color .3s; }
 .dice-result.flash { color:var(--gold); }
 .dice-label { font-family:'Crimson Text',serif;font-size:0.69rem;color:var(--ink-light);font-style:italic; }

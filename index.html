@@ -164,9 +164,14 @@
 
       <!-- DICE PANEL -->
       <div class="dice-panel" v-if="showDice">
+        <div class="dice-count-ctrl">
+          <button class="dice-count-btn" @click="diceCount = Math.max(1, diceCount-1)">−</button>
+          <span class="dice-count-val">{{ diceCount }}</span>
+          <button class="dice-count-btn" @click="diceCount = Math.min(20, diceCount+1)">+</button>
+        </div>
         <button class="dice-btn" v-for="s in [4,6,8,10,12,20,100]" :key="s" @click="rollDice(s)">d{{ s }}</button>
         <span class="dice-result" :class="{ flash: diceFlash }">{{ diceResult !== null ? diceResult : '—' }}</span>
-        <span class="dice-label">{{ diceSides ? '/ d'+diceSides : '' }}</span>
+        <span class="dice-label">{{ diceSides ? (diceCount > 1 ? diceCount+'d'+diceSides+' : '+diceRolls.join('+') : '/ d'+diceSides) : '' }}</span>
       </div>
 
       <!-- HEADER -->

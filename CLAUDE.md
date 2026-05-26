@@ -90,6 +90,9 @@ renderLevel(lvl, isLevelUp)  // Recalcule tout (stats, slots, capacités) pour u
 saveToGitHub()               // PUT save.json via API GitHub
 loadFromGitHub()             // GET save.json depuis le repo
 autoSaveLocal()              // Sauvegarde localStorage à chaque interaction
+exportJSON()                 // Télécharge save.json (portabilité / clonage)
+importJSON()                 // Importe un save.json depuis un fichier local
+rollDice(sides)              // Lance diceCount dés à `sides` faces, stocke le détail dans diceRolls
 ```
 
 ### Ce qui se recalcule dynamiquement par niveau
@@ -122,6 +125,7 @@ DEFAULT_RACIAL  // Bonus raciaux Gnome des Roches
 
 ## Règles D&D pertinentes pour Torvin
 
+- **Édition : D&D 5e 2014** (PHB original + suppléments SCAG/XGtE) — **pas** la révision 2024
 - **Domaine Arcane** (Sword Coast Adventurer's Guide — SCAG) — vérifier autorisation MJ
 - **Classe :** Clerc · **Race :** Gnome des Roches
 - **Niveau de départ :** 3 · Fourchette gérée : 1–10
@@ -181,7 +185,8 @@ Exemples : `feat(combat): ajouter tracker de conditions` · `fix(save): corriger
 
 ## Pistes d'amélioration notées
 
-- [ ] Lanceur de dés intégré (1d4, 1d6, 1d8, 1d12, 1d20)
+- [x] Lanceur de dés intégré (d4, d6, d8, d10, d12, d20, d%) avec sélecteur de nombre de dés (NdX)
+- [x] Export / Import JSON
 - [ ] Mode sombre / toggle parchemin
 - [ ] Partage en lecture seule (URL avec état encodé en base64)
 - [ ] Support multi-personnages

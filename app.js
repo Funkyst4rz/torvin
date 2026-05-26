@@ -25,6 +25,8 @@ createApp({
       showPortrait: false,
       diceResult: null,
       diceSides: null,
+      diceRolls: [],
+      diceCount: 1,
       diceFlash: false,
       saveStatus: '',
       saveStatusType: '',
@@ -558,7 +560,10 @@ createApp({
 
     // ── Dice roller ──────────────────────────
     rollDice(sides) {
-      this.diceResult = Math.ceil(Math.random() * sides);
+      const n = this.diceCount || 1;
+      const rolls = Array.from({ length: n }, () => Math.ceil(Math.random() * sides));
+      this.diceRolls  = rolls;
+      this.diceResult = rolls.reduce((a, b) => a + b, 0);
       this.diceSides  = sides;
       this.diceFlash  = true;
       setTimeout(() => { this.diceFlash = false; }, 600);
