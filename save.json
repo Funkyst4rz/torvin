@@ -137,7 +137,7 @@
     "persuasion",
     "histoire"
   ],
-  "concentration": null,
+  "concentration": "Guidance",
   "conditions": [],
   "deathSaves": {
     "success": 0,
