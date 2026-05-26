@@ -831,6 +831,46 @@ body {
 .asi-existing-label { font-family:'Cinzel',serif;font-size:0.5rem;font-weight:700;text-transform:uppercase;color:var(--gold);margin-bottom:4px; }
 .asi-existing-val { font-family:'Crimson Text',serif;font-size:0.75rem;color:var(--ink); }
 
+/* ── MODE SOMBRE ────────────────────────────────────────────── */
+body.dark {
+  background: #0d0906;
+  background-image:
+    radial-gradient(ellipse at 20% 20%, rgba(30,18,8,.6) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 80%, rgba(15,9,3,.8)  0%, transparent 60%);
+
+  --parchment:      #1d1508;
+  --parchment-dark: #130e05;
+  --ink:            #e4d4a8;
+  --ink-mid:        #b89060;
+  --ink-light:      #7a5c38;
+  --gold:           #c49830;
+  --gold-light:     #e0b840;
+  --border:         #5a3d1e;
+  --border-light:   rgba(90,61,30,.5);
+  --green:          #38a060;
+  --red:            #c04040;
+}
+body.dark .page {
+  box-shadow: 0 0 0 5px #0d0906, 0 0 0 7px var(--border), 0 20px 60px rgba(0,0,0,.95);
+}
+/* Corrections hardcoded rgba parchment */
+body.dark .section-box          { background: rgba(30,20,8,.4); }
+body.dark .feature-block        { background: rgba(25,16,5,.35); }
+body.dark .feat-card            { background: rgba(25,16,5,.45); }
+body.dark .spell-picker         { background: rgba(13,9,5,.95); }
+body.dark .spell-picker-row:hover { background: rgba(196,152,48,.07); }
+body.dark .spell-row:nth-child(even) { background: rgba(196,152,48,.04); }
+body.dark .notes-area           { background: rgba(25,16,5,.3); }
+body.dark .lore-section         { background: rgba(25,16,5,.25); }
+body.dark .lore-quote           { background: rgba(196,152,48,.07); }
+body.dark .combo-box            { background: rgba(160,40,40,.07); }
+body.dark .asi-option           { background: rgba(25,16,5,.4); }
+body.dark .asi-option:hover,
+body.dark .asi-option.selected  { background: rgba(196,152,48,.1); }
+/* L''onglet actif doit cacher la bordure inférieure sur fond sombre */
+body.dark .tab.active           { background: var(--parchment); border-bottom-color: var(--parchment); }
+body.dark .header::after        { background: var(--parchment); }
+
 /* ── RESPONSIVE ────────────────────────────────────────────── */
 @media(max-width:720px){
   .content { padding:30px 16px 24px; }

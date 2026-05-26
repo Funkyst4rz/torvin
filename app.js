@@ -20,6 +20,7 @@ const app = createApp({
 
       // UI state
       activeTab: 'main',
+      darkMode: localStorage.getItem('torvin-dark') === '1',
       showConfig: false,
       showDice: false,
       showPortrait: false,
@@ -357,6 +358,10 @@ const app = createApp({
   watch: {
     char: { deep: true, handler() { this._autoSave(); } },
     'char.concentration'() { this.concCheckResult = null; },
+    darkMode(val) {
+      document.body.classList.toggle('dark', val);
+      localStorage.setItem('torvin-dark', val ? '1' : '0');
+    },
   },
 
   // ──────────────────────────────────────────
@@ -371,6 +376,7 @@ const app = createApp({
   // MOUNTED
   // ──────────────────────────────────────────
   mounted() {
+    if (this.darkMode) document.body.classList.add('dark');
     const token = localStorage.getItem('torvin-gh-token');
     if (token) {
       this.char.ghToken = token;

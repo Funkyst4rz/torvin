@@ -149,6 +149,7 @@
         <button class="save-btn" @click="importJSON">⬆ Import</button>
         <button class="save-btn" @click="showDice=!showDice">🎲 Dés</button>
         <button class="save-btn" @click="showConfig=!showConfig">⚙ Config</button>
+        <button class="save-btn dark-toggle" @click="darkMode=!darkMode" :title="darkMode ? 'Mode clair' : 'Mode sombre'">{{ darkMode ? '☀' : '🌙' }}</button>
         <span class="save-status" :class="saveStatusType">{{ saveStatus }}</span>
       </div>
 
