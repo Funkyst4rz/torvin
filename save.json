@@ -104,18 +104,6 @@
         "name": "Guidance",
         "tag": "utilitaire",
         "conc": true
-      },
-      {
-        "id": "resistance",
-        "name": "Résistance",
-        "tag": "buff",
-        "conc": true
-      },
-      {
-        "id": "sacredflame",
-        "name": "Flamme sacrée",
-        "tag": "DD Dex",
-        "conc": false
       }
     ],
     "1": [
