@@ -265,25 +265,23 @@
               </div>
               <div class="combat-box">
                 <span class="combat-label">Vitesse <span class="info-btn" @click.stop="openInfo('Vitesse de déplacement', 'Distance max de déplacement par tour (action de déplacement).<br><br><strong>7,5 m (25 pieds)</strong> — vitesse de base du Gnome des Roches.<br><br>Peut être réduite de moitié par : terrain difficile, conditions (entravé, exténué niv.2…). Certaines conditions l\'annulent totalement (paralysé, pétrifié).')">ⓘ</span></span>
-                <div style="display:flex;align-items:center">
-                  <input class="combat-input" type="number" v-model.number="char.speed" min="0" max="99">
-                  <div class="pv-spinners">
-                    <button class="pv-spin" @click="char.speed = Math.min(99, char.speed + 1)" tabindex="-1">▴</button>
-                    <button class="pv-spin" @click="char.speed = Math.max(0, char.speed - 1)" tabindex="-1">▾</button>
+                <div class="combat-val-wrap">
+                  <div style="display:flex;align-items:center">
+                    <input class="combat-input" type="number" v-model.number="char.speed" min="0" max="99">
+                    <div class="pv-spinners">
+                      <button class="pv-spin" @click="char.speed = Math.min(99, char.speed + 1)" tabindex="-1">▴</button>
+                      <button class="pv-spin" @click="char.speed = Math.max(0, char.speed - 1)" tabindex="-1">▾</button>
+                    </div>
+                    <span style="font-family:'Cinzel',serif;font-size:0.5rem;color:var(--ink-light);margin-left:2px">m</span>
                   </div>
-                </div>
-                <span style="font-family:'Cinzel',serif;font-size:0.5rem;color:var(--ink-light)">m</span>
-                <div v-if="effectiveSpeed !== char.speed" style="font-size:0.44rem;color:var(--red);font-family:'Cinzel',serif">
-                  eff: {{ effectiveSpeed }}m
+                  <div v-if="effectiveSpeed !== char.speed" style="font-size:0.44rem;color:var(--red);font-family:'Cinzel',serif;text-align:center">
+                    eff: {{ effectiveSpeed }}m
+                  </div>
                 </div>
               </div>
               <div class="combat-box" style="cursor:pointer" @click="openInfo('Bonus de Maîtrise', 'Ajouté aux jets où vous avez la maîtrise : attaques, compétences, sorts, outils.<br><br><strong>Progression par niveau :</strong><br>• Niv. 1–4 : +2<br>• Niv. 5–8 : +3<br>• Niv. 9–12 : +4<br>• Niv. 13–16 : +5<br>• Niv. 17–20 : +6<br><br>Actuellement niveau ' + char.level + ' → <strong>' + S(prof) + '</strong>')">
                 <span class="combat-label">Maîtrise <span class="info-btn">ⓘ</span></span>
                 <span class="combat-val">{{ S(prof) }}</span>
-              </div>
-              <div class="combat-box" style="cursor:pointer" @click="openInfo('Dés de vie', '1d8 par niveau de clerc.<br><br><strong>Utilisés lors d\'un repos court</strong> pour récupérer des PV : dépensez 1 ou plusieurs dés (1d8 + Mod. CON par dé).<br><br>Les dés non utilisés se rechargent lors d\'un repos long (jusqu\'à la moitié de votre max, arrondi haut).')">
-                <span class="combat-label">Dés de vie <span class="info-btn">ⓘ</span></span>
-                <span class="combat-val">{{ hitDice }}</span>
               </div>
             </div>
 
