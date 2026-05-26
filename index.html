@@ -6,7 +6,7 @@
 <title>Torvin "Trois-Parchemins" — Fiche de Personnage</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,300;0,400;0,600;0,700;0,800;0,900;1,300;1,400;1,600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -45,7 +45,7 @@
       <span class="spell-tag">{{ spellModal.tag }}</span>
       <span v-if="spellModal.conc" class="spell-conc" style="margin-left:6px">CONC.</span>
       <span v-if="spellModal.bonus" class="spell-conc bonus" style="margin-left:6px">BON.</span>
-      <span v-if="spellModal.level" style="margin-left:auto;font-family:'Cinzel',serif;font-size:0.5rem;color:var(--ink-light)">Niveau {{ spellModal.level }}</span>
+      <span v-if="spellModal.level" style="margin-left:auto;font-family:'Nunito', sans-serif;font-size:0.5rem;color:var(--ink-light)">Niveau {{ spellModal.level }}</span>
     </div>
     <p class="spell-modal-desc">{{ spellModal.desc || 'Pas de description disponible pour ce sort.' }}</p>
     <div v-if="spellModal.upcast && spellModal.level" class="spell-modal-upcast">
@@ -285,9 +285,9 @@
                       <button class="pv-spin" @click="char.speed = Math.min(99, char.speed + 1)" tabindex="-1">▴</button>
                       <button class="pv-spin" @click="char.speed = Math.max(0, char.speed - 1)" tabindex="-1">▾</button>
                     </div>
-                    <span style="font-family:'Cinzel',serif;font-size:0.5rem;color:var(--ink-light);margin-left:2px">m</span>
+                    <span style="font-family:'Nunito', sans-serif;font-size:0.5rem;color:var(--ink-light);margin-left:2px">m</span>
                   </div>
-                  <div v-if="effectiveSpeed !== char.speed" style="font-size:0.44rem;color:var(--red);font-family:'Cinzel',serif;text-align:center">
+                  <div v-if="effectiveSpeed !== char.speed" style="font-size:0.44rem;color:var(--red);font-family:'Nunito', sans-serif;text-align:center">
                     eff: {{ effectiveSpeed }}m
                   </div>
                 </div>
@@ -311,6 +311,11 @@
                 </div>
                 <div class="pv-max">Maximum : <strong>{{ hpMax }}</strong>
                   <span v-if="isDeathsDoor" style="color:var(--red);font-weight:700"> ☠ Jets de mort !</span>
+                </div>
+                <div class="pv-bar-wrap">
+                  <div class="pv-bar"
+                       :class="char.hpCurrent/hpMax > .5 ? 'bar-ok' : char.hpCurrent/hpMax > .25 ? 'bar-warn' : 'bar-danger'"
+                       :style="{ width: Math.min(100, Math.max(0, char.hpCurrent / hpMax * 100)) + '%' }"></div>
                 </div>
               </div>
               <div class="pv-box">
@@ -432,7 +437,7 @@
           <!-- Col 3 : Compétences + Langues + Outils -->
           <div>
             <div class="section-box">
-              <div class="section-title">Compétences <span style="font-size:0.5rem;font-family:'Crimson Text',serif;color:var(--ink-light);font-weight:400;text-transform:none">— clic = maîtrise</span></div>
+              <div class="section-title">Compétences <span style="font-size:0.5rem;font-family:'Nunito', sans-serif;color:var(--ink-light);font-weight:400;text-transform:none">— clic = maîtrise</span></div>
               <div class="skills-list">
                 <template v-for="group in skillGroups" :key="group.stat">
                   <div class="skill-group-label">{{ group.label }}</div>
@@ -714,7 +719,7 @@
               <button class="save-btn" style="margin-top:6px;font-size:0.5rem" @click="clearConcentration">✕ Rompre la concentration</button>
             </div>
             <div v-else class="conc-empty">
-              <div style="font-family:'Crimson Text',serif;font-size:0.75rem;color:var(--ink-light);font-style:italic;margin-bottom:8px">Aucun sort en concentration.</div>
+              <div style="font-family:'Nunito', sans-serif;font-size:0.75rem;color:var(--ink-light);font-style:italic;margin-bottom:8px">Aucun sort en concentration.</div>
               <div class="add-form">
                 <input class="add-input" type="text" v-model="newConcentration" placeholder="Nom du sort…" @keyup.enter="setConcentration">
                 <button class="add-btn" @click="setConcentration">▶</button>
@@ -729,7 +734,7 @@
                     @click="char.inspiration = !char.inspiration">
               {{ char.inspiration ? '✦ Inspiré !' : '◇ Aucune' }}
             </button>
-            <div style="font-size:0.56rem;font-family:'Crimson Text',serif;color:var(--ink-light);margin-top:6px;font-style:italic">
+            <div style="font-size:0.56rem;font-family:'Nunito', sans-serif;color:var(--ink-light);margin-top:6px;font-style:italic">
               Avantage à un jet de caract.
             </div>
           </div>
@@ -751,10 +756,10 @@
         <div class="section-box">
           <div class="section-title">
             Jets de mort
-            <span v-if="char.hpCurrent > 0" style="font-weight:400;color:var(--green);font-family:'Crimson Text',serif;font-size:0.69rem;margin-left:8px;text-transform:none">
+            <span v-if="char.hpCurrent > 0" style="font-weight:400;color:var(--green);font-family:'Nunito', sans-serif;font-size:0.69rem;margin-left:8px;text-transform:none">
               Conscient ({{ char.hpCurrent }} PV)
             </span>
-            <span v-else style="font-weight:700;color:var(--red);font-family:'Crimson Text',serif;font-size:0.69rem;margin-left:8px;text-transform:none">
+            <span v-else style="font-weight:700;color:var(--red);font-family:'Nunito', sans-serif;font-size:0.69rem;margin-left:8px;text-transform:none">
               ☠ À 0 PV — Lancer le dé !
             </span>
           </div>
@@ -856,11 +861,11 @@
             </div>
             <div style="padding:10px;border:1px solid var(--border);background:rgba(92,61,30,.05)">
               <div class="section-title">Urgence soins</div>
-              <div style="font-family:'Crimson Text',serif;font-size:0.81rem;color:var(--ink-mid)">
+              <div style="font-family:'Nunito', sans-serif;font-size:0.81rem;color:var(--ink-mid)">
                 <strong>Allié à 0 PV ?</strong> → <span style="color:var(--red);font-weight:600">Action BONUS</span> :
                 Mot de guérison (1d4{{ mods.wis >= 0 ? '+'+mods.wis : mods.wis }} PV)
               </div>
-              <div style="font-family:'Crimson Text',serif;font-size:0.75rem;color:var(--ink-light);margin-top:6px;font-style:italic">
+              <div style="font-family:'Nunito', sans-serif;font-size:0.75rem;color:var(--ink-light);margin-top:6px;font-style:italic">
                 Cantrip Glas des trépassés : {{ tollDamage }}
                 <br>Sorts mineurs : {{ cantripDice }} dé{{ cantripDice > 1 ? 's' : '' }} par sort mineur
               </div>
@@ -913,7 +918,7 @@
             <!-- Réflexes universels -->
             <div style="margin-top:10px;padding:10px;border:1px solid var(--border);background:rgba(92,61,30,.04)">
               <div class="section-title" style="margin-bottom:6px">Réflexes universels</div>
-              <div style="font-family:'IM Fell English',serif;font-size:0.75rem;color:var(--ink-mid);font-style:italic;line-height:1.9">
+              <div style="font-family:'Nunito', sans-serif;font-size:0.75rem;color:var(--ink-mid);font-style:italic;line-height:1.9">
                 « Intéressant... j'avais lu quelque chose à ce sujet. »<br>
                 « Si vous me permettez une observation non sollicitée... »<br>
                 « Techniquement parlant... »<br>
