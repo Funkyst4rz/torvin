@@ -320,7 +320,7 @@
               </div>
               <div class="pv-box pv-box-split">
                 <div class="pv-half">
-                  <span class="pv-label">✦ PV temporaires <span class="info-btn" @click.stop="showInfo('hpTemp')">ⓘ</span></span>
+                  <span class="pv-label">✦ PV temporaires</span>
                   <div class="pv-controls">
                     <input class="pv-input" type="number" v-model.number="char.hpTemp" min="0" style="color:var(--ink-mid)">
                     <div class="pv-spinners">
@@ -328,7 +328,6 @@
                       <button class="pv-spin" @click="char.hpTemp = Math.max(0, char.hpTemp - 1)" tabindex="-1">▾</button>
                     </div>
                   </div>
-                  <div class="pv-max">Ne se cumulent pas</div>
                 </div>
                 <div class="pv-half pv-half-sep">
                   <span class="pv-label">⬆ Bonus HP max</span>
@@ -339,7 +338,6 @@
                       <button class="pv-spin" @click="char.hpMaxBonus = Math.max(0,(char.hpMaxBonus||0)-1)" tabindex="-1">▾</button>
                     </div>
                   </div>
-                  <div class="pv-max">ex. Aide +5, Festin +2d10</div>
                 </div>
               </div>
             </div>

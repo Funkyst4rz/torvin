@@ -330,7 +330,7 @@ body {
 .pv-section { display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px; }
 .pv-box { border:1.5px solid var(--border);padding:10px 12px;background:var(--parchment-dark);box-shadow:0 1px 3px rgba(0,0,0,.06); }
 .pv-box-split { display:flex;padding:0;gap:0;align-items:stretch; }
-.pv-half { flex:1;padding:10px 12px;display:flex;flex-direction:column;justify-content:space-between; }
+.pv-half { flex:1;padding:10px 12px;display:flex;flex-direction:column;gap:6px; }
 .pv-half-sep { border-left:1px solid var(--border-light); }
 .pv-label { font-family:'Nunito', sans-serif;font-size:0.63rem;font-weight:600;text-transform:uppercase;color:var(--ink-light);display:block;margin-bottom:6px; }
 .pv-input {
