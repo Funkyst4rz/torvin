@@ -226,7 +226,7 @@
   padding:3px 0;border-bottom:1px dashed rgba(160,130,74,.3);
   display:flex;gap:6px;align-items:baseline;
 }
-.equip-list li::before { content:'â€¢';color:var(--gold);font-size:1rem;line-height:1;flex-shrink:0; }
+.equip-list li::before { content:'\2022';color:var(--gold);font-size:1rem;line-height:1;flex-shrink:0; }
 .equip-delete { font-family:'Nunito', sans-serif;font-size:0.5rem;background:none;border:none;color:var(--red);cursor:pointer;opacity:.3;padding:0;margin-left:auto; }
 .equip-delete:hover { opacity:1; }
 

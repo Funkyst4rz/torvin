@@ -136,7 +136,7 @@ body {
   position: relative;
 }
 .header::after {
-  content: 'â§'; position: absolute; bottom: -13px; left: 50%;
+  content: '\2767'; position: absolute; bottom: -13px; left: 50%;
   transform: translateX(-50%);
   background: var(--parchment); padding: 0 10px;
   color: var(--gold); font-size: 1.25rem;

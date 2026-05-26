@@ -90,7 +90,7 @@
 .feat-card { border:1px solid var(--border);padding:8px 10px;cursor:pointer;transition:all .2s;background:rgba(247,240,226,.5); }
 .feat-card:hover { border-color:var(--gold);background:rgba(138,110,32,.06); }
 .feat-card.selected { border-color:var(--gold);background:rgba(138,110,32,.1); }
-.feat-card.recommended::before { content:'â­ ';color:var(--gold); }
+.feat-card.recommended::before { content: '\2b50 ';color:var(--gold); }
 .feat-name { font-family:'Nunito', sans-serif;font-size:0.56rem;font-weight:700;color:var(--ink); }
 .feat-desc { font-family:'Nunito', sans-serif;font-size:0.69rem;color:var(--ink-mid);margin-top:3px;line-height:1.4; }
 .asi-actions { display:flex;gap:8px;justify-content:flex-end;padding-top:12px;border-top:1px solid var(--border-light); }
