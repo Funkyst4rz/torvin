@@ -95,7 +95,7 @@ D:\torvin\
 | `spells` | Sorts | Emplacements, sorts mineurs, domaine, préparés |
 | `combat` | Combat | CA (auto/manuelle), initiative, concentration, conditions |
 | `histoire` | Histoire | Traits, idéaux, lien, défaut, background narratif |
-| `notes` | Notes | Zone de texte libre, phrases situationnelles |
+| `notes` | Notes | Journal de session (entrées datées éditables) + phrases situationnelles |
 
 ---
 
@@ -123,6 +123,8 @@ rollInitiative()             // Lance 1d20 + DEX + bonus Alerte, stocke dans ini
 showInfo(key, ...args)       // Résout STRINGS.info[key] et ouvre le modal info
 openStatInfo(key)            // Ouvre le modal d'info d'une caractéristique
 openSaveInfo(sv)             // Ouvre le modal d'info d'un jet de sauvegarde
+addNote()                    // Ajoute une entrée de journal datée d'aujourd'hui (en tête)
+migrateOldNote()             // Importe char.notes (ancien textarea) dans sessionNotes puis le vide
 openSlotModal(key)           // Ouvre le modal d'édition d'un emplacement d'équipement
 closeSlotModal()             // Ferme le modal d'équipement
 addSlotBonus(key)            // Ajoute un bonus vide au slot (type:'', value:0)
@@ -179,7 +181,7 @@ STRINGS.info     // Contenu des modaux "info" — valeurs statiques ou fonctions
 ```
 
 ### Champs obligatoires de DEFAULT_CHAR (vérifiés par CI)
-`name · level · base · racial · asi · hpRolls · hpCurrent · currency · languages · phrases · concentration`
+`name · level · base · racial · asi · hpRolls · hpCurrent · currency · languages · phrases · concentration · sessionNotes`
 
 ### Équipement — structure des slots
 `char.slots` : objet indexé par `key` (arme, armure, bouclier, casque, cape, amulette, anneau1, anneau2, gants, bottes).  
@@ -272,5 +274,6 @@ Exemples : `feat(combat): ajouter tracker de conditions` · `fix(save): corriger
 - [x] Grille d'équipement 10 slots avec bonus structurés (CA, stats, PV max, initiative, DD…)
 - [x] Slot Arme enrichi (atkBonus, damage, damageType, range) — remplace la table d'attaques
 - [x] CA auto/manuelle toggle (useCaAuto, caAuto computed)
+- [x] Journal de session (entrées datées éditables, migration depuis l'ancien textarea)
 - [ ] Partage en lecture seule (URL avec état encodé en base64)
 - [ ] Support multi-personnages
