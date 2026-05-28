@@ -17,13 +17,22 @@ Repo : `https://github.com/Funkyst4rz/torvin` · Branche : `main`
 ```
 D:\torvin\
 ├── index.html          — Template Vue 3 (5 onglets, composants x-template, SVG symbol)
-├── style.css           — Thème parchemin + responsive (breakpoints 720px / 460px)
-├── app.js              — Logique Vue 3 (createApp, data, computed, methods, composants)
-├── data.js             — Données statiques D&D 5e (LEVELS, DOMAIN_SPELLS, DEFAULT_CHAR…)
+├── style.css           — CSS principal (importe les modules css/)
+├── css/
+│   ├── base.css        — Variables, reset, layout commun, mode sombre
+│   ├── tab-main.css    — Onglet Personnage
+│   ├── tab-spells.css  — Onglet Sorts
+│   ├── tab-combat.css  — Onglet Combat
+│   └── histoire.css    — Onglet Histoire (portrait, lightbox)
+├── app.js              — Point d'entrée : createApp(), data(), watch, montage composants
+├── computed.js         — Propriétés calculées Vue 3 (D&D math + helpers de template)
+├── storage.js          — Persistance : localStorage, API GitHub, export/import JSON
+├── data.js             — Données statiques D&D 5e (LEVELS, CONDITIONS, SKILLS, FEATS…)
 ├── strings.js          — Textes d'interface centralisés (équivalent i18n/YAML)
 ├── engine.js           — Fonctions pures D&D 5e + hook CHARACTER_MIGRATIONS
 ├── characters/
-│   └── torvin.js       — Données spécifiques au personnage + CHARACTER_MIGRATIONS
+│   ├── torvin.js       — Données spécifiques au personnage + CHARACTER_MIGRATIONS
+│   └── torvin.jpg      — Portrait du personnage (lightbox onglet Histoire)
 ├── save.json           — État sauvegardé (écrit via API GitHub, ne pas éditer manuellement)
 ├── README.md           — Documentation publique du projet
 └── .github/
@@ -50,6 +59,7 @@ D:\torvin\
 - `IM Fell English` (normal, italique) — citations, flavour text
 
 ### CSS
+- `style.css` importe les modules depuis `css/` (base, tab-main, tab-spells, tab-combat, histoire)
 - Variables CSS dans `:root` (palette parchemin) :
   ```css
   --parchment: #f7f0e2      --parchment-dark: #e8d8b6
@@ -59,6 +69,7 @@ D:\torvin\
   --border-light: rgba(160,130,74,.35)
   --green: #1e6030
   ```
+- **Mode sombre** : classe `.dark` sur `<body>` — variables CSS surchargées dans `css/base.css`
 - Style lisible et commenté par section (pas de CSS minifié)
 - Responsive : breakpoints `@media (max-width: 720px)` et `@media (max-width: 460px)`
 
@@ -70,8 +81,8 @@ D:\torvin\
 
 **⚠️ SÉCURITÉ CRITIQUE — Token GitHub :**
 - Stocké en `localStorage` côté client, **jamais dans le code source**
-- La méthode `_serializeState()` dans `app.js` doit **toujours** contenir `delete state.ghToken` avant toute sérialisation
-- Le CI vérifie : `grep -rE "ghp_[A-Za-z0-9]{30,}" index.html app.js data.js style.css` → doit retourner **rien**
+- La méthode `_serializeState()` dans `storage.js` doit **toujours** contenir `delete state.ghToken` avant toute sérialisation
+- Le CI vérifie : `grep -rE "ghp_[A-Za-z0-9]{30,}" index.html app.js computed.js storage.js data.js engine.js style.css characters/` → doit retourner **rien**
 - Ne jamais commit un token réel dans ces fichiers
 
 ---
@@ -88,21 +99,27 @@ D:\torvin\
 
 ---
 
-## Fonctions clés dans app.js
+## Fonctions clés par module
 
 ```javascript
-_loadInitialState()          // Merge localStorage + DEFAULT_CHAR au démarrage (engine.js)
-_deepMerge(target, source)   // Deep merge sécurisé pour la restauration d'état (engine.js)
+// engine.js — fonctions standalone (avant createApp, car data() s'exécute avant this)
+_loadInitialState()          // Merge localStorage + DEFAULT_CHAR + migrations au démarrage
+_deepMerge(target, source)   // Deep merge sécurisé pour la restauration d'état
+
+// storage.js — objet storageMethods (mixé dans methods de createApp)
 _serializeState()            // Sérialise l'état SANS le ghToken (sécurité)
 _applyState(state)           // Applique un état importé en préservant le token en mémoire
 _autoSave()                  // Debounce 300ms → localStorage (déclenché par watch sur char)
-_toast(msg)                  // Toast réactif 3.5s via toastMsg (pas de DOM direct)
-setLevel(n)                  // Monte/descend le niveau, lance le dé de vie, ouvre ASI si besoin
 saveToGitHub()               // PUT save.json via API GitHub (TextEncoder pour encodage UTF-8)
 loadFromGitHub()             // GET save.json depuis le repo (TextDecoder)
 exportJSON()                 // Télécharge save.json (portabilité / clonage)
 importJSON()                 // Importe un save.json depuis un fichier local
+
+// app.js — methods du createApp
+_toast(msg)                  // Toast réactif 3.5s via toastMsg (pas de DOM direct)
+setLevel(n)                  // Monte/descend le niveau, lance le dé de vie, ouvre ASI si besoin
 rollDice(sides)              // Lance diceCount dés à `sides` faces, stocke le détail dans diceRolls
+rollInitiative()             // Lance 1d20 + DEX + bonus Alerte, stocke dans initiativeRoll
 showInfo(key, ...args)       // Résout STRINGS.info[key] et ouvre le modal info
 openStatInfo(key)            // Ouvre le modal d'info d'une caractéristique
 openSaveInfo(sv)             // Ouvre le modal d'info d'un jet de sauvegarde
@@ -173,13 +190,13 @@ STRINGS.info     // Contenu des modaux "info" — valeurs statiques ou fonctions
 Fichier : `.github/workflows/validate.yml`
 
 Vérifications à chaque push sur `main` :
-1. Syntaxe JS — `node --check` sur `app.js`, `data.js`, `strings.js`, `engine.js`, `characters/torvin.js`
-2. Présence des fichiers requis — `index.html style.css app.js data.js strings.js engine.js characters/torvin.js`
+1. Syntaxe JS — `node --check` sur `app.js`, `computed.js`, `storage.js`, `data.js`, `strings.js`, `engine.js`, `characters/torvin.js`
+2. Présence des fichiers requis — `index.html style.css app.js computed.js storage.js data.js strings.js engine.js characters/torvin.js`
 3. **Sécurité token** — aucun `ghp_[A-Za-z0-9]{30,}` dans les sources
 4. Lint HTML — `htmlhint` avec règles de base
 5. Structure onglets — les 5 `activeTab===''` présents dans index.html
 6. Champs DEFAULT_CHAR — tous les champs obligatoires présents dans characters/torvin.js
-7. Suppression du token — `delete state.ghToken` présent dans app.js
+7. Suppression du token — `delete state.ghToken` présent dans `storage.js`
 
 ---
 
@@ -191,9 +208,9 @@ Types : `feat` · `fix` · `refactor` · `style` · `docs` · `chore`
 Exemples : `feat(combat): ajouter tracker de conditions` · `fix(save): corriger merge au chargement`
 
 ### CSS
-- Ajouter les nouvelles classes dans la **section pertinente** (commentée par onglet)
+- Ajouter les nouvelles classes dans le **fichier css/ correspondant à l'onglet** (tab-main, tab-spells, tab-combat, histoire) ou dans base.css pour le commun
 - Toujours utiliser les variables `--parchment`, `--gold`, etc. — pas de couleurs hardcodées
-- Les classes d'onglet sont organisées : Base → Tab Personnage → Tab Sorts → Tab Combat → Tab Histoire → Tab Notes → Responsive
+- Le mode sombre surcharge les variables dans `css/base.css` sous `body.dark { ... }`
 
 ### JavaScript
 - Strict mode (`'use strict'`) actif dans app.js
@@ -205,7 +222,7 @@ Exemples : `feat(combat): ajouter tracker de conditions` · `fix(save): corriger
 ## ⚠️ Contraintes à ne jamais violer
 
 1. **Ne jamais hardcoder un token GitHub** dans un fichier source
-2. **`delete state.ghToken`** doit rester dans `_serializeState()` / toute fonction de sérialisation
+2. **`delete state.ghToken`** doit rester dans `_serializeState()` de `storage.js` / toute fonction de sérialisation
 3. **Pas de bundler / npm** — l'app doit fonctionner en ouvrant `index.html` directement
 4. **Vue 3 CDN** uniquement — ne pas passer à une version installée localement
 5. **save.json** ne contient que l'état dynamique (PV, slots, checks) — pas le token
@@ -220,6 +237,12 @@ Exemples : `feat(combat): ajouter tracker de conditions` · `fix(save): corriger
 - [x] Textes UI centralisés dans `strings.js` (STRINGS.status / toast / info)
 - [x] CHARACTER_MIGRATIONS — hook de migration de données dans characters/torvin.js
 - [x] `asiBonus` computed unique, debounce _autoSave, _toast réactif, TextEncoder/Decoder
-- [ ] Mode sombre / toggle parchemin
+- [x] Mode sombre (toggle lune/soleil, persistance localStorage)
+- [x] Portrait du personnage avec lightbox (onglet Histoire)
+- [x] Lancer d'initiative intégré (1d20 + DEX + Alerte)
+- [x] JS de concentration automatisé (DD = max(10, dégâts/2))
+- [x] Aide upcast dans le modal de sort (PHB 2014)
+- [x] Bonus HP max (champ manuel additionnel au calcul PV max)
+- [x] Découpage app.js en modules (computed.js, storage.js) + CSS par onglet (css/)
 - [ ] Partage en lecture seule (URL avec état encodé en base64)
 - [ ] Support multi-personnages
