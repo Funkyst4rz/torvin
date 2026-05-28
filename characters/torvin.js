@@ -88,9 +88,7 @@ const DEFAULT_CHAR = {
   base:   { str:8,  dex:12, con:13, int:14, wis:15, cha:10 },
   racial: { str:0,  dex:0,  con:1,  int:2,  wis:0,  cha:0  },
   // Choix d'ASI par niveau : { 4: {type:'asi', bonuses:{wis:2}} | {type:'feat', feat:'war-caster'} }
-  asi: {
-    4: { type:'asi', bonuses:{ wis:2 } },
-  },
+  asi: {},
 
   // ── Combat ────────────────────────────────────────────────────
   caManual: 14,     // CA manuelle (override si useCaAuto=false)

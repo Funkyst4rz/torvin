@@ -35,6 +35,14 @@ function _loadInitialState() {
     if (!Array.isArray(merged.equipment)) merged.equipment = [...DEFAULT_CHAR.equipment];
     if (!merged.racial) merged.racial = { ...DEFAULT_RACIAL };
 
+    // Supprimer les choix d'ASI pour les niveaux pas encore atteints
+    // (évite les pré-remplissages de DEFAULT_CHAR qui bypasseraient le modal)
+    if (merged.asi) {
+      for (const lvl of CLERIC_ASI_LEVELS) {
+        if (merged.level < lvl) delete merged.asi[lvl];
+      }
+    }
+
     return merged;
   } catch(e) {
     return JSON.parse(JSON.stringify(DEFAULT_CHAR));
