@@ -120,7 +120,7 @@ const app = createApp({
     sign(n) { return (n >= 0 ? '+' : '') + n; },
     statLabel(k) { return STAT_LABELS[k] || k; },
     /** Supprime l'élément à l'index i dans char[field] (immutable) */
-    _removeAt(field, i) {
+    removeAt(field, i) {
       const list = [...(this.char[field] || [])];
       list.splice(i, 1);
       this.char[field] = list;

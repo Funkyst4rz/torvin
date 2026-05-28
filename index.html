@@ -475,11 +475,11 @@
               <ul class="equip-list">
                 <li v-for="(item, i) in char.equipment" :key="'base-'+i">
                   <span style="flex:1">{{ item }}</span>
-                  <button class="equip-delete" @click="_removeAt('equipment', i)" title="Supprimer">✕</button>
+                  <button class="equip-delete" @click="removeAt('equipment', i)" title="Supprimer">✕</button>
                 </li>
                 <li v-for="(item, i) in char.customEquipment" :key="'custom-'+i">
                   <span style="flex:1">{{ item }}</span>
-                  <button class="equip-delete" @click="_removeAt('customEquipment', i)" title="Supprimer">✕</button>
+                  <button class="equip-delete" @click="removeAt('customEquipment', i)" title="Supprimer">✕</button>
                 </li>
               </ul>
               <div class="add-form">
@@ -527,7 +527,7 @@
               <ul class="equip-list">
                 <li v-for="(lang, i) in char.languages" :key="'lang-'+i">
                   <span style="flex:1;font-size:0.75rem">{{ lang }}</span>
-                  <button class="equip-delete" @click="_removeAt('languages', i)" title="Supprimer">✕</button>
+                  <button class="equip-delete" @click="removeAt('languages', i)" title="Supprimer">✕</button>
                 </li>
               </ul>
               <div class="add-form">
@@ -541,7 +541,7 @@
               <ul class="equip-list">
                 <li v-for="(tool, i) in char.toolProfs" :key="'tool-'+i">
                   <span style="flex:1;font-size:0.75rem">{{ tool }}</span>
-                  <button class="equip-delete" @click="_removeAt('toolProfs', i)" title="Supprimer">✕</button>
+                  <button class="equip-delete" @click="removeAt('toolProfs', i)" title="Supprimer">✕</button>
                 </li>
               </ul>
               <div class="add-form">
@@ -915,7 +915,7 @@
           <div class="attunement-slots">
             <div v-for="(item, i) in (char.attunedItems||[])" :key="'att-'+i" class="attunement-slot filled">
               <span>✦ {{ item }}</span>
-              <button class="equip-delete" @click="_removeAt('attunedItems', i)">✕</button>
+              <button class="equip-delete" @click="removeAt('attunedItems', i)">✕</button>
             </div>
             <div v-for="n in (3 - (char.attunedItems||[]).length)" :key="'empty-'+n" class="attunement-slot empty">
               — Emplacement libre —
@@ -1010,7 +1010,7 @@
               <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px">
                 <input class="phrase-situation-input" type="text"
                        v-model="char.phrases[i].situation" spellcheck="false" placeholder="Situation…">
-                <button class="equip-delete" @click="_removeAt('phrases', i)" title="Supprimer">✕</button>
+                <button class="equip-delete" @click="removeAt('phrases', i)" title="Supprimer">✕</button>
               </div>
               <textarea class="phrase-textarea" v-model="char.phrases[i].text" rows="2" spellcheck="false"></textarea>
             </div>
