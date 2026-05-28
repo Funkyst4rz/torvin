@@ -39,25 +39,6 @@
 .combat-meta-row { display:flex;gap:12px;margin-bottom:12px;flex-wrap:wrap; }
 .combat-meta-row .section-box { margin-bottom:0;flex:1;min-width:160px; }
 
-/* Concentration section â€” wider than inspiration/exhaustion */
-.conc-section { flex: 2 !important; }
-.conc-active-area { display:flex;flex-direction:column; }
-.conc-empty { display:flex;flex-direction:column; }
-
-.conc-spell-name { font-family:'Nunito', sans-serif;font-size:0.875rem;font-weight:700;color:var(--gold);margin-bottom:6px; }
-.conc-dc-info { font-family:'Nunito', sans-serif;font-size:0.75rem;color:var(--ink-mid);line-height:1.5; }
-.conc-save-bonus { font-family:'Nunito', sans-serif;font-size:0.69rem;font-weight:700;color:var(--ink);margin-left:6px; }
-
-.conc-check-row {
-  display:flex;align-items:center;gap:6px;margin-top:8px;flex-wrap:wrap;
-}
-.conc-check-result {
-  font-family:'Nunito', sans-serif;font-size:0.59rem;font-weight:700;
-  padding:3px 10px;border-radius:2px;
-}
-.conc-check-result.success { color:var(--green);background:rgba(30,96,48,.1);border:1px solid var(--green); }
-.conc-check-result.fail    { color:var(--red);  background:rgba(139,26,26,.1);border:1px solid var(--red);  }
-
 /* Inline base armor input inside CA combat box */
 .combat-base-input {
   font-family:'Nunito', sans-serif;font-size:0.69rem;font-weight:700;

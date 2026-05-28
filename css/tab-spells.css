@@ -128,13 +128,19 @@
   padding:1px 6px;border-radius:2px;margin-left:6px;text-transform:uppercase;letter-spacing:.5px;
 }
 
-/* Concentration banner */
-.conc-banner {
-  display:flex;align-items:center;gap:12px;padding:8px 14px;
-  background:rgba(138,110,32,.1);border:1.5px solid var(--gold);
-  margin-bottom:12px;flex-wrap:wrap;
+/* Concentration block (onglet Sorts) */
+.conc-active-area { display:flex;flex-direction:column; }
+.conc-empty { display:flex;flex-direction:column; }
+.conc-spell-name { font-family:'Nunito', sans-serif;font-size:0.875rem;font-weight:700;color:var(--gold);margin-bottom:6px; }
+.conc-dc-info { font-family:'Nunito', sans-serif;font-size:0.75rem;color:var(--ink-mid);line-height:1.5; }
+.conc-save-bonus { font-family:'Nunito', sans-serif;font-size:0.69rem;font-weight:700;color:var(--ink);margin-left:6px; }
+.conc-check-row { display:flex;align-items:center;gap:6px;margin-top:8px;flex-wrap:wrap; }
+.conc-check-result {
+  font-family:'Nunito', sans-serif;font-size:0.59rem;font-weight:700;
+  padding:3px 10px;border-radius:2px;
 }
-.conc-banner strong { font-family:'Nunito', sans-serif;font-size:0.625rem;font-weight:700;color:var(--ink); }
+.conc-check-result.success { color:var(--green);background:rgba(30,96,48,.1);border:1px solid var(--green); }
+.conc-check-result.fail    { color:var(--red);  background:rgba(139,26,26,.1);border:1px solid var(--red);  }
 .conc-clear {
   font-family:'Nunito', sans-serif;font-size:0.5rem;font-weight:700;padding:4px 10px;
   border:1.5px solid var(--red);background:transparent;color:var(--red);

@@ -296,9 +296,11 @@
       <!-- TABS -->
       <div class="tabs">
         <div class="tab" :class="{active:activeTab==='main'}"     @click="switchTab('main')">Personnage</div>
-        <div class="tab" :class="{active:activeTab==='spells'}"   @click="switchTab('spells')">Sorts</div>
+        <div class="tab" :class="{active:activeTab==='spells'}"   @click="switchTab('spells')">
+          Sorts<span v-if="char.concentration" class="tab-badge">!</span>
+        </div>
         <div class="tab" :class="{active:activeTab==='combat'}"   @click="switchTab('combat')">
-          Combat<span v-if="char.conditions.length>0||char.concentration" class="tab-badge">!</span>
+          Combat<span v-if="char.conditions.length>0" class="tab-badge">!</span>
         </div>
         <div class="tab" :class="{active:activeTab==='histoire'}" @click="switchTab('histoire')">Histoire</div>
         <div class="tab" :class="{active:activeTab==='notes'}"    @click="switchTab('notes')">Notes</div>
@@ -627,14 +629,35 @@
            ════════════════════════════════════ -->
       <div class="tab-content" :class="{active:activeTab==='spells'}">
 
-        <!-- Bannière de concentration active -->
-        <div v-if="char.concentration" class="conc-banner">
-          ◆ Concentration active <span class="info-btn" @click.stop="showInfo('concentration', char.concentration, sign(concentrationSaveBonus), concentrationHasAdvantage)">ⓘ</span> :
-          <strong>{{ char.concentration }}</strong>
-          <span style="margin-left:10px;font-size:0.56rem">
-            JS Con : {{ sign(concentrationSaveBonus) }}{{ concentrationHasAdvantage ? ' + avantage (War Caster)' : '' }}
-          </span>
-          <button class="conc-clear" @click="clearConcentration">✕</button>
+        <!-- Concentration -->
+        <div class="section-box" style="margin-bottom:14px">
+          <div class="section-title">◆ Concentration <span class="info-btn" @click="showInfo('concentrationCombat', sign(concentrationSaveBonus), concentrationHasAdvantage)">ⓘ</span></div>
+          <div v-if="char.concentration" class="conc-active-area">
+            <div class="conc-spell-name">{{ char.concentration }}</div>
+            <div class="conc-dc-info">
+              JS Constitution si blessé : max(10, dégâts ÷ 2)
+              <span class="conc-save-bonus">{{ sign(concentrationSaveBonus) }}{{ concentrationHasAdvantage ? ' · avantage (War Caster)' : '' }}</span>
+            </div>
+            <div class="conc-check-row">
+              <input class="add-input add-input-xs" type="number" v-model.number="concCheckDamage"
+                     placeholder="Dégâts" min="0" style="flex:0 0 64px;text-align:center">
+              <button class="save-btn" @click="rollConcCheck">🎲 JS Conc.</button>
+              <span v-if="concCheckResult" class="conc-check-result"
+                    :class="{success: concCheckResult.success, fail: !concCheckResult.success}">
+                {{ concCheckResult.success ? '✓' : '✗' }}
+                {{ concCheckResult.rollDisplay }}{{ sign(concentrationSaveBonus) }} = {{ concCheckResult.total }}
+                <em style="font-size:.85em"> vs DD{{ concCheckResult.dc }}</em>
+              </span>
+            </div>
+            <button class="save-btn" style="margin-top:6px;font-size:0.5rem" @click="clearConcentration">✕ Rompre la concentration</button>
+          </div>
+          <div v-else class="conc-empty">
+            <div style="font-family:'Nunito', sans-serif;font-size:0.75rem;color:var(--ink-light);font-style:italic;margin-bottom:8px">Aucun sort en concentration.</div>
+            <div class="add-form">
+              <input class="add-input" type="text" v-model="newConcentration" placeholder="Nom du sort…" @keyup.enter="setConcentration">
+              <button class="add-btn" @click="setConcentration">▶</button>
+            </div>
+          </div>
         </div>
 
         <!-- Stat bar -->
@@ -795,39 +818,8 @@
            ════════════════════════════════════ -->
       <div class="tab-content" :class="{active:activeTab==='combat'}">
 
-        <!-- Ligne 1 : Concentration + Inspiration + Exhaustion -->
+        <!-- Ligne 1 : Inspiration + Épuisement -->
         <div class="combat-meta-row">
-
-          <!-- Concentration -->
-          <div class="section-box conc-section">
-            <div class="section-title">◆ Concentration <span class="info-btn" @click="showInfo('concentrationCombat', sign(concentrationSaveBonus), concentrationHasAdvantage)">ⓘ</span></div>
-            <div v-if="char.concentration" class="conc-active-area">
-              <div class="conc-spell-name">{{ char.concentration }}</div>
-              <div class="conc-dc-info">
-                JS Constitution si blessé : max(10, dégâts ÷ 2)
-                <span class="conc-save-bonus">{{ sign(concentrationSaveBonus) }}{{ concentrationHasAdvantage ? ' · avantage (War Caster)' : '' }}</span>
-              </div>
-              <div class="conc-check-row">
-                <input class="add-input add-input-xs" type="number" v-model.number="concCheckDamage"
-                       placeholder="Dégâts" min="0" style="flex:0 0 64px;text-align:center">
-                <button class="save-btn" @click="rollConcCheck">🎲 JS Conc.</button>
-                <span v-if="concCheckResult" class="conc-check-result"
-                      :class="{success: concCheckResult.success, fail: !concCheckResult.success}">
-                  {{ concCheckResult.success ? '✓' : '✗' }}
-                  {{ concCheckResult.rollDisplay }}{{ sign(concentrationSaveBonus) }} = {{ concCheckResult.total }}
-                  <em style="font-size:.85em"> vs DD{{ concCheckResult.dc }}</em>
-                </span>
-              </div>
-              <button class="save-btn" style="margin-top:6px;font-size:0.5rem" @click="clearConcentration">✕ Rompre la concentration</button>
-            </div>
-            <div v-else class="conc-empty">
-              <div style="font-family:'Nunito', sans-serif;font-size:0.75rem;color:var(--ink-light);font-style:italic;margin-bottom:8px">Aucun sort en concentration.</div>
-              <div class="add-form">
-                <input class="add-input" type="text" v-model="newConcentration" placeholder="Nom du sort…" @keyup.enter="setConcentration">
-                <button class="add-btn" @click="setConcentration">▶</button>
-              </div>
-            </div>
-          </div>
 
           <!-- Inspiration -->
           <div class="section-box" style="min-width:120px;text-align:center">
