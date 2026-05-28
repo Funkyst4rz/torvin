@@ -50,7 +50,7 @@ torvin/
 ├── computed.js             # Propriétés calculées Vue 3 (D&D math + helpers de template)
 ├── storage.js              # Persistance : localStorage, API GitHub, export/import JSON
 ├── data.js                 # Constantes D&D 5e (LEVELS, CONDITIONS, SKILLS, FEATS…)
-├── engine.js               # Fonctions pures D&D 5e + hook CHARACTER_MIGRATIONS
+├── engine.js               # Fonctions pures D&D 5e (_loadInitialState, _deepMerge)
 ├── strings.js              # Textes UI centralisés (STRINGS.status / toast / info)
 ├── style.css               # CSS principal (importe les modules css/)
 ├── css/
@@ -106,7 +106,7 @@ cd [votre-perso]
 # 3. Mettez à jour dans characters/torvin.js :
 #    - FEATURES_BY_LEVEL (capacités de classe)
 #    - DOMAIN_SPELLS / SUGGESTED_SPELLS (sorts recommandés)
-#    - CHARACTER_MIGRATIONS (migrations de données si nécessaire)
+
 
 # 4. Mettez à jour dans data.js si besoin :
 #    - LEVELS (emplacements de sorts si classe différente)
@@ -163,7 +163,7 @@ Ce projet utilise Vue 3 via CDN — aucun `npm install` requis. Ouvrez simplemen
 
 ### Architecture
 - **`data.js`** : constantes D&D 5e (LEVELS, CONDITIONS, SKILLS, FEATS…) — aucune logique
-- **`characters/torvin.js`** : données spécifiques au personnage (`DEFAULT_CHAR`, `DOMAIN_SPELLS`, `FEATURES_BY_LEVEL`, `CHARACTER_MIGRATIONS`)
+- **`characters/torvin.js`** : données spécifiques au personnage (`DEFAULT_CHAR`, `DOMAIN_SPELLS`, `FEATURES_BY_LEVEL`)
 - **`engine.js`** : fonctions pures D&D 5e (`_loadInitialState`, `_deepMerge`, migrations)
 - **`strings.js`** : textes UI centralisés (`STRINGS.status / toast / info`) — équivalent i18n
 - **`computed.js`** : objet `appComputed` — toutes les propriétés calculées Vue (stats, slots, modificateurs…)

@@ -7,45 +7,6 @@
 // Niveaux d'ASI pour le Clerc (dans la plage niv.1–10)
 const CLERIC_ASI_LEVELS = [4, 8];
 
-// Migrations de données appliquées par engine.js au chargement.
-// Ajouter ici les correctifs spécifiques à ce personnage.
-const CHARACTER_MIGRATIONS = [
-  // v1 → v2 : minorIllusion était incorrectement marqué comme sort racial
-  state => {
-    state.customSpells[0] = state.customSpells[0].map(c =>
-      c.id === 'minorIllusion' ? { ...c, racial: false } : c
-    );
-  },
-  // v2 → v3 : ajouter les emplacements d'équipement structurés
-  state => {
-    if (!state.slots) {
-      state.useCaAuto = false; // Les anciennes sauvegardes gardent la CA manuelle
-      state.slots = {
-        arme:     { name:'', notes:'', atkBonus:'', damage:'', damageType:'', range:'Corps-à-corps', bonuses:[] },
-        armure:   { name:'', notes:'', armorBase:0, armorType:'none', bonuses:[] },
-        bouclier: { name:'', notes:'', bonuses:[] },
-        casque:   { name:'', notes:'', bonuses:[] },
-        cape:     { name:'', notes:'', bonuses:[] },
-        amulette: { name:'', notes:'', bonuses:[] },
-        anneau1:  { name:'', notes:'', bonuses:[] },
-        anneau2:  { name:'', notes:'', bonuses:[] },
-        gants:    { name:'', notes:'', bonuses:[] },
-        bottes:   { name:'', notes:'', bonuses:[] },
-      };
-    }
-    if (state.useCaAuto === undefined) state.useCaAuto = false;
-  },
-  // v3 → v4 : ajouter les champs arme au slot arme
-  state => {
-    if (state.slots && state.slots.arme && !('atkBonus' in state.slots.arme)) {
-      state.slots.arme.atkBonus   = '';
-      state.slots.arme.damage     = '';
-      state.slots.arme.damageType = '';
-      state.slots.arme.range      = 'Corps-à-corps';
-    }
-  },
-];
-
 // Sorts de domaine Arcane (SCAG) — toujours préparés, ne comptent pas dans le quota
 const DOMAIN_SPELLS = {
   1: [

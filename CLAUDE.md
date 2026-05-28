@@ -29,9 +29,9 @@ D:\torvin\
 ├── storage.js          — Persistance : localStorage, API GitHub, export/import JSON
 ├── data.js             — Données statiques D&D 5e (LEVELS, CONDITIONS, SKILLS, FEATS…)
 ├── strings.js          — Textes d'interface centralisés (équivalent i18n/YAML)
-├── engine.js           — Fonctions pures D&D 5e + hook CHARACTER_MIGRATIONS
+├── engine.js           — Fonctions pures D&D 5e (_loadInitialState, _deepMerge)
 ├── characters/
-│   ├── torvin.js       — Données spécifiques au personnage + CHARACTER_MIGRATIONS
+│   ├── torvin.js       — Données spécifiques au personnage (DEFAULT_CHAR, sorts, capacités)
 │   └── torvin.jpg      — Portrait du personnage (lightbox onglet Histoire)
 ├── save.json           — État sauvegardé (écrit via API GitHub, ne pas éditer manuellement)
 ├── README.md           — Documentation publique du projet
@@ -103,7 +103,7 @@ D:\torvin\
 
 ```javascript
 // engine.js — fonctions standalone (avant createApp, car data() s'exécute avant this)
-_loadInitialState()          // Merge localStorage + DEFAULT_CHAR + migrations au démarrage
+_loadInitialState()          // Merge localStorage + DEFAULT_CHAR au démarrage
 _deepMerge(target, source)   // Deep merge sécurisé pour la restauration d'état
 
 // storage.js — objet storageMethods (mixé dans methods de createApp)
@@ -166,7 +166,6 @@ BONUS_TYPES      // 12 types de bonus (ca, str, dex, con, int, wis, cha, hp_max,
 
 // characters/torvin.js (données spécifiques au personnage)
 CLERIC_ASI_LEVELS    // [4, 8] — niveaux d'amélioration du clerc
-CHARACTER_MIGRATIONS // Migrations de données au chargement (correctifs spécifiques)
 DOMAIN_SPELLS        // Sorts de domaine Arcane (SCAG), toujours préparés
 SUGGESTED_SPELLS     // Propositions par niveau de sort
 FEATURES_BY_LEVEL    // Capacités débloquées par niveau
@@ -262,7 +261,6 @@ Exemples : `feat(combat): ajouter tracker de conditions` · `fix(save): corriger
 - [x] Export / Import JSON
 - [x] Composants Vue réutilisables (`modal-overlay`, `spell-row`) via x-template
 - [x] Textes UI centralisés dans `strings.js` (STRINGS.status / toast / info)
-- [x] CHARACTER_MIGRATIONS — hook de migration de données dans characters/torvin.js
 - [x] `asiBonus` computed unique, debounce _autoSave, _toast réactif, TextEncoder/Decoder
 - [x] Mode sombre (toggle lune/soleil, persistance localStorage)
 - [x] Portrait du personnage avec lightbox (onglet Histoire)
