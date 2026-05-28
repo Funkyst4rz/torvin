@@ -244,6 +244,12 @@
     "Outils de bricoleur"
   ],
   "notes": "test 1",
+  "sessionNotes": [
+    {
+      "date": "2026-05-28",
+      "text": "Test"
+    }
+  ],
   "traits": [
     "J'explique systématiquement ce que je fais et pourquoi, même en plein combat. Surtout en plein combat.",
     "Je trouve une explication rationnelle à tout. La magie n'est qu'un mécanisme qu'on ne comprend pas encore."
