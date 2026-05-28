@@ -36,12 +36,55 @@
 .portrait-enlarged { max-width:90vw;max-height:90vh;border:4px solid var(--border);box-shadow:0 8px 40px rgba(0,0,0,.7),inset 0 0 0 1px var(--border-light); }
 
 /* â”€â”€ NOTES â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
-.notes-area {
-  width:100%;min-height:280px;font-family:'Nunito', sans-serif;font-size:0.81rem;
-  color:var(--ink);background:rgba(232,216,182,.2);
-  border:1.5px solid var(--border);padding:12px;resize:vertical;outline:none;line-height:1.7;
+.notes-toolbar {
+  display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;
 }
-.notes-area:focus { border-color:var(--gold-light); }
+.add-note-btn {
+  font-family:'Nunito', sans-serif;font-size:0.75rem;font-weight:700;
+  color:var(--gold);background:none;border:1.5px solid var(--gold);
+  border-radius:3px;padding:4px 14px;cursor:pointer;letter-spacing:.4px;
+}
+.add-note-btn:hover { background:rgba(196,152,48,.12); }
+.notes-empty {
+  font-family:'Crimson Text', serif;font-style:italic;color:var(--ink-light);
+  text-align:center;padding:32px 0;font-size:0.9rem;
+}
+.note-card {
+  border:1px solid var(--border);background:rgba(232,216,182,.2);
+  border-radius:3px;padding:10px 12px;margin-bottom:10px;
+}
+.note-header {
+  display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;
+}
+.note-date {
+  font-family:'Nunito', sans-serif;font-size:0.72rem;color:var(--ink-mid);
+  background:transparent;border:none;border-bottom:1px dashed var(--border);
+  padding:2px 4px;cursor:pointer;
+}
+.note-delete { font-size:0.6rem;opacity:.4; }
+.note-delete:hover { opacity:1; }
+.note-text {
+  width:100%;box-sizing:border-box;background:transparent;border:none;
+  border-top:1px dashed var(--border-light);padding:8px 0 2px;
+  font-family:'Crimson Text', serif;font-size:0.9rem;color:var(--ink);
+  resize:vertical;min-height:80px;line-height:1.65;outline:none;
+}
+.note-text:focus { border-top-color:var(--gold); }
+.note-migrate-banner {
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  background:rgba(196,152,48,.1);border:1px dashed var(--gold);
+  border-radius:3px;padding:8px 12px;margin-bottom:14px;
+  font-family:'Nunito', sans-serif;font-size:0.75rem;color:var(--ink-mid);
+}
+.note-migrate-btn {
+  font-family:'Nunito', sans-serif;font-size:0.72rem;font-weight:700;
+  color:var(--gold);background:none;border:1px solid var(--gold);
+  border-radius:2px;padding:3px 10px;cursor:pointer;
+}
+.note-migrate-skip {
+  font-family:'Nunito', sans-serif;font-size:0.72rem;color:var(--ink-light);
+  background:none;border:none;cursor:pointer;text-decoration:underline;
+}
 .notes-hint { font-family:'Nunito', sans-serif;font-size:0.63rem;color:var(--ink-light);margin-top:6px;text-align:right;text-transform:uppercase;letter-spacing:.5px; }
 
 /* â”€â”€ FOOTER & TOAST â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
@@ -128,6 +171,9 @@ body.dark .spell-picker         { background: rgba(13,9,5,.95); }
 body.dark .spell-picker-row:hover { background: rgba(196,152,48,.07); }
 body.dark .spell-row:nth-child(even) { background: rgba(196,152,48,.04); }
 body.dark .notes-area           { background: rgba(25,16,5,.3); }
+body.dark .note-card            { background: rgba(25,16,5,.25); border-color: var(--border); }
+body.dark .note-text            { color: var(--ink); }
+body.dark .note-date            { color: var(--ink-mid); }
 body.dark .lore-section         { background: rgba(25,16,5,.25); }
 body.dark .lore-quote           { background: rgba(196,152,48,.07); }
 body.dark .combo-box            { background: rgba(160,40,40,.07); }

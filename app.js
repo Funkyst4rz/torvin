@@ -464,6 +464,19 @@ const app = createApp({
       return parts.join(', ');
     },
 
+    // ── Session notes ─────────────────────────
+    addNote() {
+      const d = new Date();
+      const date = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+      this.char.sessionNotes = [{ date, text: '' }, ...this.char.sessionNotes];
+    },
+    migrateOldNote() {
+      const d = new Date();
+      const date = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+      this.char.sessionNotes = [{ date, text: this.char.notes }, ...this.char.sessionNotes];
+      this.char.notes = '';
+    },
+
     // ── Custom equipment ─────────────────────
     addCustomEquip() {
       if (!this.newEquip.trim()) return;

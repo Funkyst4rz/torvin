@@ -173,7 +173,8 @@ const DEFAULT_CHAR = {
   toolProfs:  ['Outils de bricoleur'],
 
   // ── Roleplay / personnalité ────────────────────────────────────
-  notes: '',
+  notes: '',         // Conservé pour migration depuis l'ancien textarea
+  sessionNotes: [],  // Journal de session : [{ date:'YYYY-MM-DD', text:'' }, …]
   traits: [
     "J'explique systématiquement ce que je fais et pourquoi, même en plein combat. Surtout en plein combat.",
     "Je trouve une explication rationnelle à tout. La magie n'est qu'un mécanisme qu'on ne comprend pas encore."

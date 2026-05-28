@@ -1074,10 +1074,35 @@
            TAB NOTES
            ════════════════════════════════════ -->
       <div class="tab-content" :class="{active:activeTab==='notes'}">
-        <div class="section-title">Notes de session</div>
-        <textarea class="notes-area" v-model="char.notes"
-          placeholder="Notes de session, observations de Torvin, événements importants, noms de PNJ, indices, croquis mécaniques…"></textarea>
-        <div class="notes-hint">Sauvegardé automatiquement · inclus dans la sauvegarde GitHub · Exporter : bouton ⬇ JSON</div>
+        <!-- Bannière de migration depuis l'ancien textarea -->
+        <div v-if="char.notes && char.sessionNotes.length === 0" class="note-migrate-banner">
+          <span>Une ancienne note existe — importer dans le journal ?</span>
+          <button class="note-migrate-btn" @click="migrateOldNote">Importer</button>
+          <button class="note-migrate-skip" @click="char.notes = ''">Ignorer</button>
+        </div>
+
+        <!-- Barre d'outils -->
+        <div class="notes-toolbar">
+          <span class="section-title" style="border:none;padding:0;margin:0">Journal de session</span>
+          <button class="add-note-btn" @click="addNote">+ Nouvelle note</button>
+        </div>
+
+        <!-- État vide -->
+        <div v-if="char.sessionNotes.length === 0" class="notes-empty">
+          Aucune note — cliquez sur <em>+ Nouvelle note</em> pour commencer.
+        </div>
+
+        <!-- Entrées du journal -->
+        <div class="note-card" v-for="(note, i) in char.sessionNotes" :key="i">
+          <div class="note-header">
+            <input class="note-date" type="date" v-model="note.date">
+            <button class="equip-delete note-delete" @click="removeAt('sessionNotes', i)" title="Supprimer cette note">✕</button>
+          </div>
+          <textarea class="note-text" v-model="note.text" rows="5"
+            placeholder="Événements de la séance, PNJ rencontrés, indices, observations de Torvin…"></textarea>
+        </div>
+
+        <div class="notes-hint">Sauvegardé automatiquement · inclus dans la sauvegarde GitHub</div>
       </div>
 
       <!-- FOOTER -->
