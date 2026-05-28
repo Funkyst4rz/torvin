@@ -196,11 +196,15 @@ body.dark .header::after        { background: var(--parchment); }
   .level-bubbles { gap:4px; }
   .lvl-btn { width:28px;height:28px;font-size:0.56rem; }
   .lore-body { grid-template-columns:1fr; }
+  .lore-section { padding:16px 14px 18px; }
+  .lore-portrait { width:130px; }
+  .lore-portrait-col { padding-left:0; }
   .features-grid { grid-template-columns:1fr 1fr; }
   .tabs { gap:0; }
   .tab { padding:9px 12px;font-size:0.59rem;letter-spacing:.5px; }
   .save-bar { gap:6px; }
   .save-btn { padding:7px 12px;font-size:0.59rem; }
+
   .floating-save { display:flex;align-items:center;justify-content:center; }
   .conditions-grid { gap:4px; }
   .condition-btn { font-size:0.47rem;padding:4px 8px; }
@@ -211,6 +215,10 @@ body.dark .header::after        { background: var(--parchment); }
   .features-grid { grid-template-columns:1fr; }
   .spell-stats-bar { gap:8px; }
   .armor-config-row { gap:8px; }
+  /* Slot grid : 5 colonnes → 4 sur mobile */
+  .slot-grid { grid-template-columns:repeat(4,1fr); }
+  /* Notes toolbar : wrap si l'espace manque */
+  .notes-toolbar { flex-wrap:wrap;gap:6px; }
 }
 @media(max-width:460px){
   .content { padding:24px 12px 20px; }
@@ -219,4 +227,8 @@ body.dark .header::after        { background: var(--parchment); }
   .info-cell:nth-child(2) { border-right:none; }
   .info-cell:nth-child(n+3) { border-top:1px solid var(--border); }
   .tab { padding:8px 9px;font-size:0.53rem; }
+  /* Slot grid : 4 colonnes → 3 sur très petit écran */
+  .slot-grid { grid-template-columns:repeat(3,1fr); }
+  .slot-card { min-height:54px; }
+  .lore-portrait { width:110px; }
 }
