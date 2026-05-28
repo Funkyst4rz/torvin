@@ -38,6 +38,7 @@
     }
   },
   "caManual": 14,
+  "useCaAuto": true,
   "armorBase": 10,
   "armorType": "medium",
   "useShield": true,
@@ -57,6 +58,7 @@
   ],
   "hpCurrent": 26,
   "hpTemp": 0,
+  "hpMaxBonus": 0,
   "slotsUsed": {
     "1": 0,
     "2": 0,
@@ -150,22 +152,79 @@
   },
   "inspiration": false,
   "exhaustion": 0,
+  "slots": {
+    "arme": {
+      "name": "Masse d'armes",
+      "notes": "",
+      "atkBonus": "+1",
+      "damage": "1d6-1",
+      "damageType": "contondant",
+      "range": "Corps-à-corps",
+      "bonuses": []
+    },
+    "armure": {
+      "name": "Armure de cuir",
+      "notes": "",
+      "armorBase": 11,
+      "armorType": "light",
+      "bonuses": []
+    },
+    "bouclier": {
+      "name": "Bouclier",
+      "notes": "",
+      "bonuses": [
+        {
+          "type": "ca",
+          "value": 2
+        }
+      ]
+    },
+    "casque": {
+      "name": "",
+      "notes": "",
+      "bonuses": []
+    },
+    "cape": {
+      "name": "",
+      "notes": "",
+      "bonuses": []
+    },
+    "amulette": {
+      "name": "",
+      "notes": "",
+      "bonuses": []
+    },
+    "anneau1": {
+      "name": "",
+      "notes": "",
+      "bonuses": []
+    },
+    "anneau2": {
+      "name": "",
+      "notes": "",
+      "bonuses": []
+    },
+    "gants": {
+      "name": "",
+      "notes": "",
+      "bonuses": []
+    },
+    "bottes": {
+      "name": "",
+      "notes": "",
+      "bonuses": []
+    },
+    "slot-1-0": false,
+    "slot-1-1": false,
+    "slot-1-2": false
+  },
   "equipment": [
     "La Relique d'Azouth — focaliseur d'incantation & lien divin",
-    "Masse d'armes",
-    "Armure de cuir + Bouclier",
     "Outils de bricoleur",
     "Pack d'explorateur"
   ],
   "customEquipment": [
     "Lettre de guilde"
-  ],
-  "customAttacks": [
-    {
-      "name": "Masse d'arme",
-      "bonus": "—",
-      "damage": "1d6"
-    }
   ],
   "attunedItems": [
     "La Relique d'Azouth"
@@ -184,7 +243,7 @@
   "toolProfs": [
     "Outils de bricoleur"
   ],
-  "notes": "",
+  "notes": "test 1",
   "traits": [
     "J'explique systématiquement ce que je fais et pourquoi, même en plein combat. Surtout en plein combat.",
     "Je trouve une explication rationnelle à tout. La magie n'est qu'un mécanisme qu'on ne comprend pas encore."
@@ -221,14 +280,16 @@
   "ghRepo": "Funkyst4rz/torvin",
   "ghFile": "save.json",
   "ghBranch": "main",
+  "customAttacks": [
+    {
+      "name": "Masse d'arme",
+      "bonus": "—",
+      "damage": "1d6"
+    }
+  ],
   "pv": "15",
   "pvTemp": "0",
   "cd": false,
-  "slots": {
-    "slot-1-0": false,
-    "slot-1-1": false,
-    "slot-1-2": false
-  },
   "checks": {
     "sc-d1-0": false,
     "sc-d1-1": false,
