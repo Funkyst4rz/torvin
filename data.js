@@ -212,3 +212,33 @@ const SKILLS = [
   { key:'representation', name:'Représentation', stat:'cha' },
   { key:'persuasion',     name:'Persuasion',     stat:'cha' },
 ];
+
+// Emplacements d'équipement (ordre = position dans la grille 5×2)
+const EQUIPMENT_SLOTS = [
+  { key:'arme',     label:'Arme',      icon:'⚔',  hasArmor:false },
+  { key:'armure',   label:'Armure',    icon:'🛡',  hasArmor:true  },
+  { key:'bouclier', label:'Bouclier',  icon:'🔰',  hasArmor:false },
+  { key:'casque',   label:'Casque',    icon:'⛑',  hasArmor:false },
+  { key:'cape',     label:'Cape',      icon:'🧣',  hasArmor:false },
+  { key:'amulette', label:'Amulette',  icon:'📿',  hasArmor:false },
+  { key:'anneau1',  label:'Anneau 1',  icon:'💍',  hasArmor:false },
+  { key:'anneau2',  label:'Anneau 2',  icon:'💍',  hasArmor:false },
+  { key:'gants',    label:'Gants',     icon:'🥊',  hasArmor:false },
+  { key:'bottes',   label:'Bottes',    icon:'👢',  hasArmor:false },
+];
+
+// Types de bonus structurés sur les items
+const BONUS_TYPES = [
+  { key:'ca',        label:'CA'            },
+  { key:'wis',       label:'Sagesse'       },
+  { key:'str',       label:'Force'         },
+  { key:'dex',       label:'Dextérité'     },
+  { key:'con',       label:'Constitution'  },
+  { key:'int',       label:'Intelligence'  },
+  { key:'cha',       label:'Charisme'      },
+  { key:'hp_max',    label:'PV max'        },
+  { key:'speed',     label:'Vitesse (m)'   },
+  { key:'initiative',label:'Initiative'    },
+  { key:'attack',    label:'Attaque'       },
+  { key:'spell_dc',  label:'DD de sort'    },
+];

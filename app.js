@@ -48,6 +48,9 @@ const app = createApp({
       spellModal: null,
       infoModal: null,
 
+      // Slot modal
+      slotModal: null,
+
       // Concentration check
       concCheckDamage: 0,
       concCheckResult: null,
@@ -148,7 +151,7 @@ const app = createApp({
     _hpMaxAt(lvl, rolls) {
       let total = 0;
       for (let i = 1; i <= lvl; i++) total += (rolls || this.char.hpRolls)[i] || 0;
-      return total + this.mods.con * lvl + (this.char.hpMaxBonus || 0);
+      return total + this.mods.con * lvl + (this.char.hpMaxBonus || 0) + (this.equipmentBonuses.hp_max || 0);
     },
 
     // ── HP / Rests ───────────────────────────
@@ -379,8 +382,9 @@ const app = createApp({
         cha: [this.sign(this.mods.cha + this.prof)],
       };
       const { title, uses } = STRINGS.info.stat[key](...(argMap[key] || []));
+      const equipStr = stat.equip ? ` + équip. +${stat.equip}` : '';
       const header = `<strong>Score :</strong> ${stat.total} &nbsp;→&nbsp; Modificateur : <strong>${this.sign(this.mods[key])}</strong>`
-        + (stat.racial ? `<br><span style="font-size:0.8em;color:var(--ink-light)">Base ${stat.base} + racial ${stat.racial}${stat.asi ? ' + ASI ' + stat.asi : ''}</span>` : '');
+        + (stat.racial ? `<br><span style="font-size:0.8em;color:var(--ink-light)">Base ${stat.base} + racial ${stat.racial}${stat.asi ? ' + ASI ' + stat.asi : ''}${equipStr}</span>` : '');
       this.openInfo(title, header + '<br><br><strong>Utilisée pour :</strong><br>' + uses.map(u => '• ' + u).join('<br>'));
     },
 
@@ -428,6 +432,36 @@ const app = createApp({
         if (!this.char.removedSpells.includes(id))
           this.char.removedSpells = [...this.char.removedSpells, id];
       }
+    },
+
+    // ── Slot modal ───────────────────────────
+    openSlotModal(key)  { this.slotModal = { key }; },
+    closeSlotModal()    { this.slotModal = null; },
+
+    addSlotBonus(key) {
+      this.char.slots[key].bonuses.push({ type: 'ca', value: 0 });
+    },
+    removeSlotBonus(key, i) {
+      this.char.slots[key].bonuses.splice(i, 1);
+    },
+    clearSlot(key) {
+      const slot = this.char.slots[key];
+      slot.name   = '';
+      slot.notes  = '';
+      slot.bonuses = [];
+      if ('armorBase' in slot) { slot.armorBase = 0; slot.armorType = 'none'; }
+    },
+
+    slotBonusSummary(key) {
+      const slot = this.char.slots && this.char.slots[key];
+      if (!slot || !slot.bonuses.length) return '';
+      const parts = [];
+      for (const b of slot.bonuses) {
+        if (!b.type || !b.value) continue;
+        const label = BONUS_TYPES.find(t => t.key === b.type);
+        parts.push(`${b.value > 0 ? '+' : ''}${b.value} ${label ? label.label : b.type}`);
+      }
+      return parts.join(', ');
     },
 
     // ── Custom equipment ─────────────────────

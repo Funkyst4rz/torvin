@@ -16,6 +16,25 @@ const CHARACTER_MIGRATIONS = [
       c.id === 'minorIllusion' ? { ...c, racial: false } : c
     );
   },
+  // v2 → v3 : ajouter les emplacements d'équipement structurés
+  state => {
+    if (!state.slots) {
+      state.useCaAuto = false; // Les anciennes sauvegardes gardent la CA manuelle
+      state.slots = {
+        arme:     { name:'', notes:'', bonuses:[] },
+        armure:   { name:'', notes:'', armorBase:0, armorType:'none', bonuses:[] },
+        bouclier: { name:'', notes:'', bonuses:[] },
+        casque:   { name:'', notes:'', bonuses:[] },
+        cape:     { name:'', notes:'', bonuses:[] },
+        amulette: { name:'', notes:'', bonuses:[] },
+        anneau1:  { name:'', notes:'', bonuses:[] },
+        anneau2:  { name:'', notes:'', bonuses:[] },
+        gants:    { name:'', notes:'', bonuses:[] },
+        bottes:   { name:'', notes:'', bonuses:[] },
+      };
+    }
+    if (state.useCaAuto === undefined) state.useCaAuto = false;
+  },
 ];
 
 // Sorts de domaine Arcane (SCAG) — toujours préparés, ne comptent pas dans le quota
@@ -104,8 +123,9 @@ const DEFAULT_CHAR = {
   },
 
   // ── Combat ────────────────────────────────────────────────────
-  caManual: 14,     // CA saisie manuellement (armure de cuir 11 + Dex +1 + bouclier +2)
-  armorBase: 11,    // Conservé pour calcul futur éventuel (armure de cuir)
+  caManual: 14,     // CA manuelle (override si useCaAuto=false)
+  useCaAuto: true,  // true = calculer depuis les slots armure/bouclier/bonus items
+  armorBase: 11,    // Conservé pour compatibilité ascendante
   armorType: 'light',
   useShield: true,
   speed: 7.5,       // Gnome des Roches : 25 pieds = 7,5 m
@@ -147,7 +167,21 @@ const DEFAULT_CHAR = {
   inspiration: false,
   exhaustion:  0,                        // 0–6
 
-  // ── Équipement ────────────────────────────────────────────────
+  // ── Emplacements d'équipement ─────────────────────────────────
+  slots: {
+    arme:     { name:"Masse d'armes",  notes:'', bonuses:[] },
+    armure:   { name:'Armure de cuir', notes:'', armorBase:11, armorType:'light', bonuses:[] },
+    bouclier: { name:'Bouclier',       notes:'', bonuses:[{ type:'ca', value:2 }] },
+    casque:   { name:'',               notes:'', bonuses:[] },
+    cape:     { name:'',               notes:'', bonuses:[] },
+    amulette: { name:'',               notes:'', bonuses:[] },
+    anneau1:  { name:'',               notes:'', bonuses:[] },
+    anneau2:  { name:'',               notes:'', bonuses:[] },
+    gants:    { name:'',               notes:'', bonuses:[] },
+    bottes:   { name:'',               notes:'', bonuses:[] },
+  },
+
+  // ── Sac & objets divers ───────────────────────────────────────
   equipment: [
     "La Relique d'Azouth — focaliseur d'incantation & lien divin",
     "Masse d'armes",

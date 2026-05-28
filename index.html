@@ -120,6 +120,65 @@
   </modal-overlay>
 
   <!-- ══════════════════════════════════════
+       SLOT MODAL
+       ══════════════════════════════════════ -->
+  <div v-if="slotModal && currentSlotDef && slotData" class="slot-modal-overlay" @click.self="closeSlotModal">
+    <div class="slot-modal-box">
+      <div class="slot-modal-header">
+        <span class="slot-modal-icon">{{ currentSlotDef.icon }}</span>
+        <span class="slot-modal-title">{{ currentSlotDef.label }}</span>
+        <button class="conc-clear" @click="closeSlotModal">✕</button>
+      </div>
+
+      <!-- Nom de l'objet -->
+      <div class="slot-field">
+        <span class="slot-field-label">Objet</span>
+        <input class="slot-field-input" type="text" v-model="slotData.name" :placeholder="currentSlotDef.label + '…'">
+      </div>
+
+      <!-- Armure uniquement : CA de base + type -->
+      <template v-if="currentSlotDef.hasArmor">
+        <div class="slot-section-label">Armure</div>
+        <div class="slot-field">
+          <span class="slot-field-label">CA de base</span>
+          <input class="slot-field-input" type="number" v-model.number="slotData.armorBase" min="0" max="25" style="max-width:60px">
+        </div>
+        <div class="slot-field">
+          <span class="slot-field-label">Type</span>
+          <select class="slot-field-select" v-model="slotData.armorType">
+            <option value="none">Sans armure (10 + DEX)</option>
+            <option value="light">Légère (base + DEX)</option>
+            <option value="medium">Intermédiaire (base + DEX ≤ +2)</option>
+            <option value="heavy">Lourde (base fixe)</option>
+          </select>
+        </div>
+      </template>
+
+      <!-- Bonus structurés -->
+      <div class="slot-section-label">Bonus</div>
+      <div v-for="(b, i) in slotData.bonuses" :key="i" class="slot-bonus-row">
+        <select class="slot-bonus-type" v-model="b.type">
+          <option v-for="bt in bonusTypes" :key="bt.key" :value="bt.key">{{ bt.label }}</option>
+        </select>
+        <input class="slot-bonus-val" type="number" v-model.number="b.value" placeholder="0">
+        <button class="slot-bonus-del" @click="removeSlotBonus(slotModal.key, i)" title="Supprimer">✕</button>
+      </div>
+      <button class="slot-add-bonus" @click="addSlotBonus(slotModal.key)">+ Ajouter un bonus</button>
+
+      <!-- Notes -->
+      <div class="slot-section-label">Notes</div>
+      <textarea class="slot-field-input" v-model="slotData.notes" rows="2"
+        style="width:100%;resize:vertical;font-family:'Nunito',sans-serif;font-size:0.75rem"
+        placeholder="Propriétés spéciales, description…"></textarea>
+
+      <div class="slot-modal-footer">
+        <button class="slot-clear-btn" @click="clearSlot(slotModal.key)">🗑 Vider</button>
+        <button class="save-btn primary" @click="closeSlotModal">✓ Fermer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
        PAGE PARCHEMIN
        ══════════════════════════════════════ -->
   <div class="page">
@@ -247,6 +306,7 @@
                 <span v-if="st.racial" class="stat-base-label" title="Bonus racial">+{{ st.racial }}R</span>
               </div>
               <span v-if="st.asi > 0" class="stat-asi-badge" title="Bonus ASI">+{{ st.asi }}✦</span>
+              <span v-if="st.equip > 0" class="stat-equip-badge" title="Bonus équipement">+{{ st.equip }}⚔</span>
             </div>
             <div class="passive-box" style="cursor:pointer" @click="showInfo('passivePerc', passivePerc)">
               <div class="passive-val">{{ passivePerc }}</div>
@@ -259,8 +319,18 @@
             <div class="section-title">Combat</div>
             <div class="combat-row">
               <div class="combat-box">
-                <span class="combat-label">CA <span class="info-btn" @click="showInfo('ca')">ⓘ</span></span>
-                <div style="display:flex;align-items:center">
+                <span class="combat-label">
+                  CA <span class="info-btn" @click="showInfo('ca')">ⓘ</span>
+                  <span class="ca-mode-toggle"
+                        @click="char.useCaAuto = !char.useCaAuto"
+                        :title="char.useCaAuto ? 'Passer en CA manuelle' : 'Calculer depuis les emplacements'">
+                    {{ char.useCaAuto ? '⚡' : '🔧' }}
+                  </span>
+                </span>
+                <!-- Mode auto : valeur calculée (lecture seule) -->
+                <span v-if="char.useCaAuto" class="combat-val" :title="caAutoFormula">{{ ca }}</span>
+                <!-- Mode manuel : champ éditable -->
+                <div v-else style="display:flex;align-items:center">
                   <input class="combat-input" type="number" v-model.number="char.caManual" min="0" max="30" title="Classe d'Armure — saisir manuellement">
                   <div class="pv-spinners">
                     <button class="pv-spin" @click="char.caManual = Math.min(30, char.caManual + 1)" tabindex="-1">▴</button>
@@ -487,6 +557,31 @@
             </div>
           </div>
         </div><!-- /main-grid -->
+
+        <!-- Emplacements d'équipement -->
+        <div class="slot-section section-box">
+          <div class="section-title">
+            Emplacements
+            <span style="font-size:0.5rem;font-family:'Nunito',sans-serif;color:var(--ink-light);font-weight:400;text-transform:none;margin-left:6px">
+              — CA auto {{ char.useCaAuto ? '⚡ ' + ca : '🔧 ' + char.caManual }}
+            </span>
+          </div>
+          <div class="slot-grid">
+            <div v-for="slot in equipmentSlots" :key="slot.key"
+                 class="slot-card"
+                 :class="{ 'slot-equipped': char.slots[slot.key] && char.slots[slot.key].name }"
+                 @click="openSlotModal(slot.key)"
+                 :title="slot.label + (char.slots[slot.key] && char.slots[slot.key].name ? ' — ' + char.slots[slot.key].name : ' — vide')">
+              <span class="slot-icon">{{ slot.icon }}</span>
+              <span class="slot-type-label">{{ slot.label }}</span>
+              <span class="slot-item-name">{{ char.slots[slot.key] && char.slots[slot.key].name || '—' }}</span>
+              <span v-if="slot.hasArmor && char.slots[slot.key] && char.slots[slot.key].armorBase" class="slot-armor-info">
+                Base {{ char.slots[slot.key].armorBase }}
+              </span>
+              <span v-if="slotBonusSummary(slot.key)" class="slot-bonus-badge">✦ {{ slotBonusSummary(slot.key) }}</span>
+            </div>
+          </div>
+        </div>
 
         <!-- Capacités & Traits -->
         <div class="divider"><span>✦</span></div>

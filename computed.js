@@ -7,6 +7,68 @@
 
 const appComputed = {
 
+  // ── Équipement ───────────────────────────────────────────────
+
+  /** Somme de tous les bonus structurés des emplacements équipés */
+  equipmentBonuses() {
+    const totals = { ca:0, str:0, dex:0, con:0, int:0, wis:0, cha:0, hp_max:0, speed:0, initiative:0, attack:0, spell_dc:0 };
+    const slots = this.char.slots || {};
+    for (const slot of Object.values(slots)) {
+      for (const b of (slot.bonuses || [])) {
+        if (b.type && b.type in totals) totals[b.type] += (b.value || 0);
+      }
+    }
+    return totals;
+  },
+
+  /** CA calculée automatiquement depuis le slot armure + bonus items */
+  caAuto() {
+    const slots = this.char.slots || {};
+    const armor  = slots.armure  || {};
+    const dex    = this.mods.dex;
+    let base;
+    if (!armor.name) {
+      base = 10 + dex;
+    } else {
+      const armorBase = armor.armorBase || 10;
+      const type      = armor.armorType || 'light';
+      if (type === 'heavy')       base = armorBase;
+      else if (type === 'medium') base = armorBase + Math.min(dex, 2);
+      else                        base = armorBase + dex;
+    }
+    return base + (this.equipmentBonuses.ca || 0);
+  },
+
+  /** Formule CA auto pour tooltip */
+  caAutoFormula() {
+    const slots  = this.char.slots || {};
+    const armor  = slots.armure   || {};
+    const dex    = this.mods.dex;
+    const eqBonus = this.equipmentBonuses.ca || 0;
+    let formula;
+    if (!armor.name) {
+      formula = `10 (sans armure) + DEX ${dex >= 0 ? '+' : ''}${dex}`;
+    } else {
+      const type = armor.armorType || 'light';
+      const dexStr = (dex >= 0 ? '+' : '') + dex;
+      if (type === 'heavy')       formula = `${armor.armorBase} (lourde)`;
+      else if (type === 'medium') formula = `${armor.armorBase} + DEX ${(Math.min(dex,2)>=0?'+':'')}${Math.min(dex,2)} (max +2)`;
+      else                        formula = `${armor.armorBase} + DEX ${dexStr}`;
+    }
+    if (eqBonus) formula += ` + ${eqBonus >= 0 ? '+' : ''}${eqBonus} (items)`;
+    return `CA automatique : ${formula} = ${this.caAuto}`;
+  },
+
+  currentSlotDef() {
+    if (!this.slotModal) return null;
+    return EQUIPMENT_SLOTS.find(s => s.key === this.slotModal.key) || null;
+  },
+
+  slotData() {
+    if (!this.slotModal || !this.char.slots) return null;
+    return this.char.slots[this.slotModal.key] || null;
+  },
+
   // ── Stats & modificateurs ────────────────────────────────────
 
   /** Bonus cumulés des ASI/dons actifs (≤ niveau actuel) */
@@ -25,16 +87,16 @@ const appComputed = {
     return bonus;
   },
 
-  /** Scores totaux (base + racial + ASI) */
+  /** Scores totaux (base + racial + ASI + équipement) */
   stats() {
-    const b = this.char.base, r = this.char.racial, a = this.asiBonus;
+    const b = this.char.base, r = this.char.racial, a = this.asiBonus, e = this.equipmentBonuses;
     return {
-      str: b.str + r.str + a.str,
-      dex: b.dex + r.dex + a.dex,
-      con: b.con + r.con + a.con,
-      int: b.int + r.int + a.int,
-      wis: b.wis + r.wis + a.wis,
-      cha: b.cha + r.cha + a.cha,
+      str: b.str + r.str + a.str + e.str,
+      dex: b.dex + r.dex + a.dex + e.dex,
+      con: b.con + r.con + a.con + e.con,
+      int: b.int + r.int + a.int + e.int,
+      wis: b.wis + r.wis + a.wis + e.wis,
+      cha: b.cha + r.cha + a.cha + e.cha,
     };
   },
 
@@ -45,14 +107,16 @@ const appComputed = {
   },
 
   prof()     { return LEVELS[this.char.level].prof; },
-  spellDC()  { return 8 + this.prof + this.mods.wis; },
-  spellAtk() { return this.prof + this.mods.wis; },
+  spellDC()  { return 8 + this.prof + this.mods.wis + (this.equipmentBonuses.spell_dc || 0); },
+  spellAtk() { return this.prof + this.mods.wis + (this.equipmentBonuses.attack || 0); },
 
   initiativeBonus() {
-    return this.mods.dex + (this.activeFeatIds.includes('alert') ? 5 : 0);
+    return this.mods.dex
+      + (this.activeFeatIds.includes('alert') ? 5 : 0)
+      + (this.equipmentBonuses.initiative || 0);
   },
 
-  ca() { return this.char.caManual; },
+  ca() { return this.char.useCaAuto ? this.caAuto : this.char.caManual; },
 
   // ── Points de vie ────────────────────────────────────────────
 
@@ -62,7 +126,7 @@ const appComputed = {
     let base = total + this.mods.con * this.char.level;
     if (this.activeFeatIds.includes('tough')) base += 2 * this.char.level;
     if ((this.char.exhaustion || 0) >= 4) base = Math.floor(base / 2);
-    return base + (this.char.hpMaxBonus || 0);
+    return base + (this.char.hpMaxBonus || 0) + (this.equipmentBonuses.hp_max || 0);
   },
 
   hdSummary() {
@@ -287,6 +351,8 @@ const appComputed = {
   asiLevels()       { return CLERIC_ASI_LEVELS; },
   allConditions()   { return CONDITIONS; },
   exhaustionEffects(){ return EXHAUSTION_EFFECTS; },
+  equipmentSlots()  { return EQUIPMENT_SLOTS; },
+  bonusTypes()      { return BONUS_TYPES; },
 
   suggestedSpells() {
     const removed = new Set(this.char.removedSpells || []);
@@ -299,14 +365,14 @@ const appComputed = {
   },
 
   statsDisplay() {
-    const s = this.stats, m = this.mods, a = this.asiBonus, r = this.char.racial;
+    const s = this.stats, m = this.mods, a = this.asiBonus, r = this.char.racial, e = this.equipmentBonuses;
     return [
-      { key:'wis', label:'Sagesse ★',    total:s.wis, mod:m.wis, base:this.char.base.wis, racial:r.wis, asi:a.wis||0, primary:true  },
-      { key:'int', label:'Intelligence', total:s.int, mod:m.int, base:this.char.base.int, racial:r.int, asi:a.int||0, primary:true  },
-      { key:'con', label:'Constitution', total:s.con, mod:m.con, base:this.char.base.con, racial:r.con, asi:a.con||0, primary:false },
-      { key:'dex', label:'Dextérité',    total:s.dex, mod:m.dex, base:this.char.base.dex, racial:r.dex, asi:a.dex||0, primary:false },
-      { key:'cha', label:'Charisme',     total:s.cha, mod:m.cha, base:this.char.base.cha, racial:r.cha, asi:a.cha||0, primary:false },
-      { key:'str', label:'Force',        total:s.str, mod:m.str, base:this.char.base.str, racial:r.str, asi:a.str||0, primary:false },
+      { key:'wis', label:'Sagesse ★',    total:s.wis, mod:m.wis, base:this.char.base.wis, racial:r.wis, asi:a.wis||0, equip:e.wis||0, primary:true  },
+      { key:'int', label:'Intelligence', total:s.int, mod:m.int, base:this.char.base.int, racial:r.int, asi:a.int||0, equip:e.int||0, primary:true  },
+      { key:'con', label:'Constitution', total:s.con, mod:m.con, base:this.char.base.con, racial:r.con, asi:a.con||0, equip:e.con||0, primary:false },
+      { key:'dex', label:'Dextérité',    total:s.dex, mod:m.dex, base:this.char.base.dex, racial:r.dex, asi:a.dex||0, equip:e.dex||0, primary:false },
+      { key:'cha', label:'Charisme',     total:s.cha, mod:m.cha, base:this.char.base.cha, racial:r.cha, asi:a.cha||0, equip:e.cha||0, primary:false },
+      { key:'str', label:'Force',        total:s.str, mod:m.str, base:this.char.base.str, racial:r.str, asi:a.str||0, equip:e.str||0, primary:false },
     ];
   },
 };

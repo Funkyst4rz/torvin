@@ -230,6 +230,126 @@
 .equip-delete { font-family:'Nunito', sans-serif;font-size:0.5rem;background:none;border:none;color:var(--red);cursor:pointer;opacity:.3;padding:0;margin-left:auto; }
 .equip-delete:hover { opacity:1; }
 
+/* -- SLOT GRID ------------------------------------------------- */
+.slot-section { margin-bottom:14px; }
+.slot-grid {
+  display:grid;grid-template-columns:repeat(5,1fr);gap:5px;margin-top:8px;
+}
+.slot-card {
+  border:1.5px solid var(--border-light);background:var(--parchment-dark);
+  padding:6px 5px;cursor:pointer;
+  display:flex;flex-direction:column;align-items:center;gap:2px;
+  min-height:64px;transition:border-color .15s,background .15s;
+  position:relative;
+}
+.slot-card:hover { border-color:var(--gold);background:rgba(196,152,48,.07); }
+.slot-card.slot-equipped { border-color:var(--border);background:rgba(160,130,74,.12); }
+.slot-card.slot-equipped:hover { border-color:var(--gold); }
+.slot-icon { font-size:1rem;line-height:1;margin-bottom:1px; }
+.slot-type-label {
+  font-family:'Nunito', sans-serif;font-size:0.47rem;font-weight:700;
+  text-transform:uppercase;letter-spacing:.4px;color:var(--ink-light);
+}
+.slot-item-name {
+  font-family:'Nunito', sans-serif;font-size:0.59rem;font-weight:600;
+  color:var(--ink);text-align:center;max-width:100%;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width:100%;padding:0 2px;
+}
+.slot-armor-info {
+  font-family:'Nunito', sans-serif;font-size:0.44rem;color:var(--ink-light);
+}
+.slot-bonus-badge {
+  font-family:'Nunito', sans-serif;font-size:0.5rem;font-weight:700;
+  color:var(--gold);text-align:center;
+}
+/* Toggle CA auto/manuel */
+.ca-mode-toggle {
+  cursor:pointer;font-size:0.56rem;padding:0 4px;
+  border:1px solid var(--border-light);border-radius:2px;
+  font-family:'Nunito', sans-serif;font-weight:700;
+  vertical-align:middle;margin-left:3px;opacity:.65;line-height:1.4;
+}
+.ca-mode-toggle:hover { opacity:1;border-color:var(--gold); }
+/* Badge équipement sur les stats */
+.stat-equip-badge {
+  font-family:'Nunito', sans-serif;font-size:0.41rem;font-weight:700;
+  color:var(--green);position:absolute;top:2px;left:3px;
+}
+
+/* -- SLOT MODAL ------------------------------------------------ */
+.slot-modal-overlay {
+  position:fixed;inset:0;z-index:200;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(24,12,4,.7);animation:fadeIn .12s ease;
+}
+.slot-modal-box {
+  background:var(--parchment);border:1.5px solid var(--border);
+  padding:18px 20px;width:340px;max-width:95vw;max-height:85vh;
+  overflow-y:auto;box-shadow:0 8px 32px rgba(0,0,0,.5);border-radius:2px;
+}
+.slot-modal-header {
+  display:flex;align-items:center;gap:8px;margin-bottom:12px;
+}
+.slot-modal-icon { font-size:1.25rem;line-height:1; }
+.slot-modal-title {
+  font-family:'Nunito', sans-serif;font-size:0.81rem;font-weight:700;
+  color:var(--ink);flex:1;
+}
+.slot-section-label {
+  font-family:'Nunito', sans-serif;font-size:0.59rem;font-weight:700;
+  text-transform:uppercase;letter-spacing:.5px;color:var(--ink-light);
+  border-bottom:1px solid var(--border-light);padding-bottom:3px;margin:10px 0 6px;
+}
+.slot-field { display:flex;align-items:center;gap:8px;margin-bottom:7px; }
+.slot-field-label {
+  font-family:'Nunito', sans-serif;font-size:0.59rem;font-weight:700;
+  text-transform:uppercase;letter-spacing:.3px;color:var(--ink-light);min-width:72px;
+}
+.slot-field-input {
+  flex:1;font-family:'Nunito', sans-serif;font-size:0.81rem;
+  background:rgba(160,130,74,.08);border:1px solid var(--border);
+  color:var(--ink);outline:none;padding:4px 8px;
+}
+.slot-field-input:focus { border-color:var(--gold-light); }
+.slot-field-select {
+  flex:1;font-family:'Nunito', sans-serif;font-size:0.75rem;
+  background:var(--parchment);border:1px solid var(--border);
+  color:var(--ink);outline:none;padding:3px 6px;cursor:pointer;
+}
+.slot-field-select:focus { border-color:var(--gold-light); }
+.slot-bonus-row { display:flex;align-items:center;gap:5px;margin-bottom:4px; }
+.slot-bonus-type {
+  font-family:'Nunito', sans-serif;font-size:0.69rem;
+  background:var(--parchment);border:1px solid var(--border);
+  color:var(--ink);outline:none;padding:3px 4px;cursor:pointer;flex:1;
+}
+.slot-bonus-val {
+  font-family:'Nunito', sans-serif;font-size:0.81rem;font-weight:700;
+  width:44px;text-align:center;
+  background:rgba(160,130,74,.1);border:1px solid var(--border);
+  color:var(--ink);outline:none;padding:3px 4px;
+}
+.slot-bonus-type:focus,.slot-bonus-val:focus { border-color:var(--gold-light); }
+.slot-bonus-del { background:none;border:none;color:var(--red);cursor:pointer;font-size:0.75rem;opacity:.4;padding:0 2px; }
+.slot-bonus-del:hover { opacity:1; }
+.slot-add-bonus {
+  font-family:'Nunito', sans-serif;font-size:0.59rem;font-weight:700;
+  color:var(--gold);background:none;border:1px dashed var(--gold);
+  padding:3px 10px;cursor:pointer;text-transform:uppercase;
+  letter-spacing:.4px;margin-top:4px;width:100%;
+}
+.slot-add-bonus:hover { background:rgba(196,152,48,.07); }
+.slot-modal-footer {
+  display:flex;justify-content:space-between;align-items:center;
+  margin-top:12px;padding-top:8px;border-top:1px solid var(--border-light);
+}
+.slot-clear-btn {
+  font-family:'Nunito', sans-serif;font-size:0.59rem;font-weight:600;
+  color:var(--ink-light);background:none;border:1px solid var(--border-light);
+  padding:4px 10px;cursor:pointer;text-transform:uppercase;letter-spacing:.3px;
+}
+.slot-clear-btn:hover { border-color:var(--border);color:var(--red); }
+
 /* â”€â”€ PERSONALITY â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .trait-block { border:1px solid var(--border);background:var(--parchment-dark);padding:8px 10px;margin-bottom:6px; }
 .trait-label { font-family:'Nunito', sans-serif;font-size:0.59rem;font-weight:600;text-transform:uppercase;letter-spacing:.8px;color:var(--gold);display:block;margin-bottom:4px; }
