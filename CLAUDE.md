@@ -93,7 +93,7 @@ D:\torvin\
 |--------|---------|---------|
 | `main` | Personnage | Stats, compétences, PV, dés de vie, équipement |
 | `spells` | Sorts | Emplacements, sorts mineurs, domaine, préparés |
-| `combat` | Combat | CA, initiative, attaques, concentration, conditions |
+| `combat` | Combat | CA (auto/manuelle), initiative, concentration, conditions |
 | `histoire` | Histoire | Traits, idéaux, lien, défaut, background narratif |
 | `notes` | Notes | Zone de texte libre, phrases situationnelles |
 
@@ -123,6 +123,22 @@ rollInitiative()             // Lance 1d20 + DEX + bonus Alerte, stocke dans ini
 showInfo(key, ...args)       // Résout STRINGS.info[key] et ouvre le modal info
 openStatInfo(key)            // Ouvre le modal d'info d'une caractéristique
 openSaveInfo(sv)             // Ouvre le modal d'info d'un jet de sauvegarde
+openSlotModal(key)           // Ouvre le modal d'édition d'un emplacement d'équipement
+closeSlotModal()             // Ferme le modal d'équipement
+addSlotBonus(key)            // Ajoute un bonus vide au slot (type:'', value:0)
+removeSlotBonus(key, i)      // Supprime le bonus à l'index i du slot
+clearSlot(key)               // Vide le slot (name, notes, bonuses, champs armure/arme)
+slotBonusSummary(key)        // Retourne un résumé textuel des bonus actifs du slot
+
+// computed.js — propriétés clés dans appComputed
+equipmentBonuses()           // Agrège tous les bonus de tous les slots (ca, str, dex…)
+caAuto()                     // CA calculée : armorBase + DEX (selon type) + bonus CA équipement
+caAutoFormula()              // Description textuelle de la formule CA auto (pour tooltip)
+ca()                         // CA effective : caAuto si useCaAuto, sinon caManual
+equipmentSlots()             // Renvoie EQUIPMENT_SLOTS (itération dans le template)
+bonusTypes()                 // Renvoie BONUS_TYPES (options du select dans le modal)
+slotData(key)                // Renvoie char.slots[key] avec valeurs par défaut
+currentSlotDef()             // Définition (EQUIPMENT_SLOTS) du slot ouvert dans le modal
 ```
 
 ### Ce qui se recalcule dynamiquement par niveau
@@ -145,6 +161,8 @@ CONDITIONS       // Conditions de combat D&D 5e
 EXHAUSTION_EFFECTS // Effets d'épuisement par niveau
 STAT_LABELS      // Noms FR des 6 caractéristiques
 SKILLS           // Liste des compétences (key, name, stat)
+EQUIPMENT_SLOTS  // 10 emplacements (key, label, icon, hasArmor, hasWeapon)
+BONUS_TYPES      // 12 types de bonus (ca, str, dex, con, int, wis, cha, hp_max, speed, initiative, attack, spell_dc)
 
 // characters/torvin.js (données spécifiques au personnage)
 CLERIC_ASI_LEVELS    // [4, 8] — niveaux d'amélioration du clerc
@@ -164,8 +182,17 @@ STRINGS.info     // Contenu des modaux "info" — valeurs statiques ou fonctions
 ### Champs obligatoires de DEFAULT_CHAR (vérifiés par CI)
 `name · level · base · racial · asi · hpRolls · hpCurrent · currency · languages · phrases · concentration`
 
-### CA — champ manuel
-`caManual` (number) — la CA n'est **pas** calculée automatiquement. Le joueur la saisit directement dans l'onglet Personnage. Les champs `armorBase`, `armorType`, `useShield` sont conservés pour un calcul futur éventuel mais n'ont pas d'effet actuel.
+### Équipement — structure des slots
+`char.slots` : objet indexé par `key` (arme, armure, bouclier, casque, cape, amulette, anneau1, anneau2, gants, bottes).  
+Chaque slot : `{ name, notes, bonuses: [{type, value}] }`.  
+Slot `armure` : champs supplémentaires `armorBase` (number) et `armorType` ('light'|'medium'|'heavy'|'none').  
+Slot `arme` : champs supplémentaires `atkBonus` (string), `damage` (string), `damageType` (string), `range` (string).
+
+### CA — auto ou manuelle
+- `char.useCaAuto` (boolean) — toggle ⚡/🔧 dans l'onglet Combat
+- Mode auto : `caAuto` computed — `armorBase + DEX` (selon type d'armure) + bonus CA de l'équipement
+- Mode manuel : `char.caManual` (number) — saisie directe par le joueur
+- La migration v2→v3 initialise `useCaAuto: false` pour les anciennes sauvegardes (préserve la CA manuelle)
 
 ---
 
@@ -244,5 +271,8 @@ Exemples : `feat(combat): ajouter tracker de conditions` · `fix(save): corriger
 - [x] Aide upcast dans le modal de sort (PHB 2014)
 - [x] Bonus HP max (champ manuel additionnel au calcul PV max)
 - [x] Découpage app.js en modules (computed.js, storage.js) + CSS par onglet (css/)
+- [x] Grille d'équipement 10 slots avec bonus structurés (CA, stats, PV max, initiative, DD…)
+- [x] Slot Arme enrichi (atkBonus, damage, damageType, range) — remplace la table d'attaques
+- [x] CA auto/manuelle toggle (useCaAuto, caAuto computed)
 - [ ] Partage en lecture seule (URL avec état encodé en base64)
 - [ ] Support multi-personnages

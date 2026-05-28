@@ -10,7 +10,7 @@ Une fiche de personnage interactive pour **Donjons & Dragons 5e**, construite en
 
 ### Règles D&D 5e implémentées
 - **Caractéristiques** : base + bonus racial + ASI/Dons par niveau
-- **Classe d'armure** : saisie manuelle (champ `caManual`)
+- **Classe d'armure** : calcul automatique (type d'armure + DEX) ou saisie manuelle — toggle ⚡/🔧
 - **PV max** : dés de vie + modificateur CON × niveau + Don Robuste + bonus HP max manuel
 - **PV temporaires** : champ dédié, reset à 0 au repos long
 - **Épuisement** : PV max réduit de moitié au niveau 4, vitesse à 0 au niveau 5
@@ -26,6 +26,8 @@ Une fiche de personnage interactive pour **Donjons & Dragons 5e**, construite en
 
 ### Interface
 - **5 onglets** : Personnage | Sorts | Combat | Histoire | Notes
+- **Grille d'équipement** : 10 emplacements (arme, armure, bouclier, casque, cape, amulette, 2 anneaux, gants, bottes) avec bonus structurés (CA, stats, PV max, initiative, DD…)
+- **Slot Arme** : champs dédiés (bonus d'attaque, dégâts, type de dégâts, portée) affichés directement sur la carte
 - Tous les champs sont **éditables** (stats, PV, équipement, sorts, phrases...)
 - **Mode sombre** : toggle lune/soleil, persisté en localStorage
 - **Portrait** du personnage avec lightbox au clic (onglet Histoire)
