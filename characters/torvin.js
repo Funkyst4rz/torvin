@@ -21,7 +21,7 @@ const CHARACTER_MIGRATIONS = [
     if (!state.slots) {
       state.useCaAuto = false; // Les anciennes sauvegardes gardent la CA manuelle
       state.slots = {
-        arme:     { name:'', notes:'', bonuses:[] },
+        arme:     { name:'', notes:'', atkBonus:'', damage:'', damageType:'', range:'Corps-à-corps', bonuses:[] },
         armure:   { name:'', notes:'', armorBase:0, armorType:'none', bonuses:[] },
         bouclier: { name:'', notes:'', bonuses:[] },
         casque:   { name:'', notes:'', bonuses:[] },
@@ -34,6 +34,15 @@ const CHARACTER_MIGRATIONS = [
       };
     }
     if (state.useCaAuto === undefined) state.useCaAuto = false;
+  },
+  // v3 → v4 : ajouter les champs arme au slot arme
+  state => {
+    if (state.slots && state.slots.arme && !('atkBonus' in state.slots.arme)) {
+      state.slots.arme.atkBonus   = '';
+      state.slots.arme.damage     = '';
+      state.slots.arme.damageType = '';
+      state.slots.arme.range      = 'Corps-à-corps';
+    }
   },
 ];
 
@@ -169,7 +178,7 @@ const DEFAULT_CHAR = {
 
   // ── Emplacements d'équipement ─────────────────────────────────
   slots: {
-    arme:     { name:"Masse d'armes",  notes:'', bonuses:[] },
+    arme:     { name:"Masse d'armes",  notes:'', atkBonus:'+1', damage:'1d6-1', damageType:'contondant', range:'Corps-à-corps', bonuses:[] },
     armure:   { name:'Armure de cuir', notes:'', armorBase:11, armorType:'light', bonuses:[] },
     bouclier: { name:'Bouclier',       notes:'', bonuses:[{ type:'ca', value:2 }] },
     casque:   { name:'',               notes:'', bonuses:[] },
@@ -191,7 +200,6 @@ const DEFAULT_CHAR = {
     "Lettre de guilde · 15 po",
   ],
   customEquipment: [],
-  customAttacks:   [],
 
   // Harmonisation (max 3 objets magiques)
   attunedItems: [],

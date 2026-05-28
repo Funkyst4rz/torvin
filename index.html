@@ -136,6 +136,24 @@
         <input class="slot-field-input" type="text" v-model="slotData.name" :placeholder="currentSlotDef.label + '…'">
       </div>
 
+      <!-- Arme uniquement : bonus att. + dégâts + type + portée -->
+      <template v-if="currentSlotDef.hasWeapon">
+        <div class="slot-section-label">Arme</div>
+        <div class="slot-field">
+          <span class="slot-field-label">Bonus att.</span>
+          <input class="slot-field-input" type="text" v-model="slotData.atkBonus" placeholder="+5" style="max-width:70px">
+        </div>
+        <div class="slot-field">
+          <span class="slot-field-label">Dégâts</span>
+          <input class="slot-field-input" type="text" v-model="slotData.damage" placeholder="1d6+3">
+          <input class="slot-field-input" type="text" v-model="slotData.damageType" placeholder="contondant" style="max-width:110px">
+        </div>
+        <div class="slot-field">
+          <span class="slot-field-label">Portée</span>
+          <input class="slot-field-input" type="text" v-model="slotData.range" placeholder="Corps-à-corps">
+        </div>
+      </template>
+
       <!-- Armure uniquement : CA de base + type -->
       <template v-if="currentSlotDef.hasArmor">
         <div class="slot-section-label">Armure</div>
@@ -451,30 +469,6 @@
               </div>
             </div>
 
-            <!-- Attaques -->
-            <div class="section-box">
-              <div class="section-title">Attaques</div>
-              <table class="attacks-table">
-                <thead><tr><th>Nom</th><th>Bonus att.</th><th>Dégâts / Type</th></tr></thead>
-                <tbody>
-                  <tr v-for="(atk, i) in char.customAttacks" :key="i">
-                    <td>{{ atk.name }}</td>
-                    <td>{{ atk.bonus }}</td>
-                    <td style="display:flex;justify-content:space-between;align-items:center">
-                      {{ atk.damage }}
-                      <button class="delete-btn" @click="_removeAt('customAttacks', i)" title="Supprimer">×</button>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-              <div class="add-form">
-                <input class="add-input add-input-sm" type="text" v-model="newAtkName" placeholder="Nom…" @keyup.enter="addCustomAttack">
-                <input class="add-input add-input-xs" type="text" v-model="newAtkBonus" placeholder="+X" @keyup.enter="addCustomAttack">
-                <input class="add-input" type="text" v-model="newAtkDmg" placeholder="Dés / type" @keyup.enter="addCustomAttack">
-                <button class="add-btn" @click="addCustomAttack" title="Ajouter">+</button>
-              </div>
-            </div>
-
             <!-- Équipement -->
             <div class="section-box">
               <div class="section-title">Équipement</div>
@@ -577,6 +571,9 @@
               <span class="slot-item-name">{{ char.slots[slot.key] && char.slots[slot.key].name || '—' }}</span>
               <span v-if="slot.hasArmor && char.slots[slot.key] && char.slots[slot.key].armorBase" class="slot-armor-info">
                 Base {{ char.slots[slot.key].armorBase }}
+              </span>
+              <span v-if="slot.hasWeapon && char.slots[slot.key] && char.slots[slot.key].atkBonus" class="slot-armor-info">
+                {{ char.slots[slot.key].atkBonus }} · {{ char.slots[slot.key].damage }} {{ char.slots[slot.key].damageType }}
               </span>
               <span v-if="slotBonusSummary(slot.key)" class="slot-bonus-badge">✦ {{ slotBonusSummary(slot.key) }}</span>
             </div>

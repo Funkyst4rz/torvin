@@ -57,7 +57,6 @@ const app = createApp({
 
       // Inline add forms
       newEquip: '',
-      newAtkName: '', newAtkBonus: '', newAtkDmg: '',
       newSpellLvl: 1, newSpellName: '', newSpellTag: '', newSpellConc: false,
 
       // New add forms
@@ -446,10 +445,11 @@ const app = createApp({
     },
     clearSlot(key) {
       const slot = this.char.slots[key];
-      slot.name   = '';
-      slot.notes  = '';
+      slot.name    = '';
+      slot.notes   = '';
       slot.bonuses = [];
-      if ('armorBase' in slot) { slot.armorBase = 0; slot.armorType = 'none'; }
+      if ('armorBase'  in slot) { slot.armorBase = 0; slot.armorType = 'none'; }
+      if ('atkBonus'   in slot) { slot.atkBonus = ''; slot.damage = ''; slot.damageType = ''; slot.range = 'Corps-à-corps'; }
     },
 
     slotBonusSummary(key) {
@@ -469,15 +469,6 @@ const app = createApp({
       if (!this.newEquip.trim()) return;
       this.char.customEquipment = [...this.char.customEquipment, this.newEquip.trim()];
       this.newEquip = '';
-    },
-
-    // ── Custom attacks ───────────────────────
-    addCustomAttack() {
-      if (!this.newAtkName && !this.newAtkDmg) return;
-      this.char.customAttacks = [...this.char.customAttacks, {
-        name: this.newAtkName || '—', bonus: this.newAtkBonus || '—', damage: this.newAtkDmg || '—',
-      }];
-      this.newAtkName = ''; this.newAtkBonus = ''; this.newAtkDmg = '';
     },
 
     // ── Skill proficiencies ──────────────────

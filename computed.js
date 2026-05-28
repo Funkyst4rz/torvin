@@ -152,12 +152,6 @@ const appComputed = {
     return this.char.speed;
   },
 
-  maceAttack() { return this.sign(this.mods.str + this.prof); },
-  maceDamage() {
-    const m = this.mods.str;
-    return `1d6${m > 0 ? '+'+m : m < 0 ? m : ''} contondant`;
-  },
-
   tollDamage() {
     const d = this.cantripDice;
     const bonus = this.char.level >= 8 ? `+${this.mods.wis}` : '';

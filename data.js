@@ -215,7 +215,7 @@ const SKILLS = [
 
 // Emplacements d'équipement (ordre = position dans la grille 5×2)
 const EQUIPMENT_SLOTS = [
-  { key:'arme',     label:'Arme',      icon:'⚔',  hasArmor:false },
+  { key:'arme',     label:'Arme',      icon:'⚔',  hasArmor:false, hasWeapon:true },
   { key:'armure',   label:'Armure',    icon:'🛡',  hasArmor:true  },
   { key:'bouclier', label:'Bouclier',  icon:'🔰',  hasArmor:false },
   { key:'casque',   label:'Casque',    icon:'⛑',  hasArmor:false },
