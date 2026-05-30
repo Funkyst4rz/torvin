@@ -199,6 +199,7 @@ body {
   display: inline-flex; align-items: center; justify-content: center;
   margin-left: 4px; vertical-align: middle;
 }
+.tab-icon { display: none; }
 .tab-content { display: none; }
 .tab-content.active { display: block; }
 

@@ -23,6 +23,7 @@ const app = createApp({
       darkMode: localStorage.getItem('torvin-dark') === '1',
       showConfig: false,
       showDice: false,
+      showMoreMenu: false,
       showPortrait: false,
       diceResult: null,
       diceSides: null,

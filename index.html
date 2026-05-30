@@ -224,13 +224,22 @@
       <!-- SAVE BAR -->
       <div class="save-bar">
         <button class="save-btn primary" @click="saveToGitHub">💾 Sauvegarder</button>
-        <button class="save-btn" @click="loadFromGitHub">↓ Charger</button>
-        <button class="save-btn" @click="exportJSON">⬇ Export JSON</button>
-        <button class="save-btn" @click="importJSON">⬆ Import</button>
-        <button class="save-btn" @click="showDice=!showDice">🎲 Dés</button>
-        <button class="save-btn" @click="showConfig=!showConfig">⚙ Config</button>
-        <button class="save-btn dark-toggle" @click="darkMode=!darkMode" :title="darkMode ? 'Mode clair' : 'Mode sombre'">{{ darkMode ? '☀' : '🌙' }}</button>
+        <button class="save-btn desk-only" @click="loadFromGitHub">↓ Charger</button>
+        <button class="save-btn desk-only" @click="exportJSON">⬇ Export JSON</button>
+        <button class="save-btn desk-only" @click="importJSON">⬆ Import</button>
+        <button class="save-btn desk-only" @click="showDice=!showDice">🎲 Dés</button>
+        <button class="save-btn desk-only" @click="showConfig=!showConfig">⚙ Config</button>
+        <button class="save-btn dark-toggle desk-only" @click="darkMode=!darkMode" :title="darkMode ? 'Mode clair' : 'Mode sombre'">{{ darkMode ? '☀' : '🌙' }}</button>
+        <button class="save-btn mob-only" @click="showMoreMenu=!showMoreMenu" :title="showMoreMenu ? 'Fermer' : 'Plus d\'options'">{{ showMoreMenu ? '✕' : '⋮' }}</button>
         <span class="save-status" :class="saveStatusType">{{ saveStatus }}</span>
+        <div class="more-menu" v-if="showMoreMenu">
+          <button class="save-btn" @click="loadFromGitHub;showMoreMenu=false">↓ Charger</button>
+          <button class="save-btn" @click="exportJSON;showMoreMenu=false">⬇ Export JSON</button>
+          <button class="save-btn" @click="importJSON;showMoreMenu=false">⬆ Import</button>
+          <button class="save-btn" @click="showDice=!showDice;showMoreMenu=false">🎲 Dés</button>
+          <button class="save-btn" @click="showConfig=!showConfig;showMoreMenu=false">⚙ Config</button>
+          <button class="save-btn dark-toggle" @click="darkMode=!darkMode">{{ darkMode ? '☀' : '🌙' }}</button>
+        </div>
       </div>
 
       <!-- CONFIG PANEL -->
@@ -295,15 +304,15 @@
 
       <!-- TABS -->
       <div class="tabs">
-        <div class="tab" :class="{active:activeTab==='main'}"     @click="switchTab('main')">Personnage</div>
+        <div class="tab" :class="{active:activeTab==='main'}"     @click="switchTab('main')"><span class="tab-icon">◆</span>Personnage</div>
         <div class="tab" :class="{active:activeTab==='spells'}"   @click="switchTab('spells')">
-          Sorts<span v-if="char.concentration" class="tab-badge">!</span>
+          <span class="tab-icon">✦</span>Sorts<span v-if="char.concentration" class="tab-badge">!</span>
         </div>
         <div class="tab" :class="{active:activeTab==='combat'}"   @click="switchTab('combat')">
-          Combat<span v-if="char.conditions.length>0" class="tab-badge">!</span>
+          <span class="tab-icon">⚔</span>Combat<span v-if="char.conditions.length>0" class="tab-badge">!</span>
         </div>
-        <div class="tab" :class="{active:activeTab==='histoire'}" @click="switchTab('histoire')">Histoire</div>
-        <div class="tab" :class="{active:activeTab==='notes'}"    @click="switchTab('notes')">Notes</div>
+        <div class="tab" :class="{active:activeTab==='histoire'}" @click="switchTab('histoire')"><span class="tab-icon">❧</span>Histoire</div>
+        <div class="tab" :class="{active:activeTab==='notes'}"    @click="switchTab('notes')"><span class="tab-icon">✏</span>Notes</div>
       </div>
 
       <!-- ════════════════════════════════════
@@ -1106,8 +1115,6 @@
     </div><!-- /content -->
   </div><!-- /page -->
 
-  <!-- FLOATING SAVE (mobile) -->
-  <button class="floating-save" @click="saveToGitHub" title="Sauvegarder sur GitHub">💾</button>
 
 </div><!-- /app -->
 
