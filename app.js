@@ -25,6 +25,8 @@ const app = createApp({
       showDice: false,
       showMoreMenu: false,
       showPortrait: false,
+      randomPhrase: null,
+      universalReflexes: UNIVERSAL_REFLEXES,
       diceResult: null,
       diceSides: null,
       diceRolls: [],
@@ -133,6 +135,17 @@ const app = createApp({
       const el = e.target;
       el.style.height = 'auto';
       el.style.height = el.scrollHeight + 'px';
+    },
+    drawRandomPhrase() {
+      const pool = [];
+      this.char.phrases.forEach(p => {
+        if (p.text && p.text.trim())
+          pool.push({ label: p.situation || '', text: p.text.trim() });
+      });
+      UNIVERSAL_REFLEXES.forEach(text => pool.push({ label: '', text }));
+      if (!pool.length) return;
+      const idx = Math.floor(Math.random() * pool.length);
+      this.randomPhrase = pool[idx];
     },
     statLabel(k) { return STAT_LABELS[k] || k; },
     /** Supprime l'élément à l'index i dans char[field] (immutable) */

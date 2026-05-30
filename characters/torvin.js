@@ -69,6 +69,16 @@ const FEATURES_BY_LEVEL = [
   { minLvl:10, name:'Intervention divine',             desc:"Appel à Azouth pour aide miraculeuse. Succès auto si le jet ≤ niveau. 1× par repos long." },
 ];
 
+// Réflexes universels de roleplay — toujours disponibles dans le tirage aléatoire
+const UNIVERSAL_REFLEXES = [
+  "Intéressant... j'avais lu quelque chose à ce sujet.",
+  "Si vous me permettez une observation non sollicitée...",
+  "Techniquement parlant...",
+  "Ce n'est pas ce que j'aurais anticipé, mais bon.",
+  "J'ai consigné quelque chose de similaire dans mes notes. Laissez-moi vérifier.",
+  "Ce serait peut-être le moment de prendre du recul et d'analyser la situation.",
+];
+
 // Bonus raciaux — Gnome des Roches
 const DEFAULT_RACIAL = { str:0, dex:0, con:1, int:2, wis:0, cha:0 };
 

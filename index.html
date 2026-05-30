@@ -981,6 +981,19 @@
            TAB HISTOIRE
            ════════════════════════════════════ -->
       <div class="tab-content" :class="{active:activeTab==='histoire'}">
+
+        <!-- Tireur de phrase aléatoire -->
+        <div class="phrase-draw-bar">
+          <button class="phrase-draw-btn" @click="drawRandomPhrase">🎲 Phrase aléatoire</button>
+          <transition name="phrase-fade">
+            <div class="phrase-draw-result" v-if="randomPhrase" :key="randomPhrase.text">
+              <div class="phrase-draw-label" v-if="randomPhrase.label">{{ randomPhrase.label }}</div>
+              <div class="phrase-draw-text">« {{ randomPhrase.text }} »</div>
+              <button class="phrase-draw-close" @click="randomPhrase=null" title="Fermer">✕</button>
+            </div>
+          </transition>
+        </div>
+
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
 
           <!-- Col 1 : Personnalité -->
@@ -1019,13 +1032,11 @@
               <textarea class="phrase-textarea" v-model="char.phrases[i].text" rows="1" spellcheck="false" @input="autoResize($event)"></textarea>
             </div>
             <!-- Réflexes universels -->
-            <div style="margin-top:10px;padding:10px;border:1px solid var(--border);background:rgba(92,61,30,.04)">
+            <div style="margin-top:10px;padding:10px;border:1px solid var(--border);background:rgba(255,255,255,.02)">
               <div class="section-title" style="margin-bottom:6px">Réflexes universels</div>
-              <div style="font-family:'Nunito', sans-serif;font-size:0.75rem;color:var(--ink-mid);font-style:italic;line-height:1.9">
-                « Intéressant... j'avais lu quelque chose à ce sujet. »<br>
-                « Si vous me permettez une observation non sollicitée... »<br>
-                « Techniquement parlant... »<br>
-                « Ce n'est pas ce que j'aurais anticipé, mais bon. »
+              <div v-for="(r, i) in universalReflexes" :key="i"
+                   style="font-family:'Nunito', sans-serif;font-size:0.75rem;color:var(--ink-mid);font-style:italic;line-height:1.9">
+                « {{ r }} »
               </div>
             </div>
           </div>

@@ -1,4 +1,43 @@
 ﻿/* â”€â”€ HISTOIRE TAB â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* Tireur de phrase aléatoire */
+.phrase-draw-bar {
+  margin-bottom:14px;
+}
+.phrase-draw-btn {
+  font-family:'Nunito', sans-serif;font-size:0.69rem;font-weight:700;
+  text-transform:uppercase;letter-spacing:.8px;
+  padding:8px 16px;border:1.5px solid var(--gold);
+  background:rgba(212,168,67,.1);color:var(--gold);
+  cursor:pointer;transition:all .2s;border-radius:2px;
+}
+.phrase-draw-btn:hover { background:rgba(212,168,67,.2); }
+.phrase-draw-result {
+  margin-top:10px;padding:12px 14px;
+  border:1.5px solid var(--gold);border-left:4px solid var(--gold);
+  background:rgba(212,168,67,.06);
+  position:relative;
+}
+.phrase-draw-label {
+  font-family:'Nunito', sans-serif;font-size:0.59rem;font-weight:700;
+  text-transform:uppercase;letter-spacing:1px;color:var(--gold);
+  margin-bottom:6px;
+}
+.phrase-draw-text {
+  font-family:'Crimson Text', serif;font-size:1rem;
+  font-style:italic;color:var(--ink);line-height:1.55;
+  padding-right:24px;
+}
+.phrase-draw-close {
+  position:absolute;top:8px;right:10px;
+  background:none;border:none;color:var(--ink-light);
+  font-size:0.69rem;cursor:pointer;opacity:.5;transition:opacity .15s;
+}
+.phrase-draw-close:hover { opacity:1; }
+.phrase-fade-enter-active { transition:opacity .25s, transform .2s; }
+.phrase-fade-leave-active { transition:opacity .15s; }
+.phrase-fade-enter-from { opacity:0;transform:translateY(-4px); }
+.phrase-fade-leave-to   { opacity:0; }
+
 .phrase-block { border-left:3px solid var(--gold);padding:6px 10px;margin-bottom:6px;background:rgba(138,110,32,.05); }
 .phrase-situation-input {
   font-family:'Nunito', sans-serif;font-size:0.63rem;font-weight:600;text-transform:uppercase;color:var(--gold);
