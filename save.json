@@ -29,18 +29,12 @@
       "bonuses": {
         "wis": 2
       }
-    },
-    "8": {
-      "type": "asi",
-      "bonuses": {
-        "wis": 2
-      }
     }
   },
   "caManual": 14,
   "useCaAuto": true,
-  "armorBase": 10,
-  "armorType": "medium",
+  "armorBase": 11,
+  "armorType": "light",
   "useShield": true,
   "speed": 7.5,
   "hpRolls": [
@@ -48,13 +42,13 @@
     8,
     6,
     6,
-    6,
-    1,
-    3,
-    6,
-    3,
     5,
-    6
+    4,
+    1,
+    7,
+    4,
+    0,
+    0
   ],
   "hpCurrent": 26,
   "hpTemp": 0,
@@ -66,13 +60,7 @@
     "4": 0,
     "5": 0
   },
-  "spellChecks": {
-    "cs-spweapon": false,
-    "sc-bd": false,
-    "sc-hp": false,
-    "sc-d2-0": false,
-    "sc-d2-1": false
-  },
+  "spellChecks": {},
   "cdUsed": 0,
   "customSpells": {
     "0": [
@@ -83,68 +71,52 @@
         "conc": false
       },
       {
-        "id": "guidance",
-        "name": "Guidance",
-        "tag": "utilitaire",
-        "conc": true
-      },
-      {
         "id": "mageHand",
         "name": "Main du mage",
         "tag": "utilitaire",
         "conc": false
       },
       {
-        "id": "thaumaturgy",
-        "name": "Thaumaturgie",
+        "id": "minorIllusion",
+        "name": "Illusion mineure",
         "tag": "utilitaire",
+        "conc": false,
+        "racial": false
+      },
+      {
+        "id": "guidance",
+        "name": "Guidance",
+        "tag": "utilitaire",
+        "conc": true
+      },
+      {
+        "id": "sacredflame",
+        "name": "Flamme sacrée",
+        "tag": "DD Dex",
         "conc": false
       },
       {
-        "id": "sparedying",
-        "name": "Stabilisation",
-        "tag": "utilitaire",
-        "conc": false
-      }
-    ],
-    "1": [
-      {
-        "id": "bane",
-        "name": "Fléau",
-        "tag": "DD Cha",
+        "id": "resistance",
+        "name": "Résistance",
+        "tag": "buff",
         "conc": true
       }
     ],
-    "2": [
-      {
-        "id": "spweapon",
-        "name": "Arme spirituelle",
-        "tag": "bon./1d8",
-        "conc": false
-      }
-    ],
+    "1": [],
+    "2": [],
     "3": [],
     "4": [],
     "5": []
   },
-  "removedSpells": [
-    "sc-sw",
-    "sc-bane",
-    "tollDead",
-    "mageHand",
-    "minorIllusion",
-    "guidance",
-    "sacredflame",
-    "resistance"
-  ],
+  "removedSpells": [],
   "skillProfs": [
     "arcanes",
+    "religion",
     "medecine",
     "intuition",
-    "persuasion",
-    "histoire"
+    "persuasion"
   ],
-  "concentration": null,
+  "concentration": "Immobilisation (Hold Person)",
   "conditions": [],
   "deathSaves": {
     "success": 0,
@@ -167,7 +139,12 @@
       "notes": "",
       "armorBase": 11,
       "armorType": "light",
-      "bonuses": []
+      "bonuses": [
+        {
+          "type": "ca",
+          "value": 0
+        }
+      ]
     },
     "bouclier": {
       "name": "Bouclier",
@@ -213,22 +190,15 @@
       "name": "",
       "notes": "",
       "bonuses": []
-    },
-    "slot-1-0": false,
-    "slot-1-1": false,
-    "slot-1-2": false
+    }
   },
   "equipment": [
-    "La Relique d'Azouth — focaliseur d'incantation & lien divin",
     "Outils de bricoleur",
-    "Pack d'explorateur"
+    "Pack d'explorateur",
+    "Lettre de guilde · 15 po"
   ],
-  "customEquipment": [
-    "Lettre de guilde"
-  ],
-  "attunedItems": [
-    "La Relique d'Azouth"
-  ],
+  "customEquipment": [],
+  "attunedItems": [],
   "currency": {
     "pp": 0,
     "gp": 15,
@@ -243,11 +213,11 @@
   "toolProfs": [
     "Outils de bricoleur"
   ],
-  "notes": "test 1",
+  "notes": "",
   "sessionNotes": [
     {
       "date": "2026-05-28",
-      "text": "Test"
+      "text": ""
     }
   ],
   "traits": [
@@ -281,25 +251,50 @@
     {
       "situation": "Situation désespérée",
       "text": "« Ce n'est pas idéal. Ce n'est vraiment, vraiment pas idéal. Je recalcule. »"
+    },
+    {
+      "situation": "En perdant des PV",
+      "text": "« Ça fait mal. C'est une donnée utile, mais ça fait quand même très mal. »"
+    },
+    {
+      "situation": "Face à un monstre",
+      "text": "« Fascinant. J'aurais aimé l'étudier dans des conditions moins urgentes. »"
+    },
+    {
+      "situation": "Après une victoire",
+      "text": "« Bien. Maintenant, quelqu'un peut-il m'expliquer ce qui vient de se passer ? »"
+    },
+    {
+      "situation": "Avant un combat",
+      "text": "« Stratégie : ne pas mourir. J'affine au fur et à mesure. »"
+    },
+    {
+      "situation": "Face à un arcaniste",
+      "text": "« Oh. Oh, attendez. Vous êtes... Puis-je vous poser des questions ? Beaucoup de questions ? »"
+    },
+    {
+      "situation": "Face à un piège",
+      "text": "« Je l'avais vu. Je ne l'avais simplement pas encore mentionné. »"
+    },
+    {
+      "situation": "En négociant",
+      "text": "« Je propose un arrangement mutuellement bénéfique, documenté en trois exemplaires. »"
+    },
+    {
+      "situation": "Quelqu'un fait une erreur",
+      "text": "« C'est une approche. Ce n'est pas celle que j'aurais choisie. Mais c'est une approche. »"
+    },
+    {
+      "situation": "Canalisation divine",
+      "text": "« Azouth — maintenant. S'il te plaît. »"
+    },
+    {
+      "situation": "En fouillant un donjon",
+      "text": "« L'architecture est intéressante. Quelqu'un prend des notes ? »"
     }
   ],
   "ghRepo": "Funkyst4rz/torvin",
   "ghFile": "save.json",
   "ghBranch": "main",
-  "customAttacks": [
-    {
-      "name": "Masse d'arme",
-      "bonus": "—",
-      "damage": "1d6"
-    }
-  ],
-  "pv": "15",
-  "pvTemp": "0",
-  "cd": false,
-  "checks": {
-    "sc-d1-0": false,
-    "sc-d1-1": false,
-    "sc-bane": false,
-    "sc-hw": false
-  }
+  "customAttacks": []
 }
