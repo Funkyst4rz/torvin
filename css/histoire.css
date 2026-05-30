@@ -229,19 +229,25 @@ body.dark .header::after  { background: var(--parchment); }
   .level-bubbles { flex-wrap:nowrap; gap:3px; }
   .lvl-btn { width:26px;height:26px;font-size:0.56rem; }
 
-  /* Bottom navigation bar fixe */
+  /* Bottom navigation bar fixe — hauteur fixe pour éviter le resize Firefox */
   .tabs {
     position:fixed; bottom:0; left:0; right:0; z-index:50;
+    height:56px;
     margin:0; border-bottom:none;
     border-top:1.5px solid var(--border);
     background:var(--parchment);
     box-shadow:0 -3px 14px rgba(0,0,0,.18);
     flex-wrap:nowrap; overflow:visible;
-    padding-bottom:env(safe-area-inset-bottom,0px);
+  }
+  /* Extension de fond dans la safe area iPhone (ne modifie pas la hauteur de la barre) */
+  .tabs::before {
+    content:''; position:absolute; bottom:-40px; left:0; right:0;
+    height:40px; background:var(--parchment);
+    pointer-events:none;
   }
   .tab {
     flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center;
-    padding:6px 2px 8px; font-size:0.44rem; letter-spacing:.2px; white-space:nowrap;
+    height:100%; padding:0 2px; font-size:0.44rem; letter-spacing:.2px; white-space:nowrap;
     border:none; border-top:2px solid transparent; margin-bottom:0; gap:3px;
   }
   .tab:hover { color:var(--gold); background:transparent; }
@@ -252,7 +258,7 @@ body.dark .header::after  { background: var(--parchment); }
   }
   .tab-icon { display:block; font-size:1.1rem; line-height:1; }
   /* Compenser la hauteur de la tab bar dans le scroll */
-  .content { padding-bottom:calc(68px + env(safe-area-inset-bottom,0px)); }
+  .content { padding-bottom:calc(56px + env(safe-area-inset-bottom,0px)); }
 
   /* Menu burger mobile */
   .desk-only { display:none !important; }
@@ -282,7 +288,7 @@ body.dark .header::after  { background: var(--parchment); }
   .notes-toolbar { flex-wrap:wrap;gap:6px; }
 }
 @media(max-width:460px){
-  .content { padding:24px 12px; padding-bottom:calc(68px + env(safe-area-inset-bottom,0px)); }
+  .content { padding:24px 12px; padding-bottom:calc(56px + env(safe-area-inset-bottom,0px)); }
   .char-name-input { font-size:1.125rem; }
   /* Info bar : 2 colonnes, Alignement pleine largeur */
   .info-bar { grid-template-columns:1fr 1fr; }

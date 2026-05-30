@@ -233,9 +233,9 @@
         <button class="save-btn mob-only" @click="showMoreMenu=!showMoreMenu" :title="showMoreMenu ? 'Fermer' : 'Plus d\'options'">{{ showMoreMenu ? '✕' : '⋮' }}</button>
         <span class="save-status" :class="saveStatusType">{{ saveStatus }}</span>
         <div class="more-menu" v-if="showMoreMenu">
-          <button class="save-btn" @click="loadFromGitHub;showMoreMenu=false">↓ Charger</button>
-          <button class="save-btn" @click="exportJSON;showMoreMenu=false">⬇ Export JSON</button>
-          <button class="save-btn" @click="importJSON;showMoreMenu=false">⬆ Import</button>
+          <button class="save-btn" @click="loadFromGitHub();showMoreMenu=false">↓ Charger</button>
+          <button class="save-btn" @click="exportJSON();showMoreMenu=false">⬇ Export JSON</button>
+          <button class="save-btn" @click="importJSON();showMoreMenu=false">⬆ Import</button>
           <button class="save-btn" @click="showDice=!showDice;showMoreMenu=false">🎲 Dés</button>
           <button class="save-btn" @click="showConfig=!showConfig;showMoreMenu=false">⚙ Config</button>
           <button class="save-btn dark-toggle" @click="darkMode=!darkMode">{{ darkMode ? '☀' : '🌙' }}</button>
