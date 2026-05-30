@@ -306,10 +306,10 @@
       <div class="tabs">
         <div class="tab" :class="{active:activeTab==='main'}"     @click="switchTab('main')"><span class="tab-icon">◆</span>Personnage</div>
         <div class="tab" :class="{active:activeTab==='spells'}"   @click="switchTab('spells')">
-          <span class="tab-icon">✦</span>Sorts<span v-if="char.concentration" class="tab-badge">!</span>
+          <span class="tab-icon">✦</span><span class="tab-label">Sorts<span v-if="char.concentration" class="tab-badge">!</span></span>
         </div>
         <div class="tab" :class="{active:activeTab==='combat'}"   @click="switchTab('combat')">
-          <span class="tab-icon">⚔</span>Combat<span v-if="char.conditions.length>0" class="tab-badge">!</span>
+          <span class="tab-icon">⚔</span><span class="tab-label">Combat<span v-if="char.conditions.length>0" class="tab-badge">!</span></span>
         </div>
         <div class="tab" :class="{active:activeTab==='histoire'}" @click="switchTab('histoire')"><span class="tab-icon">❧</span>Histoire</div>
         <div class="tab" :class="{active:activeTab==='notes'}"    @click="switchTab('notes')"><span class="tab-icon">✏</span>Notes</div>
