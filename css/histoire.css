@@ -165,6 +165,9 @@ body.dark .header::after  { background: var(--parchment); }
 .more-menu { display:none; }
 
 @media(max-width:720px){
+  /* Coins bas de page masqués : chevauchent la tab bar fixe */
+  .corner-bl, .corner-br { display:none; }
+
   .content { padding:30px 16px 24px; }
   .main-grid { grid-template-columns:1fr; }
   .combat-row { grid-template-columns:repeat(2,1fr); }
