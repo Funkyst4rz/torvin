@@ -132,8 +132,8 @@
 .conc-active-area { display:flex;flex-direction:column; }
 .conc-empty { display:flex;flex-direction:column; }
 .conc-spell-name { font-family:'Nunito', sans-serif;font-size:0.875rem;font-weight:700;color:var(--gold);margin-bottom:6px; }
-.conc-dc-info { font-family:'Nunito', sans-serif;font-size:0.75rem;color:var(--ink-mid);line-height:1.5; }
-.conc-save-bonus { font-family:'Nunito', sans-serif;font-size:0.69rem;font-weight:700;color:var(--ink);margin-left:6px; }
+.conc-dc-info { font-family:'Nunito', sans-serif;font-size:0.75rem;color:var(--ink-mid);line-height:1.5;display:flex;flex-wrap:wrap;align-items:baseline;gap:2px; }
+.conc-save-bonus { font-family:'Nunito', sans-serif;font-size:0.69rem;font-weight:700;color:var(--ink);margin-left:auto;white-space:nowrap; }
 .conc-check-row { display:flex;align-items:center;gap:6px;margin-top:8px;flex-wrap:wrap; }
 .conc-check-result {
   font-family:'Nunito', sans-serif;font-size:0.59rem;font-weight:700;

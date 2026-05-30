@@ -85,6 +85,16 @@ const app = createApp({
       document.body.classList.toggle('dark', val);
       localStorage.setItem('torvin-dark', val ? '1' : '0');
     },
+    activeTab(val) {
+      if (val === 'histoire') {
+        this.$nextTick(() => {
+          document.querySelectorAll('.trait-textarea, .phrase-textarea').forEach(el => {
+            el.style.height = 'auto';
+            el.style.height = el.scrollHeight + 'px';
+          });
+        });
+      }
+    },
   },
 
   // ──────────────────────────────────────────
@@ -119,6 +129,11 @@ const app = createApp({
 
     // ── Helpers ──────────────────────────────
     sign(n) { return (n >= 0 ? '+' : '') + n; },
+    autoResize(e) {
+      const el = e.target;
+      el.style.height = 'auto';
+      el.style.height = el.scrollHeight + 'px';
+    },
     statLabel(k) { return STAT_LABELS[k] || k; },
     /** Supprime l'élément à l'index i dans char[field] (immutable) */
     removeAt(field, i) {

@@ -988,19 +988,19 @@
             <div class="section-title">Personnalité</div>
             <div class="trait-block" v-for="(trait, i) in char.traits" :key="'trait-'+i">
               <span class="trait-label">Trait {{ i+1 }}</span>
-              <textarea class="trait-textarea" v-model="char.traits[i]" rows="2" spellcheck="false"></textarea>
+              <textarea class="trait-textarea" v-model="char.traits[i]" rows="1" spellcheck="false" @input="autoResize($event)"></textarea>
             </div>
             <div class="trait-block">
               <span class="trait-label">Idéal</span>
-              <textarea class="trait-textarea" v-model="char.ideal" rows="2" spellcheck="false"></textarea>
+              <textarea class="trait-textarea" v-model="char.ideal" rows="1" spellcheck="false" @input="autoResize($event)"></textarea>
             </div>
             <div class="trait-block">
               <span class="trait-label">Lien</span>
-              <textarea class="trait-textarea" v-model="char.bond" rows="2" spellcheck="false"></textarea>
+              <textarea class="trait-textarea" v-model="char.bond" rows="1" spellcheck="false" @input="autoResize($event)"></textarea>
             </div>
             <div class="trait-block">
               <span class="trait-label">Défaut</span>
-              <textarea class="trait-textarea" v-model="char.flaw" rows="2" spellcheck="false"></textarea>
+              <textarea class="trait-textarea" v-model="char.flaw" rows="1" spellcheck="false" @input="autoResize($event)"></textarea>
             </div>
           </div>
 
@@ -1016,7 +1016,7 @@
                        v-model="char.phrases[i].situation" spellcheck="false" placeholder="Situation…">
                 <button class="equip-delete" @click="removeAt('phrases', i)" title="Supprimer">✕</button>
               </div>
-              <textarea class="phrase-textarea" v-model="char.phrases[i].text" rows="2" spellcheck="false"></textarea>
+              <textarea class="phrase-textarea" v-model="char.phrases[i].text" rows="1" spellcheck="false" @input="autoResize($event)"></textarea>
             </div>
             <!-- Réflexes universels -->
             <div style="margin-top:10px;padding:10px;border:1px solid var(--border);background:rgba(92,61,30,.04)">
