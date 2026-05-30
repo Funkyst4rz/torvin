@@ -3,39 +3,36 @@
    â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 
 :root {
-  /* Parchment â€” slightly lighter and crisper than before */
-  --parchment: #f7f0e2;
-  --parchment-dark: #e8d8b6;
+  /* Ardoise + Or */
+  --parchment:      #1e2438;
+  --parchment-dark: #252d45;
 
-  /* Ink â€” rich near-black with warmth */
-  --ink: #180c04;
-  --ink-mid: #3a2818;
-  --ink-light: #7a5c38;
+  --ink:       #e8e2d6;
+  --ink-mid:   #bfb49e;
+  --ink-light: #7a8fa8;
 
-  /* Accents */
-  --red: #8b1a1a;
-  --gold: #8a6e20;          /* brighter than before â€” more readable */
-  --gold-light: #c49830;
+  --red:        #e05050;
+  --gold:       #d4a843;
+  --gold-light: #f0c860;
 
-  /* Borders â€” significantly lighter than #5c3d1e â†’ feels airier */
-  --border: #a0824a;
-  --border-light: rgba(160,130,74,.35);
+  --border:       #3d4d6a;
+  --border-light: rgba(61,77,106,.5);
 
-  --green: #1e6030;
+  --green: #3aad6b;
 }
 
 html { font-size: 17px; } /* rem base â€” changer ici pour scaler toute la typographie */
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
-  background: #221810;
+  background: #0e1220;
   font-family: 'Nunito', sans-serif;
   color: var(--ink);
   min-height: 100vh;
   padding: 20px;
   background-image:
-    radial-gradient(ellipse at 20% 20%, rgba(90,60,20,.3) 0%, transparent 60%),
-    radial-gradient(ellipse at 80% 80%, rgba(60,30,10,.4) 0%, transparent 60%);
+    radial-gradient(ellipse at 20% 20%, rgba(30,50,90,.4) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 80%, rgba(10,20,50,.5) 0%, transparent 60%);
 }
 
 .page {
@@ -43,14 +40,14 @@ body {
   margin: 0 auto;
   background: var(--parchment);
   border: 2px solid var(--border);
-  box-shadow: 0 0 0 5px #221810, 0 0 0 7px var(--border), 0 20px 60px rgba(0,0,0,.7);
+  box-shadow: 0 0 0 5px #0e1220, 0 0 0 7px var(--border), 0 20px 60px rgba(0,0,0,.8);
   position: relative;
   overflow: hidden;
 }
 .page::before {
   content: '';
   position: absolute; inset: 0;
-  pointer-events: none; z-index: 1; opacity: .4;
+  pointer-events: none; z-index: 1; opacity: .12;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='.05'/%3E%3C/svg%3E");
 }
 

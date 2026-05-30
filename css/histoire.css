@@ -20,7 +20,7 @@
 .combo-steps li:last-child { border-bottom:none; }
 
 /* Lore */
-.lore-section { margin-top:8px;border:1.5px solid var(--border);background:rgba(232,216,182,.2);padding:22px 28px 24px; }
+.lore-section { margin-top:8px;border:1.5px solid var(--border);background:rgba(255,255,255,.03);padding:22px 28px 24px; }
 .lore-body { display:grid;grid-template-columns:1fr 1fr;gap:0 36px;margin-top:14px; }
 .lore-col { display:flex;flex-direction:column;gap:12px; }
 .lore-text { font-family:'Nunito', sans-serif;font-size:0.84rem;color:var(--ink-mid);line-height:1.85;text-align:justify; }
@@ -50,7 +50,7 @@
   text-align:center;padding:32px 0;font-size:0.9rem;
 }
 .note-card {
-  border:1px solid var(--border);background:rgba(232,216,182,.2);
+  border:1px solid var(--border);background:rgba(255,255,255,.03);
   border-radius:3px;padding:10px 12px;margin-bottom:10px;
 }
 .note-header {
@@ -106,7 +106,7 @@
 .asi-overlay { position:fixed;inset:0;background:rgba(24,12,4,.8);z-index:150;display:flex;align-items:center;justify-content:center;padding:20px; }
 .asi-modal {
   background:var(--parchment);border:2px solid var(--border);max-width:560px;width:100%;
-  box-shadow:0 0 0 4px #221810,0 0 0 6px var(--border),0 20px 60px rgba(0,0,0,.7);
+  box-shadow:0 0 0 4px #0e1220,0 0 0 6px var(--border),0 20px 60px rgba(0,0,0,.8);
   max-height:90vh;overflow-y:auto;
 }
 .asi-modal-header { background:var(--border);color:var(--parchment);padding:12px 18px;display:flex;justify-content:space-between;align-items:center; }
@@ -134,47 +134,28 @@
 .asi-existing-val { font-family:'Nunito', sans-serif;font-size:0.75rem;color:var(--ink); }
 
 /* â”€â”€ MODE SOMBRE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* Mode encore plus sombre (variante nuit profonde) */
 body.dark {
-  background: #0d0906;
+  background: #080c16;
   background-image:
-    radial-gradient(ellipse at 20% 20%, rgba(30,18,8,.6) 0%, transparent 60%),
-    radial-gradient(ellipse at 80% 80%, rgba(15,9,3,.8)  0%, transparent 60%);
+    radial-gradient(ellipse at 20% 20%, rgba(20,35,70,.5) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 80%, rgba(8,14,40,.6)  0%, transparent 60%);
 
-  --parchment:      #1d1508;
-  --parchment-dark: #130e05;
-  --ink:            #e4d4a8;
-  --ink-mid:        #b89060;
-  --ink-light:      #7a5c38;
+  --parchment:      #151928;
+  --parchment-dark: #1a2038;
+  --ink:            #f0ece4;
+  --ink-mid:        #ccc4b0;
+  --ink-light:      #6a809a;
+  --border:         #2f3c55;
+  --border-light:   rgba(47,60,85,.5);
   --gold:           #c49830;
   --gold-light:     #e0b840;
-  --border:         #5a3d1e;
-  --border-light:   rgba(90,61,30,.5);
-  --green:          #38a060;
-  --red:            #c04040;
 }
 body.dark .page {
-  box-shadow: 0 0 0 5px #0d0906, 0 0 0 7px var(--border), 0 20px 60px rgba(0,0,0,.95);
+  box-shadow: 0 0 0 5px #080c16, 0 0 0 7px var(--border), 0 20px 60px rgba(0,0,0,.95);
 }
-/* Corrections hardcoded rgba parchment */
-body.dark .section-box          { background: rgba(30,20,8,.4); }
-body.dark .feature-block        { background: rgba(25,16,5,.35); }
-body.dark .feat-card            { background: rgba(25,16,5,.45); }
-body.dark .spell-picker         { background: rgba(13,9,5,.95); }
-body.dark .spell-picker-row:hover { background: rgba(196,152,48,.07); }
-body.dark .spell-row:nth-child(even) { background: rgba(196,152,48,.04); }
-body.dark .notes-area           { background: rgba(25,16,5,.3); }
-body.dark .note-card            { background: rgba(25,16,5,.25); border-color: var(--border); }
-body.dark .note-text            { color: var(--ink); }
-body.dark .note-date            { color: var(--ink-mid); }
-body.dark .lore-section         { background: rgba(25,16,5,.25); }
-body.dark .lore-quote           { background: rgba(196,152,48,.07); }
-body.dark .combo-box            { background: rgba(160,40,40,.07); }
-body.dark .asi-option           { background: rgba(25,16,5,.4); }
-body.dark .asi-option:hover,
-body.dark .asi-option.selected  { background: rgba(196,152,48,.1); }
-/* L''onglet actif doit cacher la bordure infÃ©rieure sur fond sombre */
-body.dark .tab.active           { background: var(--parchment); border-bottom-color: var(--parchment); }
-body.dark .header::after        { background: var(--parchment); }
+body.dark .tab.active     { background: var(--parchment); border-bottom-color: var(--parchment); }
+body.dark .header::after  { background: var(--parchment); }
 
 /* â”€â”€ RESPONSIVE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 /* Classes desktop/mobile */

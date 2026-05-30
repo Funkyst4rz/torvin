@@ -1,7 +1,7 @@
 ﻿/* â”€â”€ SORTS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .spell-stats-bar {
   display:flex;gap:12px;padding:8px 12px;
-  background:rgba(160,130,74,.07);border:1px solid var(--border);
+  background:rgba(255,255,255,.03);border:1px solid var(--border);
   margin-bottom:14px;flex-wrap:wrap;
 }
 .spell-stat-item { font-family:'Nunito', sans-serif;font-size:0.69rem;color:var(--ink-light); }
@@ -26,7 +26,7 @@
 .slot-bubble.used { background:var(--ink-mid); }
 
 .spell-row { display:grid;grid-template-columns:14px 1fr 60px 50px 16px;align-items:center;gap:6px;padding:4px 6px;font-size:0.75rem; }
-.spell-row:nth-child(even) { background:rgba(160,130,74,.05); }
+.spell-row:nth-child(even) { background:rgba(255,255,255,.03); }
 .spell-check { width:10px;height:10px;border:1.5px solid var(--border);cursor:pointer;background:transparent;transition:background .15s; }
 .spell-check.checked { background:var(--ink-mid); }
 .spell-name { font-family:'Nunito', sans-serif;color:var(--ink); }
@@ -107,10 +107,10 @@
   background:transparent;color:var(--ink-light);cursor:pointer;transition:all .2s;margin-top:2px;
 }
 .spell-add-btn:hover,.spell-add-btn.active { background:rgba(160,130,74,.08);color:var(--gold);border-color:var(--gold);border-style:solid; }
-.spell-picker { display:none;border-top:1px dashed var(--border);max-height:260px;overflow-y:auto;background:rgba(247,240,226,.7); }
+.spell-picker { display:none;border-top:1px dashed var(--border);max-height:260px;overflow-y:auto;background:rgba(18,22,38,.97); }
 .spell-picker.open { display:block; }
-.spell-picker-row { display:flex;align-items:flex-start;gap:8px;padding:6px 8px;border-bottom:1px dashed rgba(160,130,74,.2); }
-.spell-picker-row:hover { background:rgba(138,110,32,.06); }
+.spell-picker-row { display:flex;align-items:flex-start;gap:8px;padding:6px 8px;border-bottom:1px dashed rgba(61,77,106,.4); }
+.spell-picker-row:hover { background:rgba(212,168,67,.08); }
 .spell-picker-info { flex:1;min-width:0; }
 .spell-picker-name { font-family:'Nunito', sans-serif;font-size:0.66rem;font-weight:700;color:var(--ink);display:block; }
 .spell-picker-tags { font-family:'Nunito', sans-serif;font-size:0.56rem;color:var(--gold);display:block;margin-top:1px; }
@@ -122,7 +122,7 @@
 }
 .spell-picker-add:hover { background:var(--green);color:white; }
 .spell-picker-empty { font-family:'Nunito', sans-serif;font-size:0.69rem;color:var(--ink-light);font-style:italic;padding:8px; }
-.spell-picker-section { font-family:'Nunito', sans-serif;font-size:0.56rem;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--ink-light);padding:6px 8px 3px;background:rgba(160,130,74,.1);border-bottom:1px solid var(--border-light); }
+.spell-picker-section { font-family:'Nunito', sans-serif;font-size:0.56rem;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--ink-light);padding:6px 8px 3px;background:rgba(61,77,106,.3);border-bottom:1px solid var(--border-light); }
 .new-badge {
   font-family:'Nunito', sans-serif;font-size:0.56rem;font-weight:600;color:white;background:var(--green);
   padding:1px 6px;border-radius:2px;margin-left:6px;text-transform:uppercase;letter-spacing:.5px;

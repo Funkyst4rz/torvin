@@ -36,7 +36,7 @@
 }
 .stat-base-input {
   font-family:'Nunito', sans-serif;font-size:0.56rem;font-weight:700;width:32px;
-  text-align:center;background:rgba(160,130,74,.1);
+  text-align:center;background:rgba(255,255,255,.07);
   border:1px solid var(--border-light);color:var(--ink);outline:none;padding:1px 2px;
   -moz-appearance:textfield;
 }
@@ -87,7 +87,7 @@
 /* Armor config row â€” compact strip below combat boxes */
 .armor-config-row {
   display: flex; align-items: center; gap: 14px;
-  background: rgba(160,130,74,.07);
+  background: rgba(255,255,255,.03);
   border: 1px solid var(--border); border-top: none;
   padding: 6px 10px; margin-bottom: 12px;
   flex-wrap: wrap;
@@ -106,7 +106,7 @@
 }
 .armor-config-item input[type="number"] {
   font-family:'Nunito', sans-serif;font-size:0.81rem;font-weight:700;width:34px;
-  text-align:center;background:rgba(160,130,74,.1);
+  text-align:center;background:rgba(255,255,255,.07);
   border:1px solid var(--border);color:var(--ink);outline:none;padding:1px 3px;
 }
 .armor-config-item input[type="number"]:focus { border-color:var(--gold-light); }
@@ -166,7 +166,7 @@
 .section-box {
   border:1.5px solid var(--border);
   padding:10px 12px;
-  background:rgba(232,216,182,.3);
+  background:rgba(255,255,255,.04);
   margin-bottom:12px;
   box-shadow:0 1px 4px rgba(0,0,0,.05);
 }
@@ -362,8 +362,8 @@
 
 /* â”€â”€ FEATURES â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .features-grid { display:grid;grid-template-columns:repeat(3,1fr);gap:8px; }
-.feature-block { border:1px solid var(--border);padding:8px 10px;background:rgba(232,216,182,.25); }
-.feature-block.asi { border-color:var(--gold);background:rgba(138,110,32,.07); }
+.feature-block { border:1px solid var(--border);padding:8px 10px;background:rgba(255,255,255,.03); }
+.feature-block.asi { border-color:var(--gold);background:rgba(212,168,67,.08); }
 .feature-block.legendary { border-color:var(--red); }
 .feature-name { font-family:'Nunito', sans-serif;font-size:0.66rem;font-weight:700;color:var(--ink);display:block;margin-bottom:3px; }
 .feature-desc { font-family:'Nunito', sans-serif;font-size:0.75rem;color:var(--ink-mid);line-height:1.55; }
