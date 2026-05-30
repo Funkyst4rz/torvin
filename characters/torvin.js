@@ -77,6 +77,14 @@ const UNIVERSAL_REFLEXES = [
   "Ce n'est pas ce que j'aurais anticipé, mais bon.",
   "J'ai consigné quelque chose de similaire dans mes notes. Laissez-moi vérifier.",
   "Ce serait peut-être le moment de prendre du recul et d'analyser la situation.",
+  "Je vais noter ça.",
+  "Dans l'absolu, j'aurais préféré une autre approche.",
+  "Ce n'est pas une retraite. C'est un repositionnement stratégique.",
+  "Hmm. Les probabilités étaient pourtant en notre faveur.",
+  "Azouth, si tu m'écoutes — maintenant serait un bon moment.",
+  "Je ré-évalue mes hypothèses.",
+  "Attendez. Non. Oui. Enfin... attendez.",
+  "Je suis certain d'avoir une solution. Elle me reviendra.",
 ];
 
 // Bonus raciaux — Gnome des Roches
@@ -193,12 +201,22 @@ const DEFAULT_CHAR = {
 
   // Phrases situationnelles (éditables)
   phrases: [
-    { situation: 'En lançant Fléau',    text: '« Fascinant — réduire votre efficacité combat augmente les probabilités de survie de mes collègues. Je procède. »' },
-    { situation: 'En soignant',          text: '« Vous saignez à un rythme préoccupant. J\'ai documenté ce type de blessure — le protocole est clair. »' },
-    { situation: 'En ratant un sort',    text: '« Hm. Résultat inattendu. Ce n\'était pas une erreur, c\'était... une donnée supplémentaire. »' },
-    { situation: 'Découverte magique',   text: '« Passez-moi ça. Non — je ne vais pas le casser. Enfin... probablement pas. »' },
-    { situation: 'Quelqu\'un conteste',  text: '« C\'est... une perspective. Incorrecte, mais une perspective tout de même. »' },
-    { situation: 'Situation désespérée', text: '« Ce n\'est pas idéal. Ce n\'est vraiment, vraiment pas idéal. Je recalcule. »' },
+    { situation: 'En lançant Fléau',           text: '« Fascinant — réduire votre efficacité combat augmente les probabilités de survie de mes collègues. Je procède. »' },
+    { situation: 'En soignant',                text: '« Vous saignez à un rythme préoccupant. J\'ai documenté ce type de blessure — le protocole est clair. »' },
+    { situation: 'En ratant un sort',          text: '« Hm. Résultat inattendu. Ce n\'était pas une erreur, c\'était... une donnée supplémentaire. »' },
+    { situation: 'Découverte magique',         text: '« Passez-moi ça. Non — je ne vais pas le casser. Enfin... probablement pas. »' },
+    { situation: 'Quelqu\'un conteste',        text: '« C\'est... une perspective. Incorrecte, mais une perspective tout de même. »' },
+    { situation: 'Situation désespérée',       text: '« Ce n\'est pas idéal. Ce n\'est vraiment, vraiment pas idéal. Je recalcule. »' },
+    { situation: 'En perdant des PV',          text: '« Ça fait mal. C\'est une donnée utile, mais ça fait quand même très mal. »' },
+    { situation: 'Face à un monstre',          text: '« Fascinant. J\'aurais aimé l\'étudier dans des conditions moins urgentes. »' },
+    { situation: 'Après une victoire',         text: '« Bien. Maintenant, quelqu\'un peut-il m\'expliquer ce qui vient de se passer ? »' },
+    { situation: 'Avant un combat',            text: '« Stratégie : ne pas mourir. J\'affine au fur et à mesure. »' },
+    { situation: 'Face à un arcaniste',        text: '« Oh. Oh, attendez. Vous êtes... Puis-je vous poser des questions ? Beaucoup de questions ? »' },
+    { situation: 'Face à un piège',            text: '« Je l\'avais vu. Je ne l\'avais simplement pas encore mentionné. »' },
+    { situation: 'En négociant',               text: '« Je propose un arrangement mutuellement bénéfique, documenté en trois exemplaires. »' },
+    { situation: 'Quelqu\'un fait une erreur', text: '« C\'est une approche. Ce n\'est pas celle que j\'aurais choisie. Mais c\'est une approche. »' },
+    { situation: 'Canalisation divine',        text: '« Azouth — maintenant. S\'il te plaît. »' },
+    { situation: 'En fouillant un donjon',     text: '« L\'architecture est intéressante. Quelqu\'un prend des notes ? »' },
   ],
 
   // ── GitHub ────────────────────────────────────────────────────
