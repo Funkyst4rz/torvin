@@ -23,14 +23,7 @@
     "wis": 0,
     "cha": 0
   },
-  "asi": {
-    "4": {
-      "type": "asi",
-      "bonuses": {
-        "wis": 2
-      }
-    }
-  },
+  "asi": {},
   "caManual": 14,
   "useCaAuto": true,
   "armorBase": 11,
@@ -116,7 +109,7 @@
     "intuition",
     "persuasion"
   ],
-  "concentration": "Immobilisation (Hold Person)",
+  "concentration": null,
   "conditions": [],
   "deathSaves": {
     "success": 0,
@@ -296,5 +289,14 @@
   "ghRepo": "Funkyst4rz/torvin",
   "ghFile": "save.json",
   "ghBranch": "main",
-  "customAttacks": []
+  "customAttacks": [],
+  "pv": "15",
+  "pvTemp": "0",
+  "cd": false,
+  "checks": {
+    "sc-d1-0": false,
+    "sc-d1-1": false,
+    "sc-bane": false,
+    "sc-hw": false
+  }
 }
