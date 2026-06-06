@@ -110,7 +110,18 @@
 .condition-btn:hover { border-color:var(--red);color:var(--red); }
 .condition-btn.active { background:var(--red);border-color:var(--red);color:white; }
 .active-conditions { border-top:1px dashed var(--border-light);padding-top:8px;margin-top:4px; }
-.active-condition-desc { font-family:'Nunito', sans-serif;font-size:0.75rem;color:var(--ink-mid);padding:3px 0;border-bottom:1px dashed rgba(160,130,74,.2);line-height:1.5; }
+.active-condition-desc { font-family:'Nunito', sans-serif;font-size:0.75rem;color:var(--ink-mid);padding:4px 0;border-bottom:1px dashed rgba(160,130,74,.2);line-height:1.5; }
+.active-condition-header { display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:2px; }
+.active-condition-text { font-size:0.69rem;color:var(--ink-light); }
+.cond-duration-wrap { display:flex;align-items:center;gap:4px;flex-shrink:0; }
+.cond-duration-input {
+  width:44px;font-family:'Nunito', sans-serif;font-size:0.69rem;font-weight:700;text-align:center;
+  background:var(--parchment);border:1px solid var(--border);color:var(--ink);padding:2px 4px;
+  outline:none;border-radius:2px;
+}
+.cond-duration-input:focus { border-color:var(--gold-light); }
+.cond-duration-input::placeholder { color:var(--ink-light);font-weight:400; }
+.cond-duration-label { font-family:'Nunito', sans-serif;font-size:0.62rem;color:var(--ink-light); }
 
 /* Currency */
 .currency-row { display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px; }

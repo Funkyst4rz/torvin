@@ -315,9 +315,37 @@ const app = createApp({
     toggleCondition(id) {
       const list = [...(this.char.conditions || [])];
       const idx = list.indexOf(id);
-      if (idx === -1) list.push(id);
-      else list.splice(idx, 1);
+      if (idx === -1) {
+        list.push(id);
+      } else {
+        list.splice(idx, 1);
+        const dur = { ...(this.char.conditionDurations || {}) };
+        delete dur[id];
+        this.char.conditionDurations = dur;
+      }
       this.char.conditions = list;
+    },
+
+    setConditionDuration(id, val) {
+      const n = parseInt(val, 10);
+      const dur = { ...(this.char.conditionDurations || {}) };
+      dur[id] = (val === '' || isNaN(n) || n <= 0) ? null : n;
+      this.char.conditionDurations = dur;
+    },
+
+    // ── Rounds ───────────────────────────────
+    nextRound() {
+      this.char.combatRound++;
+      const dur = { ...(this.char.conditionDurations || {}) };
+      const remaining = [];
+      for (const id of (this.char.conditions || [])) {
+        if (dur[id] == null) { remaining.push(id); continue; }
+        dur[id]--;
+        if (dur[id] > 0) remaining.push(id);
+        else { delete dur[id]; const cond = CONDITIONS.find(c=>c.id===id); this._toast(`⏱ ${cond ? cond.name : id} expiré`); }
+      }
+      this.char.conditions = remaining;
+      this.char.conditionDurations = dur;
     },
 
     // ── Death Saves ──────────────────────────

@@ -845,7 +845,7 @@
             </div>
             <div class="round-btns">
               <button class="dice-count-btn" @click="char.combatRound = Math.max(0, char.combatRound - 1)" :disabled="char.combatRound <= 0">−</button>
-              <button class="dice-count-btn round-next" @click="char.combatRound++" title="Round suivant">+</button>
+              <button class="dice-count-btn round-next" @click="nextRound()" title="Round suivant">+</button>
               <button class="dice-count-btn" @click="char.combatRound = 0" :disabled="char.combatRound <= 0" title="Fin du combat">↺</button>
             </div>
           </div>
@@ -927,8 +927,17 @@
           </div>
           <div v-if="char.conditions.length > 0" class="active-conditions">
             <div v-for="condId in char.conditions" :key="'desc-'+condId" class="active-condition-desc">
-              <strong>{{ allConditions.find(c=>c.id===condId)?.name }}</strong> :
-              {{ allConditions.find(c=>c.id===condId)?.desc }}
+              <div class="active-condition-header">
+                <strong>{{ allConditions.find(c=>c.id===condId)?.name }}</strong>
+                <span class="cond-duration-wrap">
+                  <input class="cond-duration-input" type="number" min="1"
+                    :value="char.conditionDurations && char.conditionDurations[condId] != null ? char.conditionDurations[condId] : ''"
+                    @change="setConditionDuration(condId, $event.target.value)"
+                    placeholder="∞">
+                  <span class="cond-duration-label">rounds</span>
+                </span>
+              </div>
+              <span class="active-condition-text">{{ allConditions.find(c=>c.id===condId)?.desc }}</span>
             </div>
           </div>
         </div>

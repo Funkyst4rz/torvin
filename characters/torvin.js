@@ -148,7 +148,8 @@ const DEFAULT_CHAR = {
   concentration: null,   // null | nom du sort
 
   // ── État de combat ────────────────────────────────────────────
-  conditions:  [],                       // ids de CONDITIONS actives
+  conditions:         [],                 // ids de CONDITIONS actives
+  conditionDurations: {},                 // { id: rounds|null } — null = sans durée
   deathSaves:  { success:0, failure:0 }, // 0–3 chacun
   inspiration: false,
   exhaustion:  0,                        // 0–6
