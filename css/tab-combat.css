@@ -121,6 +121,22 @@
 .attunement-slot.filled { border:1px solid var(--gold-light);background:rgba(138,110,32,.07);color:var(--ink); }
 .attunement-slot.empty { border:1px dashed var(--border-light);color:var(--ink-light);font-style:italic;justify-content:center;font-size:0.69rem; }
 
+/* Dice history */
+.dice-history {
+  width:100%;margin-top:8px;display:flex;flex-wrap:wrap;gap:4px;align-items:center;
+  border-top:1px solid var(--border-light);padding-top:6px;
+}
+.dice-history-entry {
+  display:inline-flex;align-items:center;gap:3px;
+  background:var(--parchment-dark);border:1px solid var(--border-light);
+  border-radius:2px;padding:1px 5px;font-family:'Nunito', sans-serif;font-size:0.62rem;cursor:default;
+}
+.dice-history-entry:hover { border-color:var(--border); }
+.dice-history-label { color:var(--ink-light); }
+.dice-history-total { font-weight:900;color:var(--ink); }
+.dice-history-clear { font-size:0.56rem;padding:1px 5px;opacity:.5; }
+.dice-history-clear:hover { opacity:1; }
+
 /* Weapon attack panel */
 .weapon-atk-panel { margin-bottom:14px; }
 .weapon-atk-info { display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-bottom:10px;font-family:'Nunito', sans-serif;font-size:0.75rem;color:var(--ink-mid); }

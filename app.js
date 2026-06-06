@@ -34,6 +34,7 @@ const app = createApp({
       diceFlash: false,
       initiativeRoll: null,
       attackRoll: null,
+      diceHistory: [],
       saveStatus: '',
       saveStatusType: '',
       toastMsg: '',
@@ -113,6 +114,10 @@ const app = createApp({
   // ──────────────────────────────────────────
   mounted() {
     if (this.darkMode) document.body.classList.add('dark');
+    try {
+      const h = localStorage.getItem('torvin-dice-history');
+      if (h) this.diceHistory = JSON.parse(h);
+    } catch(e) {}
     const token = localStorage.getItem('torvin-gh-token');
     if (token) {
       this.char.ghToken = token;
@@ -132,6 +137,12 @@ const app = createApp({
 
     // ── Helpers ──────────────────────────────
     sign(n) { return (n >= 0 ? '+' : '') + n; },
+
+    _pushHistory(label, total, detail) {
+      this.diceHistory.unshift({ label, total, detail, ts: Date.now() });
+      if (this.diceHistory.length > 20) this.diceHistory.length = 20;
+      try { localStorage.setItem('torvin-dice-history', JSON.stringify(this.diceHistory)); } catch(e) {}
+    },
     autoResize(e) {
       const el = e.target;
       el.style.height = 'auto';
@@ -291,6 +302,7 @@ const app = createApp({
         : `✗ Conc. rompue ! ${rollDisplay}${sign} = ${total} < DD${dc}`
       );
       if (!success) this.char.concentration = null;
+      this._pushHistory(success ? '✓ JS Conc.' : '✗ JS Conc.', total, `${rollDisplay}${this.sign(this.concentrationSaveBonus)} vs DD${dc}`);
     },
 
     // ── Canalisation divine ──────────────────
@@ -330,6 +342,8 @@ const app = createApp({
         msg = STRINGS.toast.deathFailure(roll, f);
       }
       this._toast(msg);
+      const outcome = roll === 20 ? 'Récup. !' : roll === 1 ? 'Échec ×2' : roll >= 10 ? 'Succès' : 'Échec';
+      this._pushHistory(`💀 Mort (${outcome})`, roll, `d20`);
     },
     resetDeathSaves() {
       this.char.deathSaves = { success:0, failure:0 };
@@ -360,6 +374,7 @@ const app = createApp({
         const label = isCrit ? ' ✦ CRITIQUE !' : isFumble ? ' ✗ Fumble' : '';
         this.attackRoll = { type:'atk', d20, bonus: atk, total, label, isCrit, isFumble };
         this._toast(`⚔ Attaque : d20(${d20}) + ${atk} = ${total}${label}`);
+        this._pushHistory(`⚔ ${slot.name||'Arme'}${label}`, total, `d20(${d20})${this.sign(atk)}`);
       } else {
         // Dégâts — parse "1d6-1" ou "2d8+3"
         const dmgStr = (slot.damage || '1d4').trim();
@@ -381,6 +396,7 @@ const app = createApp({
         const critNote = isCrit ? ' ✦ CRITIQUE (dés doublés) !' : '';
         this.attackRoll = { type:'dmg', total, detail, dmgType: slot.damageType || '', critNote };
         this._toast(`💥 Dégâts : ${total} (${slot.damageType || ''})${critNote}`);
+        this._pushHistory(`💥 Dégâts${critNote ? ' CRIT' : ''}`, total, `${slot.damage||''}${slot.damageType ? ' '+slot.damageType : ''}`);
       }
     },
 
@@ -389,6 +405,7 @@ const app = createApp({
       const roll = Math.ceil(Math.random() * 20);
       this.initiativeRoll = roll + this.initiativeBonus;
       this._toast(`🎲 Initiative : d20(${roll}) ${this.sign(this.initiativeBonus)} = ${this.initiativeRoll}`);
+      this._pushHistory('🎲 Initiative', this.initiativeRoll, `d20(${roll})${this.sign(this.initiativeBonus)}`);
     },
 
     // ── Dice roller ──────────────────────────
@@ -400,6 +417,8 @@ const app = createApp({
       this.diceSides  = sides;
       this.diceFlash  = true;
       setTimeout(() => { this.diceFlash = false; }, 600);
+      const detail = n > 1 ? `[${rolls.join('+')}]` : `d${sides}`;
+      this._pushHistory(`🎲 ${n}d${sides}`, this.diceResult, detail);
     },
 
     // ── Spell picker ─────────────────────────

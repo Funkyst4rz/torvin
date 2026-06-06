@@ -270,6 +270,13 @@
         <button class="dice-btn" v-for="s in [4,6,8,10,12,20,100]" :key="s" @click="rollDice(s)">d{{ s }}</button>
         <span class="dice-result" :class="{ flash: diceFlash }">{{ diceResult !== null ? diceResult : '—' }}</span>
         <span class="dice-label">{{ diceSides ? (diceCount > 1 ? diceCount+'d'+diceSides+' : '+diceRolls.join('+') : '/ d'+diceSides) : '' }}</span>
+        <div v-if="diceHistory.length" class="dice-history">
+          <span v-for="(h, i) in diceHistory" :key="h.ts" class="dice-history-entry" :title="h.detail">
+            <span class="dice-history-label">{{ h.label }}</span>
+            <span class="dice-history-total">{{ h.total }}</span>
+          </span>
+          <button class="dice-count-btn dice-history-clear" @click="diceHistory=[]; try{localStorage.removeItem('torvin-dice-history')}catch(e){}" title="Effacer l'historique">✕</button>
+        </div>
       </div>
 
       <!-- HEADER -->
