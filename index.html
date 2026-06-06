@@ -834,8 +834,21 @@
            ════════════════════════════════════ -->
       <div class="tab-content" :class="{active:activeTab==='combat'}">
 
-        <!-- Ligne 1 : Inspiration + Épuisement -->
+        <!-- Ligne 1 : Round + Inspiration + Épuisement -->
         <div class="combat-meta-row">
+
+          <!-- Compteur de rounds -->
+          <div class="section-box round-counter-box">
+            <div class="section-title">Round</div>
+            <div class="round-display" :class="{active: char.combatRound > 0}">
+              {{ char.combatRound > 0 ? char.combatRound : '—' }}
+            </div>
+            <div class="round-btns">
+              <button class="dice-count-btn" @click="char.combatRound = Math.max(0, char.combatRound - 1)" :disabled="char.combatRound <= 0">−</button>
+              <button class="dice-count-btn round-next" @click="char.combatRound++" title="Round suivant">+</button>
+              <button class="dice-count-btn" @click="char.combatRound = 0" :disabled="char.combatRound <= 0" title="Fin du combat">↺</button>
+            </div>
+          </div>
 
           <!-- Inspiration -->
           <div class="section-box" style="min-width:120px;text-align:center">

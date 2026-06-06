@@ -52,6 +52,17 @@
 .combat-base-input::-webkit-outer-spin-button { display:none; }
 .combat-base-input:focus { border-color:var(--gold-light);background:rgba(196,152,48,.12); }
 
+/* Round counter */
+.round-counter-box { min-width:90px;text-align:center; }
+.round-display {
+  font-family:'Cinzel', serif;font-size:1.6rem;font-weight:900;color:var(--ink-light);
+  line-height:1;margin:4px 0;transition:color .2s;
+}
+.round-display.active { color:var(--gold); }
+.round-btns { display:flex;justify-content:center;gap:4px;margin-top:4px; }
+.round-next { background:rgba(138,110,32,.12) !important;border-color:var(--gold) !important; }
+.round-next:hover { background:var(--gold) !important;color:white; }
+
 /* Inspiration */
 .inspiration-btn {
   font-family:'Nunito', sans-serif;font-size:0.69rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;

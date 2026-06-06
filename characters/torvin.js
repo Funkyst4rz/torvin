@@ -152,6 +152,7 @@ const DEFAULT_CHAR = {
   deathSaves:  { success:0, failure:0 }, // 0–3 chacun
   inspiration: false,
   exhaustion:  0,                        // 0–6
+  combatRound: 0,                        // 0 = hors combat
 
   // ── Emplacements d'équipement ─────────────────────────────────
   slots: {
