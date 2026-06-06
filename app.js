@@ -33,6 +33,7 @@ const app = createApp({
       diceCount: 1,
       diceFlash: false,
       initiativeRoll: null,
+      attackRoll: null,
       saveStatus: '',
       saveStatusType: '',
       toastMsg: '',
@@ -341,6 +342,46 @@ const app = createApp({
     /** Clic sur un niveau d'exhaustion : toggle (clic même valeur = retire 1) */
     setExhaustion(n) {
       this.char.exhaustion = (n === (this.char.exhaustion || 0) ? n - 1 : n);
+    },
+
+    // ── Weapon attack ────────────────────────
+    rollWeaponAttack(type) {
+      const slot = this.char.slots && this.char.slots.arme;
+      if (!slot) return;
+      const d20 = Math.ceil(Math.random() * 20);
+      const isCrit = d20 === 20;
+      const isFumble = d20 === 1;
+
+      if (type === 'atk') {
+        const extraStr = (slot.atkBonus || '').toString().trim();
+        const extra = extraStr ? (parseInt(extraStr, 10) || 0) : 0;
+        const atk = this.mods.str + this.prof + extra;
+        const total = d20 + atk;
+        const label = isCrit ? ' ✦ CRITIQUE !' : isFumble ? ' ✗ Fumble' : '';
+        this.attackRoll = { type:'atk', d20, bonus: atk, total, label, isCrit, isFumble };
+        this._toast(`⚔ Attaque : d20(${d20}) + ${atk} = ${total}${label}`);
+      } else {
+        // Dégâts — parse "1d6-1" ou "2d8+3"
+        const dmgStr = (slot.damage || '1d4').trim();
+        const m = dmgStr.match(/^(\d+)d(\d+)([+-]\d+)?$/i);
+        let total, detail;
+        if (m) {
+          const count = parseInt(m[1], 10);
+          const sides = parseInt(m[2], 10);
+          const flat  = m[3] ? parseInt(m[3], 10) : 0;
+          const numDice = isCrit ? count * 2 : count;
+          const rolls = Array.from({ length: numDice }, () => Math.ceil(Math.random() * sides));
+          const sum = rolls.reduce((a, b) => a + b, 0);
+          total = sum + flat;
+          detail = `[${rolls.join('+')}]${flat >= 0 ? '+'+flat : flat}`;
+        } else {
+          total = parseInt(dmgStr, 10) || 0;
+          detail = dmgStr;
+        }
+        const critNote = isCrit ? ' ✦ CRITIQUE (dés doublés) !' : '';
+        this.attackRoll = { type:'dmg', total, detail, dmgType: slot.damageType || '', critNote };
+        this._toast(`💥 Dégâts : ${total} (${slot.damageType || ''})${critNote}`);
+      }
     },
 
     // ── Initiative ───────────────────────────

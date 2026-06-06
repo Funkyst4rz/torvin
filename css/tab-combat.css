@@ -121,3 +121,23 @@
 .attunement-slot.filled { border:1px solid var(--gold-light);background:rgba(138,110,32,.07);color:var(--ink); }
 .attunement-slot.empty { border:1px dashed var(--border-light);color:var(--ink-light);font-style:italic;justify-content:center;font-size:0.69rem; }
 
+/* Weapon attack panel */
+.weapon-atk-panel { margin-bottom:14px; }
+.weapon-atk-info { display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-bottom:10px;font-family:'Nunito', sans-serif;font-size:0.75rem;color:var(--ink-mid); }
+.weapon-atk-stat strong { color:var(--ink);font-weight:700; }
+.weapon-atk-type { color:var(--ink-light);margin-left:3px; }
+.weapon-atk-sep { color:var(--border);font-size:0.9em; }
+.weapon-atk-btns { display:flex;gap:8px;margin-bottom:8px; }
+.weapon-btn-atk { background:rgba(30,96,48,.07);border-color:var(--green) !important; }
+.weapon-btn-atk:hover { background:var(--green) !important;color:white; }
+.weapon-btn-dmg { background:rgba(180,40,40,.06);border-color:#b43030 !important; }
+.weapon-btn-dmg:hover { background:#b43030 !important;color:white; }
+.weapon-atk-result {
+  font-family:'Nunito', sans-serif;font-size:1rem;font-weight:700;color:var(--ink);
+  padding:6px 10px;border:1.5px solid var(--border);background:rgba(160,130,74,.06);
+  display:inline-block;border-radius:2px;
+}
+.weapon-atk-result strong { font-size:1.15rem; }
+.weapon-atk-detail { font-size:0.75rem;font-weight:400;color:var(--ink-light);margin-left:6px; }
+.weapon-atk-result.weapon-crit { border-color:var(--gold);background:rgba(138,110,32,.12);color:var(--gold); }
+.weapon-atk-result.weapon-fumble { border-color:#b43030;background:rgba(180,40,40,.06);color:#b43030; }

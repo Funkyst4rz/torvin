@@ -931,6 +931,37 @@
           </div>
         </div>
 
+        <!-- Attaque arme -->
+        <div class="section-box weapon-atk-panel">
+          <div class="section-title">⚔ Attaque — {{ char.slots && char.slots.arme && char.slots.arme.name || 'Arme' }}</div>
+          <div class="weapon-atk-info">
+            <span class="weapon-atk-stat">
+              Attaque :
+              <strong>{{ sign(mods.str + prof + (parseInt((char.slots&&char.slots.arme&&char.slots.arme.atkBonus)||0)||0)) }}</strong>
+            </span>
+            <span class="weapon-atk-sep">·</span>
+            <span class="weapon-atk-stat">
+              Dégâts : <strong>{{ (char.slots&&char.slots.arme&&char.slots.arme.damage)||'—' }}</strong>
+              <em class="weapon-atk-type">{{ (char.slots&&char.slots.arme&&char.slots.arme.damageType)||'' }}</em>
+            </span>
+            <span class="weapon-atk-sep">·</span>
+            <span class="weapon-atk-stat">Portée : {{ (char.slots&&char.slots.arme&&char.slots.arme.range)||'—' }}</span>
+          </div>
+          <div class="weapon-atk-btns">
+            <button class="save-btn weapon-btn-atk" @click="rollWeaponAttack('atk')">🎲 Attaque (d20)</button>
+            <button class="save-btn weapon-btn-dmg" @click="rollWeaponAttack('dmg')">💥 Dégâts</button>
+          </div>
+          <div v-if="attackRoll" class="weapon-atk-result" :class="{'weapon-crit': attackRoll.isCrit, 'weapon-fumble': attackRoll.isFumble}">
+            <span v-if="attackRoll.type==='atk'">
+              d20({{ attackRoll.d20 }}) {{ sign(attackRoll.bonus) }} = <strong>{{ attackRoll.total }}</strong>{{ attackRoll.label }}
+            </span>
+            <span v-else>
+              {{ attackRoll.total }} dégâts {{ attackRoll.dmgType }}
+              <em class="weapon-atk-detail">{{ attackRoll.detail }}</em>{{ attackRoll.critNote }}
+            </span>
+          </div>
+        </div>
+
         <!-- Combos de combat -->
         <div class="divider"><span>✦</span></div>
         <div class="section-title">Combos de combat</div>
