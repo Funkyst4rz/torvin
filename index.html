@@ -1169,11 +1169,21 @@
         <div v-if="char.sessionNotes.length === 0" class="notes-empty">
           Aucune note — cliquez sur <em>+ Nouvelle note</em> pour commencer.
         </div>
-        <div v-else-if="filteredNotes.length === 0" class="notes-empty">
+        <div v-else-if="noteSearch && filteredNotes.length === 0 && noteSearchLines.length === 0" class="notes-empty">
           Aucun résultat pour « {{ noteSearch }} ».
         </div>
 
-        <!-- Entrées du journal -->
+        <!-- Résultats de recherche : lignes correspondantes -->
+        <template v-if="noteSearch && noteSearchLines.length">
+          <div class="note-search-results-label">{{ noteSearchLines.length }} ligne{{ noteSearchLines.length > 1 ? 's' : '' }} trouvée{{ noteSearchLines.length > 1 ? 's' : '' }}</div>
+          <div class="note-search-line" v-for="(r, i) in noteSearchLines" :key="i" @click="toggleNoteCollapse(r.idx); noteSearch=''">
+            <span class="note-search-line-meta">{{ r.title || r.date }}</span>
+            <span class="note-search-line-text">{{ r.line }}</span>
+          </div>
+        </template>
+
+        <!-- Entrées du journal (masquées si recherche active) -->
+        <template v-if="!noteSearch">
         <div class="note-card" v-for="{note, idx} in filteredNotes" :key="idx">
           <div class="note-header" @click="toggleNoteCollapse(idx)">
             <input class="note-title" v-model="note.title" placeholder="Titre de la session…"
@@ -1187,6 +1197,8 @@
             v-autoresize
             placeholder="Événements de la séance, PNJ rencontrés, indices, observations de Torvin…"></textarea>
         </div>
+
+        </template><!-- /!noteSearch -->
 
         <div class="notes-hint">Sauvegardé automatiquement · inclus dans la sauvegarde GitHub</div>
       </div>

@@ -155,6 +155,23 @@
   font-family:'Nunito', sans-serif;font-size:0.72rem;color:var(--ink-light);
   background:none;border:none;cursor:pointer;text-decoration:underline;
 }
+.note-search-results-label {
+  font-family:'Nunito', sans-serif;font-size:0.65rem;color:var(--ink-light);
+  text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;
+}
+.note-search-line {
+  display:flex;flex-direction:column;gap:2px;
+  border-left:2px solid var(--gold);padding:5px 10px;margin-bottom:6px;
+  cursor:pointer;background:rgba(255,255,255,.02);border-radius:0 2px 2px 0;
+}
+.note-search-line:hover { background:rgba(196,152,48,.06); }
+.note-search-line-meta {
+  font-family:'Nunito', sans-serif;font-size:0.63rem;color:var(--gold);
+  font-weight:700;text-transform:uppercase;letter-spacing:.4px;
+}
+.note-search-line-text {
+  font-family:'Crimson Text', serif;font-size:0.88rem;color:var(--ink);line-height:1.5;
+}
 .notes-hint { font-family:'Nunito', sans-serif;font-size:0.63rem;color:var(--ink-light);margin-top:6px;text-align:right;text-transform:uppercase;letter-spacing:.5px; }
 
 /* â”€â”€ FOOTER & TOAST â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */

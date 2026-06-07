@@ -370,6 +370,21 @@ const appComputed = {
       );
   },
 
+  noteSearchLines() {
+    if (!this.noteSearch) return [];
+    const q = this.noteSearch.toLowerCase();
+    const results = [];
+    (this.char.sessionNotes || []).forEach((note, idx) => {
+      const lines = (note.text || '').split('\n');
+      lines.forEach(line => {
+        if (line.toLowerCase().includes(q)) {
+          results.push({ idx, title: note.title || '', date: note.date || '', line: line.trim() });
+        }
+      });
+    });
+    return results;
+  },
+
   statsDisplay() {
     const s = this.stats, m = this.mods, a = this.asiBonus, r = this.char.racial, e = this.equipmentBonuses;
     return [
