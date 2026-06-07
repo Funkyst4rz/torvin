@@ -81,18 +81,6 @@
         "name": "Guidance",
         "tag": "utilitaire",
         "conc": true
-      },
-      {
-        "id": "sacredflame",
-        "name": "Flamme sacrée",
-        "tag": "DD Dex",
-        "conc": false
-      },
-      {
-        "id": "resistance",
-        "name": "Résistance",
-        "tag": "buff",
-        "conc": true
       }
     ],
     "1": [],
@@ -101,7 +89,10 @@
     "4": [],
     "5": []
   },
-  "removedSpells": [],
+  "removedSpells": [
+    "resistance",
+    "sacredflame"
+  ],
   "skillProfs": [
     "arcanes",
     "religion",
@@ -111,12 +102,14 @@
   ],
   "concentration": null,
   "conditions": [],
+  "conditionDurations": {},
   "deathSaves": {
     "success": 0,
     "failure": 0
   },
   "inspiration": false,
   "exhaustion": 0,
+  "combatRound": 0,
   "slots": {
     "arme": {
       "name": "Masse d'armes",
@@ -128,10 +121,10 @@
       "bonuses": []
     },
     "armure": {
-      "name": "Armure de cuir",
+      "name": "cotte de mailles",
       "notes": "",
-      "armorBase": 11,
-      "armorType": "light",
+      "armorBase": 13,
+      "armorType": "medium",
       "bonuses": [
         {
           "type": "ca",
