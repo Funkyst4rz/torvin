@@ -81,6 +81,12 @@
         "name": "Guidance",
         "tag": "utilitaire",
         "conc": true
+      },
+      {
+        "id": "thaumaturgy",
+        "name": "Thaumaturgie",
+        "tag": "utilitaire",
+        "conc": false
       }
     ],
     "1": [],
