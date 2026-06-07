@@ -56,6 +56,10 @@ const app = createApp({
       // Slot modal
       slotModal: null,
 
+      // Notes UI
+      noteSearch: '',
+      noteCollapsed: {},
+
       // Concentration check
       concCheckDamage: 0,
       concCheckResult: null,
@@ -585,13 +589,26 @@ const app = createApp({
     addNote() {
       const d = new Date();
       const date = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
-      this.char.sessionNotes = [{ date, text: '' }, ...this.char.sessionNotes];
+      this.char.sessionNotes = [{ date, title: '', text: '' }, ...this.char.sessionNotes];
+      // nouvelle note toujours dépliée
+      const shifted = {};
+      Object.keys(this.noteCollapsed).forEach(k => { shifted[+k + 1] = this.noteCollapsed[k]; });
+      shifted[0] = false;
+      this.noteCollapsed = shifted;
     },
     migrateOldNote() {
       const d = new Date();
       const date = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
-      this.char.sessionNotes = [{ date, text: this.char.notes }, ...this.char.sessionNotes];
+      this.char.sessionNotes = [{ date, title: '', text: this.char.notes }, ...this.char.sessionNotes];
       this.char.notes = '';
+    },
+    isCollapsed(idx) {
+      if (this.noteCollapsed[idx] !== undefined) return this.noteCollapsed[idx];
+      const note = this.char.sessionNotes[idx];
+      return note && note.text.length > 120;
+    },
+    toggleNoteCollapse(idx) {
+      this.noteCollapsed = { ...this.noteCollapsed, [idx]: !this.isCollapsed(idx) };
     },
 
     // ── Custom equipment ─────────────────────
@@ -707,6 +724,12 @@ const app = createApp({
 // ── Composants Vue réutilisables ─────────────────────────────
 
 // Overlay générique pour les modaux (spell, info, ASI)
+// Directive auto-resize pour les textareas
+app.directive('autoresize', {
+  mounted(el)  { el.style.height = 'auto'; el.style.height = el.scrollHeight + 'px'; },
+  updated(el)  { el.style.height = 'auto'; el.style.height = el.scrollHeight + 'px'; },
+});
+
 app.component('modal-overlay', {
   props: {
     overlayClass: { type: String, default: 'spell-modal-overlay' },

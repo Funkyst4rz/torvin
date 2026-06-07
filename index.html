@@ -1155,22 +1155,36 @@
 
         <!-- Barre d'outils -->
         <div class="notes-toolbar">
-          <span class="section-title" style="border:none;padding:0;margin:0">Journal de session</span>
-          <button class="add-note-btn" @click="addNote">+ Nouvelle note</button>
+          <div class="notes-toolbar-left">
+            <span class="section-title" style="border:none;padding:0;margin:0">Journal de session</span>
+            <span class="notes-count" v-if="char.sessionNotes.length">{{ char.sessionNotes.length }} note{{ char.sessionNotes.length > 1 ? 's' : '' }}</span>
+          </div>
+          <div class="notes-toolbar-right">
+            <input class="note-search" v-model="noteSearch" placeholder="Chercher…" type="search">
+            <button class="add-note-btn" @click="addNote">+ Nouvelle note</button>
+          </div>
         </div>
 
         <!-- État vide -->
         <div v-if="char.sessionNotes.length === 0" class="notes-empty">
           Aucune note — cliquez sur <em>+ Nouvelle note</em> pour commencer.
         </div>
+        <div v-else-if="filteredNotes.length === 0" class="notes-empty">
+          Aucun résultat pour « {{ noteSearch }} ».
+        </div>
 
         <!-- Entrées du journal -->
-        <div class="note-card" v-for="(note, i) in char.sessionNotes" :key="i">
-          <div class="note-header">
-            <input class="note-date" type="date" v-model="note.date">
-            <button class="equip-delete note-delete" @click="removeAt('sessionNotes', i)" title="Supprimer cette note">✕</button>
+        <div class="note-card" v-for="{note, idx} in filteredNotes" :key="idx">
+          <div class="note-header" @click="toggleNoteCollapse(idx)">
+            <input class="note-title" v-model="note.title" placeholder="Titre de la session…"
+              @click.stop @keydown.stop>
+            <input class="note-date" type="date" v-model="note.date" @click.stop>
+            <span class="note-collapse-btn">{{ isCollapsed(idx) ? '▾' : '▴' }}</span>
+            <button class="equip-delete note-delete" @click.stop="removeAt('sessionNotes', idx)" title="Supprimer cette note">✕</button>
           </div>
-          <textarea class="note-text" v-model="note.text" rows="5"
+          <div v-if="isCollapsed(idx) && note.text" class="note-preview" @click="toggleNoteCollapse(idx)">{{ note.text.slice(0, 180).trimEnd() }}{{ note.text.length > 180 ? '…' : '' }}</div>
+          <textarea v-if="!isCollapsed(idx)" class="note-text" v-model="note.text"
+            v-autoresize
             placeholder="Événements de la séance, PNJ rencontrés, indices, observations de Torvin…"></textarea>
         </div>
 

@@ -358,6 +358,18 @@ const appComputed = {
     return result;
   },
 
+  filteredNotes() {
+    const notes = this.char.sessionNotes || [];
+    if (!this.noteSearch) return notes.map((note, idx) => ({ note, idx }));
+    const q = this.noteSearch.toLowerCase();
+    return notes
+      .map((note, idx) => ({ note, idx }))
+      .filter(({ note }) =>
+        (note.title || '').toLowerCase().includes(q) ||
+        (note.text  || '').toLowerCase().includes(q)
+      );
+  },
+
   statsDisplay() {
     const s = this.stats, m = this.mods, a = this.asiBonus, r = this.char.racial, e = this.equipmentBonuses;
     return [

@@ -77,12 +77,24 @@
 
 /* â”€â”€ NOTES â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .notes-toolbar {
-  display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;
+  display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px;flex-wrap:wrap;
 }
+.notes-toolbar-left { display:flex;align-items:center;gap:10px; }
+.notes-toolbar-right { display:flex;align-items:center;gap:8px; }
+.notes-count {
+  font-family:'Nunito', sans-serif;font-size:0.65rem;color:var(--ink-light);
+  background:var(--border-light);border-radius:10px;padding:1px 8px;
+}
+.note-search {
+  font-family:'Nunito', sans-serif;font-size:0.72rem;color:var(--ink);
+  background:transparent;border:1px solid var(--border);border-radius:3px;
+  padding:3px 8px;width:120px;outline:none;
+}
+.note-search:focus { border-color:var(--gold); }
 .add-note-btn {
   font-family:'Nunito', sans-serif;font-size:0.75rem;font-weight:700;
   color:var(--gold);background:none;border:1.5px solid var(--gold);
-  border-radius:3px;padding:4px 14px;cursor:pointer;letter-spacing:.4px;
+  border-radius:3px;padding:4px 14px;cursor:pointer;letter-spacing:.4px;white-space:nowrap;
 }
 .add-note-btn:hover { background:rgba(196,152,48,.12); }
 .notes-empty {
@@ -94,20 +106,38 @@
   border-radius:3px;padding:10px 12px;margin-bottom:10px;
 }
 .note-header {
-  display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;
+  display:flex;align-items:center;gap:8px;cursor:pointer;user-select:none;
 }
+.note-header:hover .note-collapse-btn { opacity:1; }
+.note-title {
+  flex:1;font-family:'Cinzel', serif;font-size:0.78rem;font-weight:700;
+  color:var(--ink-mid);background:transparent;border:none;outline:none;
+  min-width:0;cursor:text;
+}
+.note-title::placeholder { font-weight:400;font-family:'Crimson Text',serif;font-style:italic;color:var(--ink-light); }
 .note-date {
-  font-family:'Nunito', sans-serif;font-size:0.72rem;color:var(--ink-mid);
+  font-family:'Nunito', sans-serif;font-size:0.68rem;color:var(--ink-light);
   background:transparent;border:none;border-bottom:1px dashed var(--border);
-  padding:2px 4px;cursor:pointer;
+  padding:2px 2px;cursor:pointer;flex-shrink:0;
 }
-.note-delete { font-size:0.6rem;opacity:.4; }
+.note-collapse-btn {
+  font-size:0.65rem;color:var(--ink-light);opacity:.5;flex-shrink:0;transition:opacity .15s;
+}
+.note-delete { font-size:0.6rem;opacity:.4;flex-shrink:0; }
 .note-delete:hover { opacity:1; }
+.note-preview {
+  margin-top:7px;padding:6px 0 2px;
+  border-top:1px dashed var(--border-light);
+  font-family:'Crimson Text', serif;font-size:0.85rem;color:var(--ink-light);
+  line-height:1.55;white-space:pre-wrap;cursor:pointer;
+  display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;
+}
+.note-preview:hover { color:var(--ink); }
 .note-text {
-  width:100%;box-sizing:border-box;background:transparent;border:none;
+  display:block;width:100%;box-sizing:border-box;background:transparent;border:none;
   border-top:1px dashed var(--border-light);padding:8px 0 2px;
   font-family:'Crimson Text', serif;font-size:0.9rem;color:var(--ink);
-  resize:vertical;min-height:80px;line-height:1.65;outline:none;
+  resize:none;overflow:hidden;min-height:60px;line-height:1.65;outline:none;
 }
 .note-text:focus { border-top-color:var(--gold); }
 .note-migrate-banner {
@@ -286,6 +316,8 @@ body.dark .header::after  { background: var(--parchment); }
   .armor-config-row { gap:8px; }
   .slot-grid { grid-template-columns:repeat(4,1fr); }
   .notes-toolbar { flex-wrap:wrap;gap:6px; }
+  .notes-toolbar-right { flex-wrap:wrap; }
+  .note-search { width:100px; }
 }
 @media(max-width:460px){
   .content { padding:24px 12px; padding-bottom:calc(56px + env(safe-area-inset-bottom,0px)); }
