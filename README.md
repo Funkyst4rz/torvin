@@ -38,7 +38,7 @@ Une fiche de personnage interactive pour **Donjons & Dragons 5e**, construite en
 - Lanceur de **dés intégré** (d4, d6, d8, d10, d12, d20, d100) avec sélecteur NdX
 - **Lancer d'initiative** intégré (1d20 + DEX + bonus Alerte si actif)
 - **Aide upcast** dans le modal de sort (description des niveaux supérieurs, PHB 2014)
-- **Journal de session** : entrées datées éditables (ajout/suppression), migration depuis l'ancien champ notes
+- **Journal de session** : entrées datées avec titre, collapse/dépli automatique, textarea auto-redimensionnable, recherche par ligne (affiche les phrases correspondantes avec titre de note en contexte)
 
 ---
 

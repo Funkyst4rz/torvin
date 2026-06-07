@@ -95,7 +95,7 @@ D:\torvin\
 | `spells` | Sorts | Emplacements, sorts mineurs, domaine, préparés |
 | `combat` | Combat | CA (auto/manuelle), initiative, concentration, conditions |
 | `histoire` | Histoire | Traits, idéaux, lien, défaut, background narratif |
-| `notes` | Notes | Journal de session (entrées datées éditables) + phrases situationnelles |
+| `notes` | Notes | Journal de session (titre, collapse, auto-resize, recherche par ligne) + phrases situationnelles |
 
 ---
 
@@ -123,8 +123,10 @@ rollInitiative()             // Lance 1d20 + DEX + bonus Alerte, stocke dans ini
 showInfo(key, ...args)       // Résout STRINGS.info[key] et ouvre le modal info
 openStatInfo(key)            // Ouvre le modal d'info d'une caractéristique
 openSaveInfo(sv)             // Ouvre le modal d'info d'un jet de sauvegarde
-addNote()                    // Ajoute une entrée de journal datée d'aujourd'hui (en tête)
+addNote()                    // Ajoute une entrée {date, title:'', text:''} en tête + décale noteCollapsed
 migrateOldNote()             // Importe char.notes (ancien textarea) dans sessionNotes puis le vide
+isCollapsed(idx)             // true si note repliée (défaut : text.length > 120), overridable via noteCollapsed[idx]
+toggleNoteCollapse(idx)      // Inverse l'état collapse d'une note dans noteCollapsed
 openSlotModal(key)           // Ouvre le modal d'édition d'un emplacement d'équipement
 closeSlotModal()             // Ferme le modal d'équipement
 addSlotBonus(key)            // Ajoute un bonus vide au slot (type:'', value:0)
@@ -141,6 +143,8 @@ equipmentSlots()             // Renvoie EQUIPMENT_SLOTS (itération dans le temp
 bonusTypes()                 // Renvoie BONUS_TYPES (options du select dans le modal)
 slotData(key)                // Renvoie char.slots[key] avec valeurs par défaut
 currentSlotDef()             // Définition (EQUIPMENT_SLOTS) du slot ouvert dans le modal
+filteredNotes()              // [{note, idx}] — notes visibles (toutes si pas de recherche)
+noteSearchLines()            // [{idx, title, date, line}] — lignes correspondant à noteSearch
 ```
 
 ### Ce qui se recalcule dynamiquement par niveau
@@ -157,7 +161,7 @@ currentSlotDef()             // Définition (EQUIPMENT_SLOTS) du slot ouvert dan
 ```javascript
 // data.js
 LEVELS           // { 1..10 } — prof, slots, cd, info par niveau
-CLERIC_SPELLS    // Sorts de clerc par niveau (avec desc, tag, conc…)
+CLERIC_SPELLS    // Sorts de clerc par niveau — liste complète PHB 2014 (niv.0–5) : sorts mineurs clerc + magicien (Arcane Initiate), tous les sorts préparables niv.1–5 incluant rituels
 FEATS            // Liste des dons disponibles
 CONDITIONS       // Conditions de combat D&D 5e
 EXHAUSTION_EFFECTS // Effets d'épuisement par niveau
@@ -244,6 +248,8 @@ Exemples : `feat(combat): ajouter tracker de conditions` · `fix(save): corriger
 - Strict mode (`'use strict'`) actif dans app.js
 - Vérifications de champs manquants dans `_loadInitialState()` pour la rétrocompatibilité
 - Pas de dépendances npm, pas de build step
+- Directive Vue globale `v-autoresize` enregistrée dans app.js (auto-resize textarea au mount et update)
+- UI state notes : `noteSearch` (string) + `noteCollapsed` (objet idx→bool) — non persistés dans la save
 
 ---
 
@@ -275,5 +281,7 @@ Exemples : `feat(combat): ajouter tracker de conditions` · `fix(save): corriger
 - [x] Slot Arme enrichi (atkBonus, damage, damageType, range) — remplace la table d'attaques
 - [x] CA auto/manuelle toggle (useCaAuto, caAuto computed)
 - [x] Journal de session (entrées datées éditables, migration depuis l'ancien textarea)
+- [x] Journal : titre par note, collapse automatique, textarea auto-resize (directive v-autoresize), recherche par ligne
+- [x] Liste de sorts clerc complète PHB 2014 (niv.0–5, +27 sorts manquants ajoutés)
 - [ ] Partage en lecture seule (URL avec état encodé en base64)
 - [ ] Support multi-personnages
