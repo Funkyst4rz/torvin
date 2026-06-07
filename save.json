@@ -89,7 +89,14 @@
         "conc": false
       }
     ],
-    "1": [],
+    "1": [
+      {
+        "id": "bane",
+        "name": "Fléau",
+        "tag": "DD Cha",
+        "conc": true
+      }
+    ],
     "2": [],
     "3": [],
     "4": [],
@@ -97,7 +104,8 @@
   },
   "removedSpells": [
     "resistance",
-    "sacredflame"
+    "sacredflame",
+    "sc-bane"
   ],
   "skillProfs": [
     "arcanes",
@@ -209,7 +217,7 @@
   "sessionNotes": [
     {
       "date": "2026-06-07",
-      "text": "Ville havre-fer : pionnière créé y'z 18ans, sur le continent de l'aube. Nouveau continent.\nFaut traverser un océan depuis le vieux continent.\nPhénomène magique dans l'océan. Les bateaux se perde.\nGrandement inexploré le continent.\n\nHavre fer Ville de mineur \nGros gisement de fer, argent ..\n\nOn y trouve des mines\nLa dent rouge, la dent gris, la bouche\n200-300 ouvriers\nContremaître nain krask\n\nFonderie a l'est, métaux traités avant envoi\n\nGouverneure : lyra ashenbail\nBâtiment en pierre\n\nCaserne milice pour le maintien de l'ordre, rixe et bureau de douane\n\nTemple avec infirmerie gratuit. Style Panthéon \n\nLa tavenere où on se trouve : veine d'or (pas la plus connue)\nTaverne tenue par drakeide : brita\n\n\n"
+      "text": "Ville havre-fer : pionnière créé y'z 18ans, sur le continent de l'aube. Nouveau continent.\nFaut traverser un océan depuis le vieux continent.\n\n\nPhénomène magique dans l'océan. Les bateaux se perde.\nGrandement inexploré le continent.\n\nHavre fer Ville de mineur \nGros gisement de fer, argent ..\n\nOn y trouve des mines\nLa dent rouge, la dent gris, la bouche\n200-300 ouvriers\nContremaître nain krask\n\nFonderie a l'est, métaux traités avant envoi\n\nGouverneure : lyra ashenbail\nBâtiment en pierre\n\nCaserne milice pour le maintien de l'ordre, rixe et bureau de douane\n\nTemple avec infirmerie gratuit. Style Panthéon \n\nLa tavenere où on se trouve : veine d'or (pas la plus connue)\nTaverne tenue par drakeide : brita\n\nOn peut faire plusieurs petits jobs pour subvenir a ses besoins.\n\nJe suis là depuis 2 ans\nOn a déjà bosser ensemble sur des contrats de recherche de personne\n\nGuideon pied de brime druide\nShen varath moine, parle pas beaucoup. Mission d'escorte \nElara vaine, dite l'éclairause, sur mes bateaux. Matelot\n\nOn a ete contacté par un demi elfe rael qui n'est pas connu dans la ville mais part souvent à l'extérieur. Donné rdv a la veine d'or\n.\nRael a des vêtements pas propre, plein de poussière sur lui. Habillé pour la route.\nSac à dos énorme.\n\nIl arrive essoufflé en retard. \nIl a trouvé quelque chose au nord ouest, opposé des mines.\nIl évaluait les risques\nIl jette une un caillou magique sur la table qui l'a retrouvé dans l'ours.\nIl montre la prau de l'ours qui l'a récupéré \nProtubérance osseuse qui sorte de la peau\n\nJe prends la piece et la dessine sur un parchemin\n\nRael a une cicatrice au cou. Suite a un piege\nMission pour explorer la pyramide 15po/j/personne\n+20po si la mission est ok\n\nLa pierre est magique je ne sais pas ce que ca fait mais on sait que une taverne les utilise en déco. Peut être a la fonderie ils savent.\n\n\n"
     }
   ],
   "traits": [
