@@ -64,6 +64,7 @@ const CLERIC_SPELLS = {
     { id:'detectmagic',   name:'Détection de la magie',       tag:'rituel',     conc:true,  cast:'1 action',  range:'Personnelle',  dur:'10 minutes',  desc:"Détectez la magie dans 9 m. Vous percevez son aura et son école. Durée 10 minutes." },
     { id:'detectpoison',  name:'Détect. poison et maladies',  tag:'rituel',     conc:true,  cast:'1 action',  range:'Personnelle',  dur:'10 minutes',  desc:"Détectez les poisons, créatures venimeuses et maladies dans 9 m pendant 10 minutes." },
     { id:'purifyfood',    name:"Purification nourriture/eau", tag:'rituel',     conc:false, cast:'1 action',  range:'3 m',          dur:'Instantanée', desc:"Purifiez toute nourriture et eau non magique dans une sphère de 1,5 m de rayon, supprimant poisons et maladies." },
+    { id:'magicmissile',  name:'Projectile magique',         tag:'auto',       conc:false, cast:'1 action',  range:'36 m',         dur:'Instantanée', domainOnly:true, desc:"3 fléchettes de force (1d4+1 chacune). Ne rate jamais. Peut cibler plusieurs créatures.", upcast:"+1 fléchette (1d4+1) par niveau d'emplacement supérieur au niv.1." },
   ],
   2: [
     { id:'aid',           name:'Aide',                      tag:'+5 PV',      conc:false, cast:'1 action',  range:'9 m',          dur:'8 heures',    desc:"3 alliés gagnent +5 PV max et actuels pendant 8 heures.", upcast:"+5 PV supplémentaires par niveau d'emplacement supérieur au niv.2." },
@@ -82,6 +83,8 @@ const CLERIC_SPELLS = {
     { id:'gentlerepose',  name:'Repos éternel',             tag:'rituel',     conc:false, cast:'1 action',  range:'Contact',      dur:'10 jours',    desc:"Préservez un cadavre de la décomposition et empêchez l'animation en mort-vivant pendant 10 jours." },
     { id:'locateobject',  name:"Localisation d'objet",      tag:'divination', conc:true,  cast:'1 action',  range:'Personnelle',  dur:'10 minutes',  desc:"Sentez la direction d'un objet familier ou d'un type d'objet dans 300 m pendant 10 minutes." },
     { id:'zoneoftruth',   name:'Zone de vérité',            tag:'utilitaire', conc:false, cast:'1 action',  range:'18 m',         dur:'10 minutes',  desc:"Sphère 4,5 m : JS Charisme ou impossible de mentir sciemment pendant 10 minutes." },
+    { id:'magicweapon',   name:'Arme magique',              tag:'buff',       conc:true,  cast:'1 bonus',   range:'Contact',      dur:'1 heure',     domainOnly:true, desc:"Une arme non magique devient magique : +1 aux jets d'attaque et dégâts (ou +2 si emplacement de niv.4+).", upcast:"Niv.4+ : bonus passe à +2." },
+    { id:'nystulmagicaura',name:"Aura magique de Nystul",  tag:'illusion',   conc:true,  cast:'1 action',  range:'Contact',      dur:'24 heures',   domainOnly:true, desc:"Modifie la détection magique d'un objet ou d'une créature pendant 24 heures. Peut masquer ou falsifier l'aura magique." },
   ],
   3: [
     { id:'animdead',      name:'Animation des morts',       tag:'nécro',      conc:false, cast:'1 minute',  range:'3 m',          dur:'Instantanée', desc:"Animez un squelette ou zombie obéissant pendant 24h. Renouvelable.", upcast:"+2 morts-vivants supplémentaires par niveau d'emplacement supérieur au niv.3." },
@@ -106,6 +109,8 @@ const CLERIC_SPELLS = {
     { id:'waterwalk',     name:"Marcher sur l'eau",         tag:'rituel',     conc:false, cast:'1 action',  range:'Contact',      dur:'1 heure',     desc:"Jusqu'à 10 créatures se déplacent sur les liquides pendant 1 heure." },
   ],
   4: [
+    { id:'arcaneeye',     name:"Œil d'Arcane",              tag:'divination', conc:true,  cast:'1 action',  range:'9 m',          dur:'1 heure',     domainOnly:true, desc:"Crée un œil magique invisible se déplaçant à 9 m/tour. Vision normale + vision dans le noir 9 m pendant 1 heure." },
+    { id:'leomundschest', name:'Coffre de Léomund',         tag:'invocation', conc:false, cast:'1 action',  range:'Contact',      dur:'Indéfinie',   domainOnly:true, desc:"Cache un coffre sur le plan éthéré. Rappel avec une réplique miniature. Contenu conservé indéfiniment." },
     { id:'banishment',    name:'Bannissement',              tag:'contrôle',   conc:true,  cast:'1 action',  range:'18 m',         dur:'1 minute',    desc:"JS Charisme ou banni pendant 1 min. Si extra-planaire, permanent après 1 minute.", upcast:"+1 créature par niveau d'emplacement supérieur au niv.4." },
     { id:'deathward',     name:'Protection contre la mort', tag:'défense',    conc:false, cast:'1 action',  range:'Contact',      dur:'8 heures',    desc:"1ère fois à 0 PV : reste à 1 PV. Dure 8 heures." },
     { id:'divination',    name:'Divination',                tag:'rituel',     conc:false, cast:'1 action',  range:'Personnelle',  dur:'Instantanée', desc:"Réponse véridique de votre divinité sur un événement dans les 7 prochains jours." },
@@ -116,6 +121,7 @@ const CLERIC_SPELLS = {
     { id:'stoneshape',    name:'Façonnage de la pierre',    tag:'utilitaire', conc:false, cast:'1 action',  range:'Contact',      dur:'Instantanée', desc:"Façonnez une pierre touchée (max 1,5 m³) selon votre volonté." },
   ],
   5: [
+    { id:'teleportcircle',name:'Cercle de téléportation',   tag:'rituel',     conc:false, cast:'1 minute',  range:'3 m',          dur:'1 round',     domainOnly:true, desc:"Ouvre un portail vers un cercle de téléportation connu. Peut être gravé définitivement (11 jours de travail, coût 50 po/j)." },
     { id:'commune',       name:'Communion',                 tag:'rituel',     conc:false, cast:'1 minute',  range:'Personnelle',  dur:'1 minute',    desc:"Posez 3 questions oui/non à votre divinité. Une fois par jour." },
     { id:'dispevil',      name:'Dissipation du mal',        tag:'défense',    conc:true,  cast:'1 action',  range:'Personnelle',  dur:'1 minute',    desc:"Avantage aux JS contre aberrations, célestes, fées, fiélons, morts-vivants." },
     { id:'flamestrike',   name:'Colonne de flamme',         tag:'+atk',       conc:false, cast:'1 action',  range:'18 m',         dur:'Instantanée', desc:"Cylindre 3 m × 9 m : 4d6 feu + 4d6 radiants. JS Dex pour moitié.", upcast:"+1d6 feu + 1d6 radiant par niveau d'emplacement supérieur au niv.5." },

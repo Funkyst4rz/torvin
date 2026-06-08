@@ -185,9 +185,9 @@ const appComputed = {
     return (this.char.preparedSpells[0] || []).map(c => {
       const def = defs.get(c.id) || {};
       return {
-        ...c,
+        ...def, ...c,
         racial: def.racial || c.racial || false,
-        tag: c.id === 'tollDead' ? `DD ${this.spellDC} Sag` : c.tag,
+        tag: c.id === 'tollDead' ? `DD ${this.spellDC} Sag` : (c.tag || def.tag),
       };
     });
   },
@@ -218,7 +218,19 @@ const appComputed = {
     const result = {};
     for (const lvl of this.slotLevels) {
       const alreadyAdded = new Set((this.char.preparedSpells[lvl] || []).map(s => s.id));
-      result[lvl] = (CLERIC_SPELLS[lvl] || []).filter(s => !alreadyAdded.has(s.id));
+      result[lvl] = (CLERIC_SPELLS[lvl] || []).filter(s => !alreadyAdded.has(s.id) && !s.domainOnly);
+    }
+    return result;
+  },
+
+  preparedByLevel() {
+    const allDefs = new Map(Object.values(CLERIC_SPELLS).flat().map(s => [s.id, s]));
+    const result = {};
+    for (const lvl of this.slotLevels) {
+      result[lvl] = (this.char.preparedSpells[lvl] || []).map(cs => {
+        const def = allDefs.get(cs.id) || {};
+        return { ...def, ...cs };
+      });
     }
     return result;
   },
@@ -337,7 +349,14 @@ const appComputed = {
   statKeys()        { return ['str','dex','con','int','wis','cha']; },
   statLabels()      { return STAT_LABELS; },
   allFeats()        { return FEATS; },
-  domainSpells()    { return DOMAIN_SPELLS; },
+  domainSpells() {
+    const allDefs = new Map(Object.values(CLERIC_SPELLS).flat().map(s => [s.id, s]));
+    const result = {};
+    for (const [lvl, spells] of Object.entries(DOMAIN_SPELLS)) {
+      result[lvl] = spells.map(ds => ({ ...(allDefs.get(ds.id) || {}), ...ds }));
+    }
+    return result;
+  },
   asiLevels()       { return CLERIC_ASI_LEVELS; },
   allConditions()   { return CONDITIONS; },
   exhaustionEffects(){ return EXHAUSTION_EFFECTS; },

@@ -529,7 +529,7 @@ const app = createApp({
       if (!spell) return;
       const list = this.char.preparedSpells[spellLvl] || [];
       if (!list.find(s => s.id === spellId))
-        this.char.preparedSpells[spellLvl] = [...list, { id: spell.id, name: spell.name, tag: spell.tag, conc: spell.conc }];
+        this.char.preparedSpells[spellLvl] = [...list, { id: spell.id }];
       const pickers = { ...this.openPickers };
       pickers[spellLvl] = false;
       this.openPickers = pickers;
