@@ -36,8 +36,8 @@ jobs:
       - name: Check JS syntax — engine.js
         run: node --check engine.js
 
-      - name: Check JS syntax — characters/torvin.js
-        run: node --check characters/torvin.js
+      - name: Check JS syntax — characters/torvin/torvin.js
+        run: node --check characters/torvin/torvin.js
 
       - name: Check JS syntax — strings.js
         run: node --check strings.js
@@ -45,7 +45,7 @@ jobs:
       # ── Required files presence ────────────────────────────────
       - name: Check required files exist
         run: |
-          for f in index.html style.css app.js computed.js storage.js data.js strings.js engine.js characters/torvin.js; do
+          for f in index.html style.css app.js computed.js storage.js data.js strings.js engine.js characters/torvin/torvin.js; do
             if [ ! -f "$f" ]; then
               echo "ERROR: Missing required file: $f"
               exit 1
@@ -86,11 +86,11 @@ jobs:
       - name: Verify DEFAULT_CHAR has required fields
         run: |
           for field in name level base racial asi hpRolls hpCurrent currency languages phrases concentration; do
-            if ! grep -q "$field" characters/torvin.js; then
+            if ! grep -q "$field" characters/torvin/torvin.js; then
               echo "ERROR: DEFAULT_CHAR missing field: $field"
               exit 1
             fi
-            echo "OK: field '$field' in characters/torvin.js"
+            echo "OK: field '$field' in characters/torvin/torvin.js"
           done
 
       - name: Verify security function (token deletion before save)

@@ -1,5 +1,5 @@
 // ══════════════════════════════════════════════════════════════
-// characters/torvin.js — Torvin "Trois-Parchemins"
+// characters/torvin/torvin.js — Torvin "Trois-Parchemins"
 // Données spécifiques au personnage (race, classe, sorts, état initial)
 // Dépend de : data.js (LEVELS, CLERIC_SPELLS, FEATS, CONDITIONS…)
 // ══════════════════════════════════════════════════════════════
@@ -179,6 +179,6 @@ const DEFAULT_CHAR = {
 
   // ── GitHub ────────────────────────────────────────────────────
   ghRepo:   'Funkyst4rz/torvin',
-  ghFile:   'save.json',
+  ghFile:   'characters/torvin/save.json',
   ghBranch: 'main',
 };

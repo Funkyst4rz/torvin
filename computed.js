@@ -1,7 +1,7 @@
 // ══════════════════════════════════════════════════════════════
 // computed.js — Torvin "Trois-Parchemins"
 // Propriétés calculées Vue 3 (D&D math + helpers de template)
-// Dépend de : data.js · characters/torvin.js
+// Dépend de : data.js · characters/torvin/torvin.js
 // Importé dans app.js via : computed: { ...appComputed }
 // ══════════════════════════════════════════════════════════════
 

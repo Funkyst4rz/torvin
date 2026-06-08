@@ -1,7 +1,7 @@
 // ══════════════════════════════════════════════════════════════
 // app.js — Torvin "Trois-Parchemins"
 // Application Vue 3 (CDN global build)
-// Dépend de : data.js · strings.js · characters/torvin.js · engine.js
+// Dépend de : data.js · strings.js · characters/torvin/torvin.js · engine.js
 // ══════════════════════════════════════════════════════════════
 'use strict';
 
