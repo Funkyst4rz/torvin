@@ -10,24 +10,24 @@ const CLERIC_ASI_LEVELS = [4, 8];
 // Sorts de domaine Arcane (SCAG) — toujours préparés, ne comptent pas dans le quota
 const DOMAIN_SPELLS = {
   1: [
-    { name:'Détection de la magie', tag:'rituel',     conc:true,  desc:"Détecte la présence de magie dans un rayon de 9 m pendant 10 min. Peut être lancé comme rituel. Identifie les auras magiques et les écoles de magie." },
-    { name:'Projectile magique',    tag:'auto',        conc:false, desc:"3 fléchettes de force (1d4+1 chacune, +1 fléchette par niveau d'emplacement supérieur). Ne rate jamais. Peut cibler plusieurs créatures.", upcast:"+1 fléchette (1d4+1) par niveau d'emplacement supérieur au niv.1 (niv.2 = 4, niv.3 = 5…)." },
+    { name:'Détection de la magie', tag:'rituel',  conc:true,  cast:'1 action', range:'Soi-même (9 m)', dur:'10 min', desc:"Détecte la présence de magie dans un rayon de 9 m pendant 10 min. Peut être lancé comme rituel. Identifie les auras magiques et les écoles de magie." },
+    { name:'Projectile magique',    tag:'auto',    conc:false, cast:'1 action', range:'36 m',           dur:'Instantanée', desc:"3 fléchettes de force (1d4+1 chacune, +1 fléchette par niveau d'emplacement supérieur). Ne rate jamais. Peut cibler plusieurs créatures.", upcast:"+1 fléchette (1d4+1) par niveau d'emplacement supérieur au niv.1 (niv.2 = 4, niv.3 = 5…)." },
   ],
   3: [
-    { name:'Arme magique',          tag:'buff',        conc:true,  desc:"Une arme non magique devient magique : +1 aux jets d'attaque et dégâts (ou +2 si emplacement de niv.4+). Concentration, 1 heure." },
-    { name:"Aura magique de Nystul",tag:'illusion',    conc:true,  desc:"Modifie la détection magique d'un objet ou d'une créature pendant 24 heures. Peut masquer ou falsifier l'aura magique." },
+    { name:'Arme magique',          tag:'buff',    conc:true,  cast:'1 action bonus', range:'Contact', dur:'1 heure',  desc:"Une arme non magique devient magique : +1 aux jets d'attaque et dégâts (ou +2 si emplacement de niv.4+). Concentration, 1 heure." },
+    { name:"Aura magique de Nystul",tag:'illusion',conc:true,  cast:'1 action',       range:'9 m',    dur:'24 heures', desc:"Modifie la détection magique d'un objet ou d'une créature pendant 24 heures. Peut masquer ou falsifier l'aura magique." },
   ],
   5: [
-    { name:'Dissipation de la magie',tag:'utilitaire', conc:false, desc:"Annule les effets magiques sur une créature, un objet ou un effet ciblé (DD = 10 + niveau du sort). Supprime automatiquement les sorts de niv.≤3." },
-    { name:'Cercle magique',         tag:'protection', conc:false, desc:"Cylindre de 3 m de rayon × 6 m de hauteur : protège contre un type de créature choisi (fiélons, morts-vivants…). Dure 1 heure." },
+    { name:'Dissipation de la magie',tag:'utilitaire',conc:false,cast:'1 action', range:'36 m',            dur:'Instantanée', desc:"Annule les effets magiques sur une créature, un objet ou un effet ciblé (DD = 10 + niveau du sort). Supprime automatiquement les sorts de niv.≤3." },
+    { name:'Cercle magique',         tag:'protection',conc:false,cast:'1 minute', range:'3 m (au sol)',    dur:'1 heure',     desc:"Cylindre de 3 m de rayon × 6 m de hauteur : protège contre un type de créature choisi (fiélons, morts-vivants…). Dure 1 heure." },
   ],
   7: [
-    { name:"Œil d'Arcane",    tag:'divination', conc:true,  desc:"Crée un œil magique invisible se déplaçant à 9 m/tour. Vous percevez à travers lui (vision normale + vision dans le noir 9 m) pendant 1 heure." },
-    { name:'Coffre de Léomund', tag:'invocation', conc:false, desc:"Un coffre peut être caché sur le plan éthéré et rappelé avec un réplique miniature. Contenu conservé indéfiniment." },
+    { name:"Œil d'Arcane",     tag:'divination',conc:true,  cast:'1 action', range:'9 m',  dur:'1 heure',     desc:"Crée un œil magique invisible se déplaçant à 9 m/tour. Vous percevez à travers lui (vision normale + vision dans le noir 9 m) pendant 1 heure." },
+    { name:'Coffre de Léomund',tag:'invocation', conc:false, cast:'1 action', range:'Contact', dur:'Indéfinie', desc:"Un coffre peut être caché sur le plan éthéré et rappelé avec un réplique miniature. Contenu conservé indéfiniment." },
   ],
   9: [
-    { name:'Lien planaire',          tag:'DD Cha',  conc:true,  desc:"Soumet un céleste, fiélon ou élémentaire. JS Charisme. Sur un échec, il est lié à votre service pendant 24 heures (renouvelable). Concentration." },
-    { name:'Cercle de téléportation', tag:'rituel', conc:false, desc:"Ouvre un portail vers un cercle de téléportation connu. Dure 1 minute. Peut être gravé définitivement (11 jours de travail, coût 50 po/j)." },
+    { name:'Lien planaire',           tag:'DD Cha', conc:true,  cast:'1 heure',  range:'18 m', dur:'24 heures', desc:"Soumet un céleste, fiélon ou élémentaire. JS Charisme. Sur un échec, il est lié à votre service pendant 24 heures (renouvelable). Concentration." },
+    { name:'Cercle de téléportation', tag:'rituel', conc:false, cast:'1 minute', range:'3 m',  dur:'1 round',   desc:"Ouvre un portail vers un cercle de téléportation connu. Dure 1 minute. Peut être gravé définitivement (11 jours de travail, coût 50 po/j)." },
   ],
 };
 

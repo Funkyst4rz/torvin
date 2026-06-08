@@ -476,7 +476,7 @@ const app = createApp({
           }
         }
       }
-      this.spellModal = { name: spell.name, tag: spell.tag || '—', conc: !!spell.conc, bonus: !!spell.bonus, desc, upcast, level: level || null };
+      this.spellModal = { name: spell.name, tag: spell.tag || '—', conc: !!spell.conc, bonus: !!spell.bonus, desc, upcast, level: level || null, cast: spell.cast || null, range: spell.range || null, dur: spell.dur || null };
     },
     closeSpellModal() { this.spellModal = null; },
 
