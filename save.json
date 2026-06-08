@@ -47,8 +47,8 @@
   "hpTemp": 0,
   "hpMaxBonus": 0,
   "slotsUsed": {
-    "1": 1,
-    "2": 1,
+    "1": 0,
+    "2": 0,
     "3": 0,
     "4": 0,
     "5": 0
@@ -82,22 +82,9 @@
         "name": "Guidance",
         "tag": "utilitaire",
         "conc": true
-      },
-      {
-        "id": "sacredflame",
-        "name": "Flamme sacrée",
-        "tag": "DD Dex",
-        "conc": false
       }
     ],
-    "1": [
-      {
-        "id": "bane",
-        "name": "Fléau",
-        "tag": "DD Cha",
-        "conc": true
-      }
-    ],
+    "1": [],
     "2": [],
     "3": [],
     "4": [],
