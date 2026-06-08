@@ -121,10 +121,18 @@
   padding:2px 2px;cursor:pointer;flex-shrink:0;
 }
 .note-collapse-btn {
-  font-size:0.65rem;color:var(--ink-light);opacity:.5;flex-shrink:0;transition:opacity .15s;
+  display:inline-flex;align-items:center;justify-content:center;
+  width:28px;height:28px;font-size:0.85rem;
+  color:var(--ink-light);opacity:.5;flex-shrink:0;
+  transition:opacity .15s;border-radius:4px;
 }
-.note-delete { font-size:0.6rem;opacity:.4;flex-shrink:0; }
-.note-delete:hover { opacity:1; }
+.note-collapse-btn:hover { opacity:1;background:rgba(160,130,74,.12); }
+.note-delete {
+  display:inline-flex;align-items:center;justify-content:center;
+  width:28px;height:28px;font-size:0.8rem;
+  opacity:.4;flex-shrink:0;border-radius:4px;transition:opacity .15s,background .15s;
+}
+.note-delete:hover { opacity:1;background:rgba(139,26,26,.1); }
 .note-preview {
   margin-top:7px;padding:6px 0 2px;
   border-top:1px dashed var(--border-light);
