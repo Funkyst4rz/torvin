@@ -68,6 +68,22 @@
   border-bottom:1px solid var(--border-light);
   margin-bottom:12px;
 }
+.spell-modal-stats {
+  display:flex;gap:16px;flex-wrap:wrap;
+  padding:7px 0 10px;
+  border-bottom:1px solid var(--border-light);
+  margin-bottom:10px;
+}
+.spell-stat {
+  display:flex;flex-direction:column;gap:1px;
+}
+.spell-stat-label {
+  font-family:'Nunito', sans-serif;font-size:0.55rem;font-weight:700;
+  color:var(--gold);text-transform:uppercase;letter-spacing:.6px;
+}
+.spell-stat {
+  font-family:'Nunito', sans-serif;font-size:0.8rem;color:var(--ink-mid);
+}
 .spell-modal-desc {
   font-family:'Nunito', sans-serif;font-size:0.875rem;
   color:var(--ink-mid);line-height:1.55;margin:0;
