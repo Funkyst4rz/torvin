@@ -1,0 +1,291 @@
+{
+  "name": "Torvin \"Trois-Parchemins\"",
+  "race": "Gnome des Roches",
+  "className": "Clerc",
+  "subclass": "Domaine Arcane",
+  "background": "Artisan de Guilde",
+  "deity": "Azouth",
+  "alignment": "Neutre Bon",
+  "level": 3,
+  "base": {
+    "str": 8,
+    "dex": 12,
+    "con": 13,
+    "int": 14,
+    "wis": 15,
+    "cha": 10
+  },
+  "racial": {
+    "str": 0,
+    "dex": 0,
+    "con": 1,
+    "int": 2,
+    "wis": 0,
+    "cha": 0
+  },
+  "asi": {},
+  "caManual": 14,
+  "useCaAuto": true,
+  "speed": 7.5,
+  "hpRolls": [
+    0,
+    8,
+    6,
+    6,
+    5,
+    4,
+    1,
+    7,
+    4,
+    0,
+    0
+  ],
+  "hpCurrent": 26,
+  "hpTemp": 0,
+  "hpMaxBonus": 0,
+  "slotsUsed": {
+    "1": 0,
+    "2": 0,
+    "3": 0,
+    "4": 0,
+    "5": 0
+  },
+  "spellChecks": {
+    "sc-sw": false
+  },
+  "cdUsed": 0,
+  "preparedSpells": {
+    "0": [
+      {
+        "id": "tollDead",
+        "name": "Glas des trépassés",
+        "tag": "DD Sag",
+        "conc": false
+      },
+      {
+        "id": "mageHand",
+        "name": "Main du mage",
+        "tag": "utilitaire",
+        "conc": false
+      },
+      {
+        "id": "minorIllusion",
+        "name": "Illusion mineure",
+        "tag": "utilitaire",
+        "conc": false
+      },
+      {
+        "id": "guidance",
+        "name": "Guidance",
+        "tag": "utilitaire",
+        "conc": true
+      }
+    ],
+    "1": [
+      {
+        "id": "bane",
+        "name": "Fléau",
+        "tag": "DD Cha",
+        "conc": true
+      }
+    ],
+    "2": [],
+    "3": [],
+    "4": [],
+    "5": []
+  },
+  "removedSpells": [
+    "resistance",
+    "sacredflame",
+    "sc-bane"
+  ],
+  "skillProfs": [
+    "arcanes",
+    "religion",
+    "medecine",
+    "intuition",
+    "persuasion"
+  ],
+  "concentration": null,
+  "conditions": [],
+  "conditionDurations": {},
+  "deathSaves": {
+    "success": 0,
+    "failure": 0
+  },
+  "inspiration": false,
+  "exhaustion": 0,
+  "combatRound": 0,
+  "slots": {
+    "arme": {
+      "name": "Masse d'armes",
+      "notes": "",
+      "atkBonus": "+1",
+      "damage": "1d6-1",
+      "damageType": "contondant",
+      "range": "Corps-à-corps",
+      "bonuses": []
+    },
+    "armure": {
+      "name": "cotte de mailles",
+      "notes": "",
+      "armorBase": 13,
+      "armorType": "medium",
+      "bonuses": [
+        {
+          "type": "ca",
+          "value": 0
+        }
+      ]
+    },
+    "bouclier": {
+      "name": "Bouclier",
+      "notes": "",
+      "bonuses": [
+        {
+          "type": "ca",
+          "value": 2
+        }
+      ]
+    },
+    "casque": {
+      "name": "",
+      "notes": "",
+      "bonuses": []
+    },
+    "cape": {
+      "name": "",
+      "notes": "",
+      "bonuses": []
+    },
+    "amulette": {
+      "name": "",
+      "notes": "",
+      "bonuses": []
+    },
+    "anneau1": {
+      "name": "",
+      "notes": "",
+      "bonuses": []
+    },
+    "anneau2": {
+      "name": "",
+      "notes": "",
+      "bonuses": []
+    },
+    "gants": {
+      "name": "",
+      "notes": "",
+      "bonuses": []
+    },
+    "bottes": {
+      "name": "",
+      "notes": "",
+      "bonuses": []
+    }
+  },
+  "equipment": [
+    "Outils de bricoleur",
+    "Pack d'explorateur",
+    "Lettre de guilde · 15 po"
+  ],
+  "customEquipment": [],
+  "attunedItems": [],
+  "currency": {
+    "pp": 0,
+    "gp": 14,
+    "ep": 0,
+    "sp": 0,
+    "cp": 0
+  },
+  "languages": [
+    "Commun",
+    "Gnome"
+  ],
+  "toolProfs": [
+    "Outils de bricoleur"
+  ],
+  "notes": "",
+  "sessionNotes": [
+    {
+      "date": "2026-06-07",
+      "text": "Ville havre-fer : pionnière créée il y a 18 ans, sur le continent de l'aube. Nouveau continent.\nFaut traverser un océan depuis le vieux continent.\n\n\nPhénomène magique dans l'océan. Les bateaux se perdent.\nGrandement inexploré le continent.\n\nHavre-Fer, ville de mineurs.\nGros gisement de fer, argent...\n\nOn y trouve des mines\nLa dent rouge, la dent grise, la bouche\n200-300 ouvriers\nContremaître nain Krask\n\nFonderie à l'est, métaux traités avant envoi\n\nGouverneure : Lyra Ashenbail\nBâtiment en pierre\n\nCaserne milice pour le maintien de l'ordre, rixe et bureau de douane\n\nTemple avec infirmerie gratuit. Style Panthéon\n\nLa taverne où on se trouve : veine d'or (pas la plus connue)\nTaverne tenue par draconide : Brita\n\nOn peut faire plusieurs petits jobs pour subvenir à ses besoins.\n\nJe suis là depuis 2 ans\nOn a déjà bossé ensemble sur des contrats de recherche de personne\n\nGuideon pied de brime druide\nShen Varath moine, parle pas beaucoup. Mission d'escorte\nElara Vaine, dite l'éclaireuse, sur mes bateaux. Matelot\n\nOn a été contacté par un demi-elfe Rael qui n'est pas connu dans la ville mais part souvent à l'extérieur. Donné rdv à la veine d'or\n.\nRael a des vêtements pas propres, plein de poussière sur lui. Habillé pour la route.\nSac à dos énorme.\n\nIl arrive essoufflé en retard.\nIl a trouvé quelque chose au nord-ouest, opposé des mines.\nIl évaluait les risques\nIl jette un caillou magique sur la table qu'il a retrouvé dans l'ours.\nIl montre la peau de l'ours qui l'a récupéré\nProtubérance osseuse qui sort de la peau\n\nJe prends la pièce et la dessine sur un parchemin\n\nRael a une cicatrice au cou. Suite à un piège\nMission pour explorer la pyramide 15 po/j/personne\n+20 po si la mission est ok\n\nLa pierre est magique, je ne sais pas ce que ça fait mais on sait qu'une taverne les utilise en déco. Peut-être à la fonderie ils savent.\n\nOn s'est fritté avec un gars de la pègre qui voulait acheter la pierre à Rael. Shen l'a assommé\n\nLanterne verte : propre et calme, artisans et marchands, tout est correct\nOn peut s'entendre sans hurler\nJe discute avec les gens, j'ai la même histoire que ce sont les mineurs. Soit-disant ça vaut rien, donc pourquoi la pègre voulait racheter ?\n\nReceleur Ossin, rachète tout, même illégal et revend sur le continent\n\nAu petit matin on est parti. On est tombé sur Glück un kobold qui peut lancer invisibilité deux fois par jour.\nOn a monté le camp\n\nOn est à la pyramide. Y'a pas de faune autour dans un rayon de 50 m\nLa pyramide émet de la magie. Elle ressemble à celle de la pierre.\n\nOn investigue la pyramide. On a démonté un piège\n\nOn a tué une manticore. Récupéré griffe et dard. Elle a une pierre comme la première sur elle.\n\nJe vais dans la pièce où y'a le bureau d'études.\nQuelqu'un étudie les runes pour déformer leur utilisation.\nEn mélangeant ces runes avec la faune il a créé une manticore. Il tentait d'en créer une deuxième.\n\nPeut-être que quelqu'un l'avait domestiqué ou autre moyen"
+    }
+  ],
+  "traits": [
+    "J'explique systématiquement ce que je fais et pourquoi, même en plein combat. Surtout en plein combat.",
+    "Je trouve une explication rationnelle à tout. La magie n'est qu'un mécanisme qu'on ne comprend pas encore."
+  ],
+  "ideal": "La connaissance doit circuler librement — la garder pour soi est un crime contre l'humanité.",
+  "bond": "La relique d'Azouth est toujours en ma possession. Je ne sais pas encore ce qu'elle fait vraiment.",
+  "flaw": "Je suis incapable de jeter quoi que ce soit — parchemins, bouts de mécanismes, notes griffonnées. Mon sac est un désastre.",
+  "phrases": [
+    {
+      "situation": "En lançant Fléau",
+      "text": "« Fascinant — réduire votre efficacité combat augmente les probabilités de survie de mes collègues. Je procède. »"
+    },
+    {
+      "situation": "En soignant",
+      "text": "« Vous saignez à un rythme préoccupant. J'ai documenté ce type de blessure — le protocole est clair. »"
+    },
+    {
+      "situation": "En ratant un sort",
+      "text": "« Hm. Résultat inattendu. Ce n'était pas une erreur, c'était... une donnée supplémentaire. »"
+    },
+    {
+      "situation": "Découverte magique",
+      "text": "« Passez-moi ça. Non — je ne vais pas le casser. Enfin... probablement pas. »"
+    },
+    {
+      "situation": "Quelqu'un conteste",
+      "text": "« C'est... une perspective. Incorrecte, mais une perspective tout de même. »"
+    },
+    {
+      "situation": "Situation désespérée",
+      "text": "« Ce n'est pas idéal. Ce n'est vraiment, vraiment pas idéal. Je recalcule. »"
+    },
+    {
+      "situation": "En perdant des PV",
+      "text": "« Ça fait mal. C'est une donnée utile, mais ça fait quand même très mal. »"
+    },
+    {
+      "situation": "Face à un monstre",
+      "text": "« Fascinant. J'aurais aimé l'étudier dans des conditions moins urgentes. »"
+    },
+    {
+      "situation": "Après une victoire",
+      "text": "« Bien. Maintenant, quelqu'un peut-il m'expliquer ce qui vient de se passer ? »"
+    },
+    {
+      "situation": "Avant un combat",
+      "text": "« Stratégie : ne pas mourir. J'affine au fur et à mesure. »"
+    },
+    {
+      "situation": "Face à un arcaniste",
+      "text": "« Oh. Oh, attendez. Vous êtes... Puis-je vous poser des questions ? Beaucoup de questions ? »"
+    },
+    {
+      "situation": "Face à un piège",
+      "text": "« Je l'avais vu. Je ne l'avais simplement pas encore mentionné. »"
+    },
+    {
+      "situation": "En négociant",
+      "text": "« Je propose un arrangement mutuellement bénéfique, documenté en trois exemplaires. »"
+    },
+    {
+      "situation": "Quelqu'un fait une erreur",
+      "text": "« C'est une approche. Ce n'est pas celle que j'aurais choisie. Mais c'est une approche. »"
+    },
+    {
+      "situation": "Canalisation divine",
+      "text": "« Azouth — maintenant. S'il te plaît. »"
+    },
+    {
+      "situation": "En fouillant un donjon",
+      "text": "« L'architecture est intéressante. Quelqu'un prend des notes ? »"
+    }
+  ],
+  "ghRepo": "Funkyst4rz/torvin",
+  "ghFile": "characters/torvin/torvin.json",
+  "ghBranch": "main"
+}
