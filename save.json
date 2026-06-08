@@ -57,7 +57,7 @@
     "sc-sw": false
   },
   "cdUsed": 0,
-  "customSpells": {
+  "preparedSpells": {
     "0": [
       {
         "id": "tollDead",
@@ -75,8 +75,7 @@
         "id": "minorIllusion",
         "name": "Illusion mineure",
         "tag": "utilitaire",
-        "conc": false,
-        "racial": false
+        "conc": false
       },
       {
         "id": "guidance",
@@ -85,20 +84,13 @@
         "conc": true
       },
       {
-        "id": "thaumaturgy",
-        "name": "Thaumaturgie",
-        "tag": "utilitaire",
+        "id": "sacredflame",
+        "name": "Flamme sacrée",
+        "tag": "DD Dex",
         "conc": false
       }
     ],
-    "1": [
-      {
-        "id": "bane",
-        "name": "Fléau",
-        "tag": "DD Cha",
-        "conc": true
-      }
-    ],
+    "1": [],
     "2": [],
     "3": [],
     "4": [],
