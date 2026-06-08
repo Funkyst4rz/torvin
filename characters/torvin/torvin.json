@@ -79,6 +79,9 @@
         "name": "Guidance",
         "tag": "utilitaire",
         "conc": true
+      },
+      {
+        "id": "prestidigitation"
       }
     ],
     "1": [
@@ -87,9 +90,22 @@
         "name": "Fléau",
         "tag": "DD Cha",
         "conc": true
+      },
+      {
+        "id": "healingword"
       }
     ],
-    "2": [],
+    "2": [
+      {
+        "id": "blinddeaf"
+      },
+      {
+        "id": "holdperson"
+      },
+      {
+        "id": "spweapon"
+      }
+    ],
     "3": [],
     "4": [],
     "5": []
