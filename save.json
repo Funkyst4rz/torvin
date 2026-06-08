@@ -79,6 +79,9 @@
         "name": "Guidance",
         "tag": "utilitaire",
         "conc": true
+      },
+      {
+        "id": "resistance"
       }
     ],
     "1": [
