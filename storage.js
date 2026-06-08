@@ -31,8 +31,8 @@ const storageMethods = {
   /** Applique un état importé en préservant le token en mémoire */
   _applyState(state) {
     const ghToken = this.char.ghToken;
-    const loaded  = _deepMerge(JSON.parse(JSON.stringify(DEFAULT_CHAR)), state);
-    Object.assign(this.char, loaded);
+    _migrateState(state);
+    Object.assign(this.char, state);
     this.char.ghToken = ghToken;
   },
 

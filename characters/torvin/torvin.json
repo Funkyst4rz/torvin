@@ -26,96 +26,35 @@
   "asi": {},
   "caManual": 14,
   "useCaAuto": true,
-  "armorBase": 11,
-  "armorType": "light",
-  "useShield": true,
   "speed": 7.5,
-  "hpRolls": [
-    0,
-    8,
-    6,
-    6,
-    5,
-    4,
-    1,
-    7,
-    4,
-    0,
-    0
-  ],
+  "hpRolls": [0, 8, 6, 6, 5, 4, 1, 7, 4, 0, 0],
   "hpCurrent": 22,
   "hpTemp": 0,
   "hpMaxBonus": 0,
-  "slotsUsed": {
-    "1": 0,
-    "2": 0,
-    "3": 0,
-    "4": 0,
-    "5": 0
-  },
-  "spellChecks": {
-    "sc-sw": false
-  },
+  "slotsUsed": { "1": 0, "2": 0, "3": 0, "4": 0, "5": 0 },
+  "spellChecks": { "sc-sw": false },
   "cdUsed": 0,
   "preparedSpells": {
     "0": [
-      {
-        "id": "tollDead",
-        "name": "Glas des trépassés",
-        "tag": "DD Sag",
-        "conc": false
-      },
-      {
-        "id": "mageHand",
-        "name": "Main du mage",
-        "tag": "utilitaire",
-        "conc": false
-      },
-      {
-        "id": "minorIllusion",
-        "name": "Illusion mineure",
-        "tag": "utilitaire",
-        "conc": false
-      },
-      {
-        "id": "guidance",
-        "name": "Guidance",
-        "tag": "utilitaire",
-        "conc": true
-      }
+      { "id": "tollDead",       "name": "Glas des trépassés", "tag": "DD Sag",    "conc": false },
+      { "id": "mageHand",       "name": "Main du mage",       "tag": "utilitaire","conc": false },
+      { "id": "minorIllusion",  "name": "Illusion mineure",   "tag": "utilitaire","conc": false },
+      { "id": "guidance",       "name": "Guidance",           "tag": "utilitaire","conc": true  }
     ],
     "1": [
-      {
-        "id": "bane",
-        "name": "Fléau",
-        "tag": "DD Cha",
-        "conc": true
-      }
+      { "id": "bane", "name": "Fléau", "tag": "DD Cha", "conc": true }
     ],
     "2": [],
     "3": [],
     "4": [],
     "5": []
   },
-  "removedSpells": [
-    "resistance",
-    "sacredflame",
-    "sc-bane"
-  ],
-  "skillProfs": [
-    "arcanes",
-    "religion",
-    "medecine",
-    "intuition",
-    "persuasion"
-  ],
+  "removedSpells": ["resistance", "sacredflame", "sc-bane"],
+  "skillProfs": ["arcanes", "religion", "medecine", "intuition", "persuasion"],
   "concentration": null,
   "conditions": [],
   "conditionDurations": {},
-  "deathSaves": {
-    "success": 0,
-    "failure": 0
-  },
+  "deathSaves": { "success": 0, "failure": 0 },
   "inspiration": false,
   "exhaustion": 0,
   "combatRound": 0,
@@ -134,58 +73,20 @@
       "notes": "",
       "armorBase": 13,
       "armorType": "medium",
-      "bonuses": [
-        {
-          "type": "ca",
-          "value": 0
-        }
-      ]
+      "bonuses": [{ "type": "ca", "value": 0 }]
     },
     "bouclier": {
       "name": "Bouclier",
       "notes": "",
-      "bonuses": [
-        {
-          "type": "ca",
-          "value": 2
-        }
-      ]
+      "bonuses": [{ "type": "ca", "value": 2 }]
     },
-    "casque": {
-      "name": "",
-      "notes": "",
-      "bonuses": []
-    },
-    "cape": {
-      "name": "",
-      "notes": "",
-      "bonuses": []
-    },
-    "amulette": {
-      "name": "",
-      "notes": "",
-      "bonuses": []
-    },
-    "anneau1": {
-      "name": "",
-      "notes": "",
-      "bonuses": []
-    },
-    "anneau2": {
-      "name": "",
-      "notes": "",
-      "bonuses": []
-    },
-    "gants": {
-      "name": "",
-      "notes": "",
-      "bonuses": []
-    },
-    "bottes": {
-      "name": "",
-      "notes": "",
-      "bonuses": []
-    }
+    "casque":  { "name": "", "notes": "", "bonuses": [] },
+    "cape":    { "name": "", "notes": "", "bonuses": [] },
+    "amulette":{ "name": "", "notes": "", "bonuses": [] },
+    "anneau1": { "name": "", "notes": "", "bonuses": [] },
+    "anneau2": { "name": "", "notes": "", "bonuses": [] },
+    "gants":   { "name": "", "notes": "", "bonuses": [] },
+    "bottes":  { "name": "", "notes": "", "bonuses": [] }
   },
   "equipment": [
     "Outils de bricoleur",
@@ -194,20 +95,9 @@
   ],
   "customEquipment": [],
   "attunedItems": [],
-  "currency": {
-    "pp": 0,
-    "gp": 14,
-    "ep": 0,
-    "sp": 0,
-    "cp": 0
-  },
-  "languages": [
-    "Commun",
-    "Gnome"
-  ],
-  "toolProfs": [
-    "Outils de bricoleur"
-  ],
+  "currency": { "pp": 0, "gp": 14, "ep": 0, "sp": 0, "cp": 0 },
+  "languages": ["Commun", "Gnome"],
+  "toolProfs": ["Outils de bricoleur"],
   "notes": "",
   "sessionNotes": [
     {
@@ -223,82 +113,24 @@
   "bond": "La relique d'Azouth est toujours en ma possession. Je ne sais pas encore ce qu'elle fait vraiment.",
   "flaw": "Je suis incapable de jeter quoi que ce soit — parchemins, bouts de mécanismes, notes griffonnées. Mon sac est un désastre.",
   "phrases": [
-    {
-      "situation": "En lançant Fléau",
-      "text": "« Fascinant — réduire votre efficacité combat augmente les probabilités de survie de mes collègues. Je procède. »"
-    },
-    {
-      "situation": "En soignant",
-      "text": "« Vous saignez à un rythme préoccupant. J'ai documenté ce type de blessure — le protocole est clair. »"
-    },
-    {
-      "situation": "En ratant un sort",
-      "text": "« Hm. Résultat inattendu. Ce n'était pas une erreur, c'était... une donnée supplémentaire. »"
-    },
-    {
-      "situation": "Découverte magique",
-      "text": "« Passez-moi ça. Non — je ne vais pas le casser. Enfin... probablement pas. »"
-    },
-    {
-      "situation": "Quelqu'un conteste",
-      "text": "« C'est... une perspective. Incorrecte, mais une perspective tout de même. »"
-    },
-    {
-      "situation": "Situation désespérée",
-      "text": "« Ce n'est pas idéal. Ce n'est vraiment, vraiment pas idéal. Je recalcule. »"
-    },
-    {
-      "situation": "En perdant des PV",
-      "text": "« Ça fait mal. C'est une donnée utile, mais ça fait quand même très mal. »"
-    },
-    {
-      "situation": "Face à un monstre",
-      "text": "« Fascinant. J'aurais aimé l'étudier dans des conditions moins urgentes. »"
-    },
-    {
-      "situation": "Après une victoire",
-      "text": "« Bien. Maintenant, quelqu'un peut-il m'expliquer ce qui vient de se passer ? »"
-    },
-    {
-      "situation": "Avant un combat",
-      "text": "« Stratégie : ne pas mourir. J'affine au fur et à mesure. »"
-    },
-    {
-      "situation": "Face à un arcaniste",
-      "text": "« Oh. Oh, attendez. Vous êtes... Puis-je vous poser des questions ? Beaucoup de questions ? »"
-    },
-    {
-      "situation": "Face à un piège",
-      "text": "« Je l'avais vu. Je ne l'avais simplement pas encore mentionné. »"
-    },
-    {
-      "situation": "En négociant",
-      "text": "« Je propose un arrangement mutuellement bénéfique, documenté en trois exemplaires. »"
-    },
-    {
-      "situation": "Quelqu'un fait une erreur",
-      "text": "« C'est une approche. Ce n'est pas celle que j'aurais choisie. Mais c'est une approche. »"
-    },
-    {
-      "situation": "Canalisation divine",
-      "text": "« Azouth — maintenant. S'il te plaît. »"
-    },
-    {
-      "situation": "En fouillant un donjon",
-      "text": "« L'architecture est intéressante. Quelqu'un prend des notes ? »"
-    }
+    { "situation": "En lançant Fléau",           "text": "« Fascinant — réduire votre efficacité combat augmente les probabilités de survie de mes collègues. Je procède. »" },
+    { "situation": "En soignant",                "text": "« Vous saignez à un rythme préoccupant. J'ai documenté ce type de blessure — le protocole est clair. »" },
+    { "situation": "En ratant un sort",          "text": "« Hm. Résultat inattendu. Ce n'était pas une erreur, c'était... une donnée supplémentaire. »" },
+    { "situation": "Découverte magique",         "text": "« Passez-moi ça. Non — je ne vais pas le casser. Enfin... probablement pas. »" },
+    { "situation": "Quelqu'un conteste",         "text": "« C'est... une perspective. Incorrecte, mais une perspective tout de même. »" },
+    { "situation": "Situation désespérée",       "text": "« Ce n'est pas idéal. Ce n'est vraiment, vraiment pas idéal. Je recalcule. »" },
+    { "situation": "En perdant des PV",          "text": "« Ça fait mal. C'est une donnée utile, mais ça fait quand même très mal. »" },
+    { "situation": "Face à un monstre",          "text": "« Fascinant. J'aurais aimé l'étudier dans des conditions moins urgentes. »" },
+    { "situation": "Après une victoire",         "text": "« Bien. Maintenant, quelqu'un peut-il m'expliquer ce qui vient de se passer ? »" },
+    { "situation": "Avant un combat",            "text": "« Stratégie : ne pas mourir. J'affine au fur et à mesure. »" },
+    { "situation": "Face à un arcaniste",        "text": "« Oh. Oh, attendez. Vous êtes... Puis-je vous poser des questions ? Beaucoup de questions ? »" },
+    { "situation": "Face à un piège",            "text": "« Je l'avais vu. Je ne l'avais simplement pas encore mentionné. »" },
+    { "situation": "En négociant",               "text": "« Je propose un arrangement mutuellement bénéfique, documenté en trois exemplaires. »" },
+    { "situation": "Quelqu'un fait une erreur",  "text": "« C'est une approche. Ce n'est pas celle que j'aurais choisie. Mais c'est une approche. »" },
+    { "situation": "Canalisation divine",        "text": "« Azouth — maintenant. S'il te plaît. »" },
+    { "situation": "En fouillant un donjon",     "text": "« L'architecture est intéressante. Quelqu'un prend des notes ? »" }
   ],
   "ghRepo": "Funkyst4rz/torvin",
-  "ghFile": "characters/torvin/save.json",
-  "ghBranch": "main",
-  "customAttacks": [],
-  "pv": "15",
-  "pvTemp": "0",
-  "cd": false,
-  "checks": {
-    "sc-d1-0": false,
-    "sc-d1-1": false,
-    "sc-bane": false,
-    "sc-hw": false
-  }
+  "ghFile": "characters/torvin/torvin.json",
+  "ghBranch": "main"
 }

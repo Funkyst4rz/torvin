@@ -9,12 +9,14 @@ const { createApp } = Vue;
 
 // ─────────────────────────────────────────────────────────────
 
-const app = createApp({
+async function _initApp() {
+  const char = await _loadInitialState();
+
+  const app = createApp({
   // ──────────────────────────────────────────
   // DATA
   // ──────────────────────────────────────────
   data() {
-    const char = _loadInitialState();
     return {
       char,
 
@@ -548,12 +550,6 @@ const app = createApp({
 
     removeCustomSpell(lvl, id) {
       this.char.preparedSpells[lvl] = (this.char.preparedSpells[lvl] || []).filter(s => s.id !== id);
-      // Si c'est un cantrip par défaut, on le mémorise pour que la migration ne le réinjecte pas
-      if (lvl === 0 && DEFAULT_CHAR.preparedSpells[0].some(c => c.id === id)) {
-        if (!this.char.removedSpells) this.char.removedSpells = [];
-        if (!this.char.removedSpells.includes(id))
-          this.char.removedSpells = [...this.char.removedSpells, id];
-      }
     },
 
     // ── Slot modal ───────────────────────────
@@ -723,39 +719,42 @@ const app = createApp({
   },
 });
 
-// ── Composants Vue réutilisables ─────────────────────────────
+  // ── Composants Vue réutilisables ─────────────────────────────
 
-// Overlay générique pour les modaux (spell, info, ASI)
-// Directive auto-resize pour les textareas
-app.directive('autoresize', {
-  mounted(el)  { el.style.height = 'auto'; el.style.height = el.scrollHeight + 'px'; },
-  updated(el)  { el.style.height = 'auto'; el.style.height = el.scrollHeight + 'px'; },
-});
+  // Directive auto-resize pour les textareas
+  app.directive('autoresize', {
+    mounted(el)  { el.style.height = 'auto'; el.style.height = el.scrollHeight + 'px'; },
+    updated(el)  { el.style.height = 'auto'; el.style.height = el.scrollHeight + 'px'; },
+  });
 
-app.component('modal-overlay', {
-  props: {
-    overlayClass: { type: String, default: 'spell-modal-overlay' },
-    boxClass:     { type: String, default: 'spell-modal' },
-  },
-  emits: ['close'],
-  template: '#tpl-modal-overlay',
-});
+  // Overlay générique pour les modaux (spell, info, ASI)
+  app.component('modal-overlay', {
+    props: {
+      overlayClass: { type: String, default: 'spell-modal-overlay' },
+      boxClass:     { type: String, default: 'spell-modal' },
+    },
+    emits: ['close'],
+    template: '#tpl-modal-overlay',
+  });
 
-// Ligne de sort (cantrip, domaine, suggéré, personnalisé)
-app.component('spell-row', {
-  props: {
-    spell:      { type: Object,  required: true },
-    checked:    { type: Boolean, default: false },
-    concActive: { type: Boolean, default: false },
-    label:      { type: String,  default: null  },
-    bold:       { type: Boolean, default: false },
-    removable:  { type: Boolean, default: true  },
-    rowClass:   { type: String,  default: ''    },
-    rowStyle:   { type: String,  default: ''    },
-    nameClass:  { type: String,  default: ''    },
-  },
-  emits: ['toggle-check', 'open-modal', 'toggle-conc', 'remove'],
-  template: '#tpl-spell-row',
-});
+  // Ligne de sort (cantrip, domaine, suggéré, personnalisé)
+  app.component('spell-row', {
+    props: {
+      spell:      { type: Object,  required: true },
+      checked:    { type: Boolean, default: false },
+      concActive: { type: Boolean, default: false },
+      label:      { type: String,  default: null  },
+      bold:       { type: Boolean, default: false },
+      removable:  { type: Boolean, default: true  },
+      rowClass:   { type: String,  default: ''    },
+      rowStyle:   { type: String,  default: ''    },
+      nameClass:  { type: String,  default: ''    },
+    },
+    emits: ['toggle-check', 'open-modal', 'toggle-conc', 'remove'],
+    template: '#tpl-spell-row',
+  });
 
-app.mount('#app');
+  app.mount('#app');
+}
+
+_initApp();

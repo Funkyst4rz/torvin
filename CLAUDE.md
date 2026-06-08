@@ -29,11 +29,12 @@ D:\torvin\
 ├── storage.js          — Persistance : localStorage, API GitHub, export/import JSON
 ├── data.js             — Données statiques D&D 5e (LEVELS, CONDITIONS, SKILLS, FEATS…)
 ├── strings.js          — Textes d'interface centralisés (équivalent i18n/YAML)
-├── engine.js           — Fonctions pures D&D 5e (_loadInitialState, _deepMerge)
+├── engine.js           — Fonctions pures D&D 5e (_loadInitialState async, _migrateState)
 ├── characters/
-│   ├── torvin.js       — Données spécifiques au personnage (DEFAULT_CHAR, sorts, capacités)
-│   └── torvin.jpg      — Portrait du personnage (lightbox onglet Histoire)
-├── save.json           — État sauvegardé (écrit via API GitHub, ne pas éditer manuellement)
+│   └── torvin/
+│       ├── torvin.js   — Données statiques du personnage (DOMAIN_SPELLS, FEATURES_BY_LEVEL, CLERIC_ASI_LEVELS, UNIVERSAL_REFLEXES)
+│       ├── torvin.json — Source de vérité unique : état complet du personnage (chargé par fetch au démarrage)
+│       └── torvin.jpg  — Portrait du personnage (lightbox onglet Histoire)
 ├── README.md           — Documentation publique du projet
 └── .github/
     └── workflows/

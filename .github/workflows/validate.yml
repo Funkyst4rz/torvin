@@ -45,7 +45,7 @@ jobs:
       # ── Required files presence ────────────────────────────────
       - name: Check required files exist
         run: |
-          for f in index.html style.css app.js computed.js storage.js data.js strings.js engine.js characters/torvin/torvin.js; do
+          for f in index.html style.css app.js computed.js storage.js data.js strings.js engine.js characters/torvin/torvin.js characters/torvin/torvin.json; do
             if [ ! -f "$f" ]; then
               echo "ERROR: Missing required file: $f"
               exit 1
@@ -83,14 +83,14 @@ jobs:
             echo "OK: Tab '$tab' present"
           done
 
-      - name: Verify DEFAULT_CHAR has required fields
+      - name: Verify torvin.json has required fields
         run: |
           for field in name level base racial asi hpRolls hpCurrent currency languages phrases concentration; do
-            if ! grep -q "$field" characters/torvin/torvin.js; then
-              echo "ERROR: DEFAULT_CHAR missing field: $field"
+            if ! grep -q "\"$field\"" characters/torvin/torvin.json; then
+              echo "ERROR: torvin.json missing field: $field"
               exit 1
             fi
-            echo "OK: field '$field' in characters/torvin/torvin.js"
+            echo "OK: field '$field' in characters/torvin/torvin.json"
           done
 
       - name: Verify security function (token deletion before save)
