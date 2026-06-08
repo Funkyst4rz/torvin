@@ -464,20 +464,25 @@ const app = createApp({
     openSpellModal(spell, level) {
       let desc   = spell.desc   || null;
       let upcast = spell.upcast || null;
-      let cast = spell.cast || null, range = spell.range || null, dur = spell.dur || null;
-      if (!desc || !upcast || !cast) {
+      let cast   = spell.cast   || null;
+      let range  = spell.range  || null;
+      let dur    = spell.dur    || null;
+      if (!desc || !cast) {
+        // Cherche dans CLERIC_SPELLS + DOMAIN_SPELLS par id d'abord, puis par nom
+        const id    = spell.id || null;
         const clean = spell.name.replace(/[⭐★✦◆]/g, '').trim();
-        outer: for (const lvl of Object.keys(CLERIC_SPELLS)) {
-          for (const s of CLERIC_SPELLS[lvl]) {
-            if (s.name.replace(/[⭐★✦◆]/g, '').trim() === clean) {
-              if (!desc)   desc   = s.desc;
-              if (!upcast) upcast = s.upcast || null;
-              if (!cast)   cast   = s.cast   || null;
-              if (!range)  range  = s.range  || null;
-              if (!dur)    dur    = s.dur    || null;
-              break outer;
-            }
-          }
+        const allSources = [
+          ...Object.values(CLERIC_SPELLS).flat(),
+          ...Object.values(DOMAIN_SPELLS).flat(),
+        ];
+        const match = (id && allSources.find(s => s.id === id))
+                   || allSources.find(s => s.name.replace(/[⭐★✦◆]/g, '').trim() === clean);
+        if (match) {
+          if (!desc)   desc   = match.desc   || null;
+          if (!upcast) upcast = match.upcast || null;
+          if (!cast)   cast   = match.cast   || null;
+          if (!range)  range  = match.range  || null;
+          if (!dur)    dur    = match.dur    || null;
         }
       }
       this.spellModal = { name: spell.name, tag: spell.tag || '—', conc: !!spell.conc, bonus: !!spell.bonus, desc, upcast, level: level || null, cast, range, dur };
