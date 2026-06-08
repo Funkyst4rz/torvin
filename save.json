@@ -90,7 +90,14 @@
         "conc": false
       }
     ],
-    "1": [],
+    "1": [
+      {
+        "id": "bane",
+        "name": "Fléau",
+        "tag": "DD Cha",
+        "conc": true
+      }
+    ],
     "2": [],
     "3": [],
     "4": [],
