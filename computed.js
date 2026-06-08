@@ -317,7 +317,7 @@ const appComputed = {
   },
 
   cantripMax() {
-    const base = this.char.level < 5 ? 3 : 4;
+    const base = this.char.level < 4 ? 3 : this.char.level < 10 ? 4 : 5;
     return base + 2;
   },
 

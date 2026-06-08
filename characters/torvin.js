@@ -18,15 +18,15 @@ const DOMAIN_SPELLS = {
     { name:"Aura magique de Nystul",tag:'illusion',    conc:true,  desc:"Modifie la détection magique d'un objet ou d'une créature pendant 24 heures. Peut masquer ou falsifier l'aura magique." },
   ],
   5: [
-    { name:'Dissipation de la magie',tag:'utilitaire', conc:false, desc:"Annule les effets magiques dans un rayon de 9 m (DD = 10 + niveau du sort). Supprime automatiquement les sorts de niv.≤3." },
-    { name:'Cercle magique',         tag:'protection', conc:false, desc:"Cylindre de 3 m de rayon × 9 m de hauteur : protège contre un type de créature choisi (fiélons, morts-vivants…). Dure 1 heure." },
+    { name:'Dissipation de la magie',tag:'utilitaire', conc:false, desc:"Annule les effets magiques sur une créature, un objet ou un effet ciblé (DD = 10 + niveau du sort). Supprime automatiquement les sorts de niv.≤3." },
+    { name:'Cercle magique',         tag:'protection', conc:false, desc:"Cylindre de 3 m de rayon × 6 m de hauteur : protège contre un type de créature choisi (fiélons, morts-vivants…). Dure 1 heure." },
   ],
   7: [
     { name:"Œil d'Arcane",    tag:'divination', conc:true,  desc:"Crée un œil magique invisible se déplaçant à 9 m/tour. Vous percevez à travers lui (vision normale + vision dans le noir 9 m) pendant 1 heure." },
     { name:'Coffre de Léomund', tag:'invocation', conc:false, desc:"Un coffre peut être caché sur le plan éthéré et rappelé avec un réplique miniature. Contenu conservé indéfiniment." },
   ],
   9: [
-    { name:'Lien planaire',          tag:'DD Cha',  conc:true,  desc:"Soumet un céleste, fiélon ou élémentaire. JS Charisme. S'il échoue 3 fois, il est lié pendant 24 heures (renouvelable). Concentration." },
+    { name:'Lien planaire',          tag:'DD Cha',  conc:true,  desc:"Soumet un céleste, fiélon ou élémentaire. JS Charisme. Sur un échec, il est lié à votre service pendant 24 heures (renouvelable). Concentration." },
     { name:'Cercle de téléportation', tag:'rituel', conc:false, desc:"Ouvre un portail vers un cercle de téléportation connu. Dure 1 minute. Peut être gravé définitivement (11 jours de travail, coût 50 po/j)." },
   ],
 };
