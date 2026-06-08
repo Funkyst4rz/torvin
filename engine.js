@@ -29,8 +29,9 @@ function _loadInitialState() {
     // _deepMerge ne fusionne pas les arrays — vérifications défensives pour les tableaux critiques
     if (!Array.isArray(merged.hpRolls) || merged.hpRolls.length < 11)
       merged.hpRolls = [...DEFAULT_CHAR.hpRolls];
-    if (!merged.customSpells) merged.customSpells = { 0:[], 1:[], 2:[], 3:[], 4:[], 5:[] };
-    [0,1,2,3,4,5].forEach(l => { if (!merged.customSpells[l]) merged.customSpells[l] = []; });
+    if (!merged.preparedSpells) merged.preparedSpells = merged.customSpells || { 0:[], 1:[], 2:[], 3:[], 4:[], 5:[] };
+    delete merged.customSpells;
+    [0,1,2,3,4,5].forEach(l => { if (!merged.preparedSpells[l]) merged.preparedSpells[l] = []; });
     if (!Array.isArray(merged.traits))    merged.traits    = [...DEFAULT_CHAR.traits];
     if (!Array.isArray(merged.equipment)) merged.equipment = [...DEFAULT_CHAR.equipment];
     if (!merged.racial) merged.racial = { ...DEFAULT_RACIAL };

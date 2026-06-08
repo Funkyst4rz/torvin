@@ -101,7 +101,7 @@ const DEFAULT_CHAR = {
   slotsUsed:    { 1:0, 2:0, 3:0, 4:0, 5:0 },
   spellChecks:  {},
   cdUsed:       0,
-  customSpells: {
+  preparedSpells: {
     0: [
       { id:'tollDead',      name:'Glas des trépassés', tag:'DD Sag',     conc:false },
       { id:'mageHand',      name:'Main du mage',        tag:'utilitaire', conc:false },

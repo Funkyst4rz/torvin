@@ -173,7 +173,7 @@ const appComputed = {
   preparedCount() {
     let count = 0;
     for (const lvl of this.slotLevels) {
-      count += (this.char.customSpells[lvl] || []).length;
+      count += (this.char.preparedSpells[lvl] || []).length;
     }
     return count;
   },
@@ -182,7 +182,7 @@ const appComputed = {
 
   cantrips() {
     const defs = new Map((CLERIC_SPELLS[0] || []).map(s => [s.id, s]));
-    return (this.char.customSpells[0] || []).map(c => {
+    return (this.char.preparedSpells[0] || []).map(c => {
       const def = defs.get(c.id) || {};
       return {
         ...c,
@@ -193,7 +193,7 @@ const appComputed = {
   },
 
   availableCantrips() {
-    const alreadyAdded = new Set((this.char.customSpells[0] || []).map(s => s.id));
+    const alreadyAdded = new Set((this.char.preparedSpells[0] || []).map(s => s.id));
     const all = (CLERIC_SPELLS[0] || []).filter(s => !alreadyAdded.has(s.id));
     return {
       cleric: all.filter(s => !s.wizard),
@@ -217,7 +217,7 @@ const appComputed = {
   availableSpells() {
     const result = {};
     for (const lvl of this.slotLevels) {
-      const alreadyAdded = new Set((this.char.customSpells[lvl] || []).map(s => s.id));
+      const alreadyAdded = new Set((this.char.preparedSpells[lvl] || []).map(s => s.id));
       result[lvl] = (CLERIC_SPELLS[lvl] || []).filter(s => !alreadyAdded.has(s.id));
     }
     return result;
@@ -318,7 +318,7 @@ const appComputed = {
   },
 
   cantripCount() {
-    return (this.char.customSpells[0] || []).filter(c => !c.racial).length;
+    return (this.char.preparedSpells[0] || []).filter(c => !c.racial).length;
   },
 
   domainKeyForSlot() {

@@ -787,7 +787,7 @@
 
           <!-- Sorts personnalisés -->
           <spell-row
-            v-for="cs in (char.customSpells[slotLvl]||[])" :key="cs.id"
+            v-for="cs in (char.preparedSpells[slotLvl]||[])" :key="cs.id"
             :spell="cs"
             :checked="isChecked('cs-'+cs.id)"
             :conc-active="char.concentration===cs.name"

@@ -527,9 +527,9 @@ const app = createApp({
     addCustomSpell(spellLvl, spellId) {
       const spell = (CLERIC_SPELLS[spellLvl] || []).find(s => s.id === spellId);
       if (!spell) return;
-      const list = this.char.customSpells[spellLvl] || [];
+      const list = this.char.preparedSpells[spellLvl] || [];
       if (!list.find(s => s.id === spellId))
-        this.char.customSpells[spellLvl] = [...list, { id: spell.id, name: spell.name, tag: spell.tag, conc: spell.conc }];
+        this.char.preparedSpells[spellLvl] = [...list, { id: spell.id, name: spell.name, tag: spell.tag, conc: spell.conc }];
       const pickers = { ...this.openPickers };
       pickers[spellLvl] = false;
       this.openPickers = pickers;
@@ -539,17 +539,17 @@ const app = createApp({
       const lvl = this.newSpellLvl;
       if (!this.newSpellName.trim()) return;
       const id = 'custom-' + Date.now();
-      const list = this.char.customSpells[lvl] || [];
-      this.char.customSpells[lvl] = [...list, {
+      const list = this.char.preparedSpells[lvl] || [];
+      this.char.preparedSpells[lvl] = [...list, {
         id, name: this.newSpellName.trim(), tag: this.newSpellTag || '—', conc: this.newSpellConc,
       }];
       this.newSpellName = ''; this.newSpellTag = ''; this.newSpellConc = false;
     },
 
     removeCustomSpell(lvl, id) {
-      this.char.customSpells[lvl] = (this.char.customSpells[lvl] || []).filter(s => s.id !== id);
+      this.char.preparedSpells[lvl] = (this.char.preparedSpells[lvl] || []).filter(s => s.id !== id);
       // Si c'est un cantrip par défaut, on le mémorise pour que la migration ne le réinjecte pas
-      if (lvl === 0 && DEFAULT_CHAR.customSpells[0].some(c => c.id === id)) {
+      if (lvl === 0 && DEFAULT_CHAR.preparedSpells[0].some(c => c.id === id)) {
         if (!this.char.removedSpells) this.char.removedSpells = [];
         if (!this.char.removedSpells.includes(id))
           this.char.removedSpells = [...this.char.removedSpells, id];
