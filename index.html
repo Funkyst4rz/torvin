@@ -785,21 +785,6 @@
             ></spell-row>
           </template>
 
-          <!-- Sorts suggérés -->
-          <spell-row
-            v-for="sp in (suggestedSpells[slotLvl]||[])" :key="sp.id"
-            :spell="sp"
-            :checked="isChecked(sp.id)"
-            :conc-active="char.concentration===sp.name"
-            :bold="true"
-            row-class="spell-row-suggested"
-            :row-style="sp.id==='sc-bane' ? 'background:rgba(139,26,26,.06)' : ''"
-            @toggle-check="toggleCheck(sp.id)"
-            @open-modal="openSpellModal(sp, slotLvl)"
-            @toggle-conc="toggleConcentration(sp.name)"
-            @remove="removeSuggestedSpell(sp.id)"
-          ></spell-row>
-
           <!-- Sorts personnalisés -->
           <spell-row
             v-for="cs in (char.customSpells[slotLvl]||[])" :key="cs.id"

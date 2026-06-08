@@ -173,7 +173,6 @@ const appComputed = {
   preparedCount() {
     let count = 0;
     for (const lvl of this.slotLevels) {
-      count += (this.suggestedSpells[lvl] || []).length;
       count += (this.char.customSpells[lvl] || []).length;
     }
     return count;
@@ -218,10 +217,7 @@ const appComputed = {
   availableSpells() {
     const result = {};
     for (const lvl of this.slotLevels) {
-      const alreadyAdded = new Set([
-        ...(SUGGESTED_SPELLS[lvl] || []).map(s => s.id),
-        ...(this.char.customSpells[lvl] || []).map(s => s.id),
-      ]);
+      const alreadyAdded = new Set((this.char.customSpells[lvl] || []).map(s => s.id));
       result[lvl] = (CLERIC_SPELLS[lvl] || []).filter(s => !alreadyAdded.has(s.id));
     }
     return result;
@@ -347,16 +343,6 @@ const appComputed = {
   exhaustionEffects(){ return EXHAUSTION_EFFECTS; },
   equipmentSlots()  { return EQUIPMENT_SLOTS; },
   bonusTypes()      { return BONUS_TYPES; },
-
-  suggestedSpells() {
-    const removed = new Set(this.char.removedSpells || []);
-    if (!removed.size) return SUGGESTED_SPELLS;
-    const result = {};
-    for (const [lvl, spells] of Object.entries(SUGGESTED_SPELLS)) {
-      result[lvl] = spells.filter(s => !removed.has(s.id));
-    }
-    return result;
-  },
 
   filteredNotes() {
     const notes = this.char.sessionNotes || [];

@@ -31,31 +31,6 @@ const DOMAIN_SPELLS = {
   ],
 };
 
-// Sorts suggérés par niveau de sort (proposition de base pour Torvin)
-const SUGGESTED_SPELLS = {
-  1: [
-    { id:'sc-bane', name:'Fléau (Bane)',       tag:'DD Cha', conc:true,  bonus:false },
-    { id:'sc-hw',   name:'Mot de guérison',    tag:'soin',   conc:false, bonus:true  },
-  ],
-  2: [
-    { id:'sc-hp',   name:'Immobilisation (Hold Person)', tag:'DD Sag', conc:true,  bonus:false },
-    { id:'sc-bd',   name:'Cécité / Surdité',             tag:'DD Con', conc:false, bonus:false },
-    { id:'sc-sw',   name:'Arme spirituelle',             tag:'+atk',   conc:false, bonus:true  },
-  ],
-  3: [
-    { id:'sc-ss',   name:'Silence',       tag:'zone', conc:true,  bonus:false },
-    { id:'sc-sb',   name:'Lumière du jour',tag:'60ft', conc:false, bonus:false },
-  ],
-  4: [
-    { id:'sc-bg',   name:'Gardien de la foi',    tag:'zone', conc:false, bonus:false },
-    { id:'sc-fof',  name:'Liberté de mouvement', tag:'buff', conc:false, bonus:false },
-  ],
-  5: [
-    { id:'sc-con',  name:'Contagion',      tag:'DD Con', conc:false, bonus:false },
-    { id:'sc-flf',  name:'Colonne de flamme',tag:'+atk', conc:false, bonus:false },
-  ],
-};
-
 // Capacités débloquées par niveau — Domaine Arcane (SCAG) + racial Gnome des Roches
 const FEATURES_BY_LEVEL = [
   { minLvl:1,  name:'Arcane Initiate',                desc:"Maîtrise de la compétence Arcanes. 2 sorts mineurs de magicien comptant comme sorts mineurs de clerc (Torvin : Main du mage + Illusion mineure)." },
@@ -137,7 +112,7 @@ const DEFAULT_CHAR = {
     ],
     1:[], 2:[], 3:[], 4:[], 5:[],
   },
-  removedSpells: [],  // IDs des sorts suggérés masqués par l'utilisateur
+  removedSpells: [],  // IDs des sorts mineurs par défaut supprimés par l'utilisateur
 
   // ── Compétences maîtrisées ────────────────────────────────────
   // Arcanes : Arcane Initiate · Religion + Médecine : choix de classe

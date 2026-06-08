@@ -464,19 +464,23 @@ const app = createApp({
     openSpellModal(spell, level) {
       let desc   = spell.desc   || null;
       let upcast = spell.upcast || null;
-      if (!desc || !upcast) {
+      let cast = spell.cast || null, range = spell.range || null, dur = spell.dur || null;
+      if (!desc || !upcast || !cast) {
         const clean = spell.name.replace(/[⭐★✦◆]/g, '').trim();
         outer: for (const lvl of Object.keys(CLERIC_SPELLS)) {
           for (const s of CLERIC_SPELLS[lvl]) {
             if (s.name.replace(/[⭐★✦◆]/g, '').trim() === clean) {
               if (!desc)   desc   = s.desc;
               if (!upcast) upcast = s.upcast || null;
+              if (!cast)   cast   = s.cast   || null;
+              if (!range)  range  = s.range  || null;
+              if (!dur)    dur    = s.dur    || null;
               break outer;
             }
           }
         }
       }
-      this.spellModal = { name: spell.name, tag: spell.tag || '—', conc: !!spell.conc, bonus: !!spell.bonus, desc, upcast, level: level || null, cast: spell.cast || null, range: spell.range || null, dur: spell.dur || null };
+      this.spellModal = { name: spell.name, tag: spell.tag || '—', conc: !!spell.conc, bonus: !!spell.bonus, desc, upcast, level: level || null, cast, range, dur };
     },
     closeSpellModal() { this.spellModal = null; },
 
@@ -512,13 +516,6 @@ const app = createApp({
       const formula = `1d20 + ${this.sign(this.mods[sv.key])}${sv.prof ? ` + ${this.sign(this.prof)} (maîtrise)` : ''} = <strong>${this.sign(sv.bonus)}</strong>`;
       const body = `<strong>Formule :</strong> ${formula}${sv.prof ? ' <em>(maîtrise clerc ✓)</em>' : ''}<br><br><strong>Déclenché par :</strong><br>${STRINGS.info.savingThrow[sv.key]}`;
       this.openInfo('JS ' + sv.name.replace(' ✓', ''), body);
-    },
-
-    // ── Suggested spells removal ─────────────
-    removeSuggestedSpell(id) {
-      if (!this.char.removedSpells) this.char.removedSpells = [];
-      if (!this.char.removedSpells.includes(id))
-        this.char.removedSpells = [...this.char.removedSpells, id];
     },
 
     // ── Custom spells ────────────────────────
