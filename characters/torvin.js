@@ -86,9 +86,6 @@ const DEFAULT_CHAR = {
   // ── Combat ────────────────────────────────────────────────────
   caManual: 14,     // CA manuelle (override si useCaAuto=false)
   useCaAuto: true,  // true = calculer depuis les slots armure/bouclier/bonus items
-  armorBase: 11,    // Conservé pour compatibilité ascendante
-  armorType: 'light',
-  useShield: true,
   speed: 7.5,       // Gnome des Roches : 25 pieds = 7,5 m
 
   // ── Points de vie ─────────────────────────────────────────────
@@ -108,7 +105,6 @@ const DEFAULT_CHAR = {
       { id:'minorIllusion', name:'Illusion mineure',    tag:'utilitaire', conc:false },
       { id:'guidance',      name:'Guidance',            tag:'utilitaire', conc:true  },
       { id:'sacredflame',   name:'Flamme sacrée',       tag:'DD Dex',     conc:false },
-      { id:'resistance',    name:'Résistance',           tag:'buff',       conc:true  },
     ],
     1:[], 2:[], 3:[], 4:[], 5:[],
   },

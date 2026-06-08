@@ -34,6 +34,9 @@ function _loadInitialState() {
       merged.preparedSpells = merged.customSpells;
       delete merged.customSpells;
     }
+
+    // Suppression des champs obsolètes
+    ['armorBase', 'armorType', 'useShield', 'pv', 'pvTemp', 'cd', 'customAttacks', 'checks'].forEach(k => delete merged[k]);
     if (!merged.preparedSpells) merged.preparedSpells = { 0:[], 1:[], 2:[], 3:[], 4:[], 5:[] };
     [0,1,2,3,4,5].forEach(l => { if (!merged.preparedSpells[l]) merged.preparedSpells[l] = []; });
     if (!Array.isArray(merged.traits))    merged.traits    = [...DEFAULT_CHAR.traits];
