@@ -50,6 +50,14 @@ function _migrateState(state) {
 
   // Garanties structurelles
   if (!state.preparedSpells) state.preparedSpells = {};
+  // Strip des champs redondants dans preparedSpells (seul {id} est nécessaire pour les sorts connus)
+  for (const list of Object.values(state.preparedSpells)) {
+    if (!Array.isArray(list)) continue;
+    list.forEach((s, i) => {
+      if (s && s.id && !s.id.startsWith('custom-'))
+        list[i] = { id: s.id };
+    });
+  }
   [0,1,2,3,4,5].forEach(l => { if (!state.preparedSpells[l]) state.preparedSpells[l] = []; });
   if (!Array.isArray(state.hpRolls) || state.hpRolls.length < 11)
     state.hpRolls = Array(11).fill(0);

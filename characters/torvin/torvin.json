@@ -56,44 +56,15 @@
   "cdUsed": 0,
   "preparedSpells": {
     "0": [
-      {
-        "id": "tollDead",
-        "name": "Glas des trépassés",
-        "tag": "DD Sag",
-        "conc": false
-      },
-      {
-        "id": "mageHand",
-        "name": "Main du mage",
-        "tag": "utilitaire",
-        "conc": false
-      },
-      {
-        "id": "minorIllusion",
-        "name": "Illusion mineure",
-        "tag": "utilitaire",
-        "conc": false
-      },
-      {
-        "id": "guidance",
-        "name": "Guidance",
-        "tag": "utilitaire",
-        "conc": true
-      },
-      {
-        "id": "prestidigitation"
-      }
+      { "id": "tollDead" },
+      { "id": "mageHand" },
+      { "id": "minorIllusion" },
+      { "id": "guidance" },
+      { "id": "prestidigitation" }
     ],
     "1": [
-      {
-        "id": "bane",
-        "name": "Fléau",
-        "tag": "DD Cha",
-        "conc": true
-      },
-      {
-        "id": "healingword"
-      }
+      { "id": "bane" },
+      { "id": "healingword" }
     ],
     "2": [
       {
