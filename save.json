@@ -43,12 +43,12 @@
     0,
     0
   ],
-  "hpCurrent": 26,
+  "hpCurrent": 22,
   "hpTemp": 0,
   "hpMaxBonus": 0,
   "slotsUsed": {
-    "1": 1,
-    "2": 1,
+    "1": 0,
+    "2": 0,
     "3": 0,
     "4": 0,
     "5": 0
@@ -57,7 +57,7 @@
     "sc-sw": false
   },
   "cdUsed": 0,
-  "customSpells": {
+  "preparedSpells": {
     "0": [
       {
         "id": "tollDead",
@@ -75,20 +75,13 @@
         "id": "minorIllusion",
         "name": "Illusion mineure",
         "tag": "utilitaire",
-        "conc": false,
-        "racial": false
+        "conc": false
       },
       {
         "id": "guidance",
         "name": "Guidance",
         "tag": "utilitaire",
         "conc": true
-      },
-      {
-        "id": "thaumaturgy",
-        "name": "Thaumaturgie",
-        "tag": "utilitaire",
-        "conc": false
       }
     ],
     "1": [
