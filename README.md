@@ -31,14 +31,15 @@ Une fiche de personnage interactive pour **Donjons & Dragons 5e**, construite en
 - Tous les champs sont **éditables** (stats, PV, équipement, sorts, phrases...)
 - **Mode sombre** : toggle lune/soleil, persisté en localStorage
 - **Portrait** du personnage avec lightbox au clic (onglet Histoire)
-- **Sauvegarde automatique** en localStorage
-- **Sauvegarde GitHub** via l'API (fichier `save.json` dans le dépôt)
+- **Sauvegarde automatique** en localStorage (300 ms debounce)
+- **Sauvegarde GitHub** via l'API REST (fichier `characters/torvin/torvin.json` dans le dépôt)
 - **Export / Import JSON** pour portabilité et clonage
 - Interface **responsive** (mobile + PC)
-- Lanceur de **dés intégré** (d4, d6, d8, d10, d12, d20, d100) avec sélecteur NdX
+- Lanceur de **dés intégré** (d4, d6, d8, d10, d12, d20, d100) avec sélecteur NdX et historique
 - **Lancer d'initiative** intégré (1d20 + DEX + bonus Alerte si actif)
+- **Lancer d'attaque et de dégâts** depuis le slot arme (critique automatique)
 - **Aide upcast** dans le modal de sort (description des niveaux supérieurs, PHB 2014)
-- **Journal de session** : entrées datées avec titre, collapse/dépli automatique, textarea auto-redimensionnable, recherche par ligne (affiche les phrases correspondantes avec titre de note en contexte)
+- **Journal de session** : entrées datées avec titre, collapse/dépli automatique, textarea auto-redimensionnable, recherche par ligne
 
 ---
 
@@ -47,12 +48,13 @@ Une fiche de personnage interactive pour **Donjons & Dragons 5e**, construite en
 ```
 torvin/
 ├── index.html              # Application Vue 3 (template, composants x-template, SVG)
-├── app.js                  # Point d'entrée : createApp(), data(), watch, montage composants
+├── app.js                  # Point d'entrée : async _initApp(), createApp(), composants
 ├── computed.js             # Propriétés calculées Vue 3 (D&D math + helpers de template)
 ├── storage.js              # Persistance : localStorage, API GitHub, export/import JSON
 ├── data.js                 # Constantes D&D 5e (LEVELS, CONDITIONS, SKILLS, FEATS…)
-├── engine.js               # Fonctions pures D&D 5e (_loadInitialState, _deepMerge)
+├── engine.js               # Init async : _loadInitialState() fetch, _migrateState()
 ├── strings.js              # Textes UI centralisés (STRINGS.status / toast / info)
+├── serve.js                # Serveur statique local Node.js (port 8080, sans npm)
 ├── style.css               # CSS principal (importe les modules css/)
 ├── css/
 │   ├── base.css            # Variables, reset, layout commun
@@ -61,9 +63,10 @@ torvin/
 │   ├── tab-combat.css      # Onglet Combat
 │   └── histoire.css        # Onglet Histoire (portrait, lightbox)
 ├── characters/
-│   ├── torvin.js           # Données personnage : DEFAULT_CHAR, DOMAIN_SPELLS, FEATURES_BY_LEVEL…
-│   └── torvin.jpg          # Portrait du personnage
-├── save.json               # Sauvegarde du personnage (généré automatiquement)
+│   └── torvin/
+│       ├── torvin.js       # Données statiques : DOMAIN_SPELLS, FEATURES_BY_LEVEL…
+│       ├── torvin.json     # ⭐ Source de vérité : état complet du personnage
+│       └── torvin.jpg      # Portrait du personnage
 └── .github/
     └── workflows/
         └── validate.yml    # CI GitHub Actions (syntax + sécurité)
@@ -73,10 +76,18 @@ torvin/
 
 ## Démarrage rapide
 
-### Voir la fiche
-Ouvrez directement `index.html` dans un navigateur, ou visitez la GitHub Pages :
+### Lancer en local
+```bash
+# Node.js requis (installé dans .node/ — pas de npm)
+node serve.js
+# → http://localhost:8080
 ```
-https://[username].github.io/[repo-name]
+
+> **Note** : l'app utilise `fetch()` pour charger `torvin.json` — elle ne peut pas être ouverte directement via `file://`. Utiliser le serveur local ou GitHub Pages.
+
+### Voir la fiche en ligne
+```
+https://funkyst4rz.github.io/torvin
 ```
 
 ### Sauvegarder sur GitHub
@@ -84,7 +95,7 @@ https://[username].github.io/[repo-name]
    [github.com/settings/tokens](https://github.com/settings/tokens)
 2. Dans la fiche, cliquez **⚙ Config**
 3. Collez votre token (stocké uniquement dans votre navigateur, jamais dans le code)
-4. Cliquez **💾 Sauvegarder** pour pousser vers `save.json`
+4. Cliquez **💾 Sauvegarder** pour pousser vers `characters/torvin/torvin.json`
 
 > **Sécurité** : le token n'est jamais inclus dans les fichiers sources ni dans les sauvegardes GitHub. Il vit uniquement dans `localStorage` de votre navigateur.
 
@@ -92,41 +103,45 @@ https://[username].github.io/[repo-name]
 
 ## Cloner pour un nouveau personnage
 
-Ce projet est conçu pour être cloné facilement :
+Ce projet est conçu pour être cloné facilement. Chaque personnage vit dans son propre dossier `characters/<nom>/`.
 
 ```bash
 # 1. Fork ou clone le dépôt
 git clone https://github.com/[vous]/[votre-perso]
 cd [votre-perso]
 
-# 2. Modifiez characters/torvin.js → DEFAULT_CHAR avec votre personnage
-#    Changez : name, race, className, subclass, background, deity
-#    Changez : base (stats de départ), racial (bonus raciaux)
-#    Changez : level, hpRolls, equipment, phrases, etc.
+# 2. Créez un dossier pour votre personnage
+cp -r characters/torvin characters/[votre-perso]
 
-# 3. Mettez à jour dans characters/torvin.js :
-#    - FEATURES_BY_LEVEL (capacités de classe)
-#    - DOMAIN_SPELLS / SUGGESTED_SPELLS (sorts recommandés)
+# 3. Éditez characters/[votre-perso]/torvin.json
+#    C'est la source de vérité — modifiez directement :
+#    name, race, className, subclass, background, deity
+#    base (stats), racial (bonus raciaux), level, hpRolls
+#    equipment, languages, phrases, etc.
+#    Mettez à jour ghFile → "characters/[votre-perso]/torvin.json"
 
+# 4. Éditez characters/[votre-perso]/torvin.js :
+#    DOMAIN_SPELLS (sorts de domaine de votre sous-classe)
+#    FEATURES_BY_LEVEL (capacités de classe)
+#    CLERIC_ASI_LEVELS (niveaux d'ASI de votre classe)
 
-# 4. Mettez à jour dans data.js si besoin :
-#    - LEVELS (emplacements de sorts si classe différente)
-#    - FEATS (dons disponibles)
+# 5. Mettez à jour dans data.js si besoin :
+#    LEVELS (emplacements de sorts si classe différente)
 
-# 5. Mettez à jour dans index.html :
-#    - ghRepo dans DEFAULT_CHAR (characters/torvin.js) → votre dépôt
-#    - Le titre <title> et le sous-titre du header
+# 6. Mettez à jour index.html :
+#    Le <script src="characters/torvin/torvin.js"> → votre chemin
+#    Le <title> et le sous-titre du header
 
-# 6. Remplacez characters/torvin.jpg par le portrait de votre personnage
+# 7. Remplacez characters/[votre-perso]/torvin.jpg par votre portrait
 
-# 7. Activez GitHub Pages dans les Settings → Pages → Source: main / root
+# 8. Activez GitHub Pages : Settings → Pages → Source: main / root
 
-# 8. Commitez et pushez
+# 9. Commitez et pushez
 git add -A && git commit -m "init: nouveau personnage [Nom]"
 git push
 ```
 
-### Champs clés à modifier dans `DEFAULT_CHAR` (characters/torvin.js)
+### Champs clés à modifier dans `torvin.json`
 | Champ | Description |
 |-------|-------------|
 | `name` | Nom du personnage |
@@ -137,51 +152,52 @@ git push
 | `racial` | Bonus raciaux |
 | `hpRolls` | Dés de vie par niveau (index 1–10) |
 | `hpCurrent` | PV actuels |
-| `equipment` | Équipement de départ |
+| `slots` | Équipement porté (armure, arme, bouclier…) |
 | `languages`, `toolProfs` | Langues et maîtrises |
 | `traits`, `ideal`, `bond`, `flaw` | Personnalité |
 | `phrases` | Phrases situationnelles (roleplay) |
-| `ghRepo` | Votre dépôt GitHub (`user/repo`) |
+| `ghRepo`, `ghFile` | Votre dépôt et chemin de sauvegarde |
 
 ---
 
 ## Développement
 
 ### Aucune dépendance de build
-Ce projet utilise Vue 3 via CDN — aucun `npm install` requis. Ouvrez simplement `index.html`.
+Ce projet utilise Vue 3 via CDN — aucun `npm install` requis. Lancez `node serve.js` et ouvrez `http://localhost:8080`.
 
 ### Ordre de chargement des scripts (bas du `<body>`)
 ```html
 <script src="https://cdn.jsdelivr.net/npm/vue@3/dist/vue.global.prod.js"></script>
-<script src="data.js"></script>          <!-- constantes D&D 5e -->
-<script src="strings.js"></script>       <!-- textes UI (STRINGS) -->
-<script src="characters/torvin.js"></script> <!-- données personnage -->
-<script src="engine.js"></script>        <!-- fonctions pures D&D + migrations -->
-<script src="computed.js"></script>      <!-- propriétés calculées Vue -->
-<script src="storage.js"></script>       <!-- persistance (localStorage, GitHub) -->
-<script src="app.js"></script>           <!-- createApp(), data(), watch, montage -->
+<script src="data.js"></script>                          <!-- constantes D&D 5e -->
+<script src="strings.js"></script>                       <!-- textes UI (STRINGS) -->
+<script src="characters/torvin/torvin.js"></script>      <!-- données statiques personnage -->
+<script src="engine.js"></script>                        <!-- init async + migrations -->
+<script src="computed.js"></script>                      <!-- propriétés calculées Vue -->
+<script src="storage.js"></script>                       <!-- persistance (localStorage, GitHub) -->
+<script src="app.js"></script>                           <!-- _initApp() async, createApp() -->
 ```
 
 ### Architecture
-- **`data.js`** : constantes D&D 5e (LEVELS, CONDITIONS, SKILLS, FEATS…) — aucune logique
-- **`characters/torvin.js`** : données spécifiques au personnage (`DEFAULT_CHAR`, `DOMAIN_SPELLS`, `FEATURES_BY_LEVEL`)
-- **`engine.js`** : fonctions pures D&D 5e (`_loadInitialState`, `_deepMerge`, migrations)
+- **`characters/torvin/torvin.json`** : source de vérité unique — chargée par `fetch()` au démarrage, sauvegardée via API GitHub. Contient tout l'état du personnage.
+- **`characters/torvin/torvin.js`** : données statiques jamais modifiées par l'app (`DOMAIN_SPELLS`, `FEATURES_BY_LEVEL`, `CLERIC_ASI_LEVELS`, `UNIVERSAL_REFLEXES`)
+- **`engine.js`** : `_loadInitialState()` async (localStorage → fetch), `_migrateState()` pour les anciens formats
+- **`data.js`** : constantes D&D 5e (`LEVELS`, `CONDITIONS`, `SKILLS`, `FEATS`…) — aucune logique
 - **`strings.js`** : textes UI centralisés (`STRINGS.status / toast / info`) — équivalent i18n
 - **`computed.js`** : objet `appComputed` — toutes les propriétés calculées Vue (stats, slots, modificateurs…)
 - **`storage.js`** : objet `storageMethods` — localStorage (auto), GitHub API (manuel), export/import JSON
-- **`app.js`** : `createApp()` avec `data()`, `watch`, `methods`, enregistrement des composants Vue
+- **`app.js`** : `async _initApp()` → `createApp()` avec `data()`, `watch`, `methods`, enregistrement des composants Vue
 - **`css/`** : styles découpés par onglet, tous importés depuis `style.css`
-- Sauvegarde : `localStorage` (auto, 300 ms debounce) + GitHub API PUT (manuelle)
 - Le token GitHub est **exclu** de toute sérialisation via `delete state.ghToken` dans `storage.js`
 
 ### CI (GitHub Actions)
 Le workflow `.github/workflows/validate.yml` vérifie à chaque push :
-- Syntaxe JS (`node --check`) sur `app.js`, `computed.js`, `storage.js`, `data.js`, `strings.js`, `engine.js`, `characters/torvin.js`
-- Présence des fichiers requis
+- Syntaxe JS (`node --check`) sur tous les fichiers JS
+- Présence des fichiers requis (dont `characters/torvin/torvin.json`)
 - Absence de token dans les sources
 - Structure HTML (htmlhint)
-- Structure des onglets et champs requis dans `DEFAULT_CHAR` (characters/torvin.js)
-- Présence de la protection de sécurité `delete state.ghToken` dans `storage.js`
+- Structure des onglets en HTML
+- Champs requis dans `characters/torvin/torvin.json`
+- Présence de la protection `delete state.ghToken` dans `storage.js`
 
 ---
 
