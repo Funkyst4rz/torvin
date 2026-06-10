@@ -290,29 +290,6 @@
         <div class="char-subtitle">{{ char.race }} · {{ char.className }} {{ char.subclass }}, Niveau {{ char.level }} · Serviteur involontaire d'Azouth</div>
       </div>
 
-      <!-- INFO BAR -->
-      <div class="info-bar">
-        <div class="info-cell">
-          <span class="info-label">Classe &amp; Niveau</span>
-          <input class="info-value-input" type="text" v-model="char.className" spellcheck="false">
-        </div>
-        <div class="info-cell">
-          <span class="info-label">Race</span>
-          <input class="info-value-input" type="text" v-model="char.race" spellcheck="false">
-        </div>
-        <div class="info-cell">
-          <span class="info-label">Historique</span>
-          <input class="info-value-input" type="text" v-model="char.background" spellcheck="false">
-        </div>
-        <div class="info-cell">
-          <span class="info-label">Divinité</span>
-          <input class="info-value-input" type="text" v-model="char.deity" spellcheck="false">
-        </div>
-        <div class="info-cell">
-          <span class="info-label">Alignement</span>
-          <input class="info-value-input" type="text" v-model="char.alignment" spellcheck="false">
-        </div>
-      </div>
 
       <!-- TABS -->
       <div class="tabs">
@@ -1031,6 +1008,30 @@
            TAB HISTOIRE
            ════════════════════════════════════ -->
       <div class="tab-content" :class="{active:activeTab==='histoire'}">
+
+        <!-- INFO BAR -->
+        <div class="info-bar">
+          <div class="info-cell">
+            <span class="info-label">Classe &amp; Niveau</span>
+            <input class="info-value-input" type="text" v-model="char.className" spellcheck="false">
+          </div>
+          <div class="info-cell">
+            <span class="info-label">Race</span>
+            <input class="info-value-input" type="text" v-model="char.race" spellcheck="false">
+          </div>
+          <div class="info-cell">
+            <span class="info-label">Historique</span>
+            <input class="info-value-input" type="text" v-model="char.background" spellcheck="false">
+          </div>
+          <div class="info-cell">
+            <span class="info-label">Divinité</span>
+            <input class="info-value-input" type="text" v-model="char.deity" spellcheck="false">
+          </div>
+          <div class="info-cell">
+            <span class="info-label">Alignement</span>
+            <input class="info-value-input" type="text" v-model="char.alignment" spellcheck="false">
+          </div>
+        </div>
 
         <!-- Tireur de phrase aléatoire -->
         <div class="phrase-draw-bar">

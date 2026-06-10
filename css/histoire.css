@@ -265,7 +265,7 @@ body.dark .header::after  { background: var(--parchment); }
   .content { padding:30px 16px 24px; }
   .main-grid { grid-template-columns:1fr; }
   .combat-row { grid-template-columns:repeat(2,1fr); }
-  .info-bar { grid-template-columns:repeat(3,1fr); }
+  .info-bar { grid-template-columns: repeat(3,1fr); }
   .info-cell:nth-child(3) { border-right:none; }
   .info-cell:nth-child(n+4) { border-top:1px solid var(--border); }
   .char-name-input { font-size:1.375rem; }
@@ -349,6 +349,7 @@ body.dark .header::after  { background: var(--parchment); }
   .char-name-input { font-size:1.125rem; }
   /* Info bar : 2 colonnes, Alignement pleine largeur */
   .info-bar { grid-template-columns:1fr 1fr; }
+  .info-cell:nth-child(3) { border-right:1px solid var(--border); }
   .info-cell:nth-child(2),
   .info-cell:nth-child(4) { border-right:none; }
   .info-cell:nth-child(n+3) { border-top:1px solid var(--border); }

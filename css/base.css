@@ -91,15 +91,15 @@ body {
 
 /* â”€â”€ SAVE BAR â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .save-bar {
-  display: flex; align-items: center; gap: 8px;
+  display: flex; align-items: center; gap: 6px;
   background: rgba(160,130,74,.07);
   border: 1px solid var(--border);
-  padding: 8px 12px; margin-bottom: 14px; flex-wrap: wrap;
+  padding: 5px 10px; margin-bottom: 12px; flex-wrap: wrap;
 }
 .save-btn {
   font-family: 'Nunito', sans-serif; font-size: 0.69rem; font-weight: 600;
   text-transform: uppercase; letter-spacing: .8px;
-  padding: 8px 16px;
+  padding: 5px 12px;
   border: 1.5px solid var(--border);
   background: var(--parchment-dark); color: var(--ink);
   cursor: pointer; transition: all .2s;
@@ -154,7 +154,7 @@ body {
 .info-bar {
   display: grid; grid-template-columns: repeat(5,1fr);
   border: 1px solid var(--border);
-  margin: 22px 0 18px;
+  margin: 0 0 18px;
 }
 .info-cell { padding: 8px 10px; border-right: 1px solid var(--border); text-align: center; }
 .info-cell:last-child { border-right: none; }
