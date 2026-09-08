@@ -40,7 +40,7 @@
     0,
     0
   ],
-  "hpCurrent": 26,
+  "hpCurrent": 42,
   "hpTemp": 0,
   "hpMaxBonus": 0,
   "slotsUsed": {
@@ -187,10 +187,11 @@
   },
   "equipment": [
     "Outils de bricoleur",
-    "Pack d'explorateur",
-    "Lettre de guilde · 15 po"
+    "Pack d'explorateur"
   ],
-  "customEquipment": [],
+  "customEquipment": [
+    "Lettre de guilde"
+  ],
   "attunedItems": [],
   "currency": {
     "pp": 0,
