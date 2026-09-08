@@ -57,39 +57,24 @@
   "preparedSpells": {
     "0": [
       {
-        "id": "tollDead",
-        "name": "Glas des trépassés",
-        "tag": "DD Sag",
-        "conc": false
+        "id": "tollDead"
       },
       {
-        "id": "mageHand",
-        "name": "Main du mage",
-        "tag": "utilitaire",
-        "conc": false
+        "id": "mageHand"
       },
       {
-        "id": "minorIllusion",
-        "name": "Illusion mineure",
-        "tag": "utilitaire",
-        "conc": false
+        "id": "minorIllusion"
       },
       {
-        "id": "guidance",
-        "name": "Guidance",
-        "tag": "utilitaire",
-        "conc": true
+        "id": "guidance"
       },
       {
-        "id": "resistance"
+        "id": "prestidigitation"
       }
     ],
     "1": [
       {
-        "id": "bane",
-        "name": "Fléau",
-        "tag": "DD Cha",
-        "conc": true
+        "id": "bane"
       },
       {
         "id": "healingword"
@@ -101,9 +86,6 @@
       },
       {
         "id": "holdperson"
-      },
-      {
-        "id": "spweapon"
       }
     ],
     "3": [],
