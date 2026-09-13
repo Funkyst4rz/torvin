@@ -188,13 +188,13 @@
   },
   "equipment": [
     "Outils de bricoleur",
-    "Pack d'explorateur",
-    "Lettre de guilde · 15 po"
+    "Pack d'explorateur"
   ],
   "customEquipment": [
     "2 potion soin majeure 4d4+4",
     "1 souffle de feu",
-    "1 poison dd 13 3d6"
+    "1 poison dd 13 3d6",
+    "lettre de guilde"
   ],
   "attunedItems": [],
   "currency": {
