@@ -40,19 +40,18 @@
     0,
     0
   ],
-  "hpCurrent": 26,
+  "hpCurrent": 21,
   "hpTemp": 0,
   "hpMaxBonus": 0,
   "slotsUsed": {
-    "1": 2,
+    "1": 1,
     "2": 1,
     "3": 0,
     "4": 0,
     "5": 0
   },
   "spellChecks": {
-    "sc-sw": false,
-    "cs-holdperson": false
+    "sc-d2-0": true
   },
   "cdUsed": 0,
   "preparedSpells": {
@@ -194,7 +193,8 @@
     "2 potion soin majeure 4d4+4",
     "1 souffle de feu",
     "1 poison dd 13 3d6",
-    "lettre de guilde"
+    "lettre de guilde",
+    "encre magique"
   ],
   "attunedItems": [],
   "currency": {
@@ -214,6 +214,11 @@
   "notes": "",
   "sessionNotes": [
     {
+      "date": "2026-09-27",
+      "title": "",
+      "text": "On se retrouve après quelques heures. On va discuter de nos options.\n\nOn part au nord ouest par la porte nord.\nGuideon discute avec les gardes sur le cycle de la vie.\n\nLe long du chemin on voit un obélisque ancien. Ca note un noeud magique.\n\nJe fais un jet d'histoire : 9 : c'est ancien mais la fracture est récente. \nJ'en fais un dessin.\n\nOn continue. On arrive à des collines. \n\nAprès 3 jours, début de soirée. On va chercher un endroit où campé.\nShen m'arrête.\nOn voit une ancienne ferme abandonné au loin. On entend des cliquetis \n\nOn a affronté 3 orcs dont un mage/nécromant.\nOn a gagné \n\nJe lance détection de la magie : la première le tatouage de l'un des orcs.\nLe second dans la bourse du mage. Shen l'a loot. C'est de l'encre magique.\n\nShen me donne l'encre. Elle est magique : pour parchemin ou tatouage. Suffisamment pour refaire une partie du tatouage.\n\nOna trouvé une lettre sur le mage/chaman : vous avez compris votre mission, empêcher les gens de passer la route. Je fournirai votre tribu en ancre.\n(Le papier est rare et vient d'havrefer).\n\nInvestigation sur la lettre : "
+    },
+    {
       "date": "2026-09-13",
       "title": "habitation ",
       "text": "J'habite autour de la lanterne verte"
@@ -221,7 +226,7 @@
     {
       "date": "2026-09-13",
       "title": "",
-      "text": "On reprend après le combat et Glück a été assommé par rael\n\nJ'etudie la deuxième pierre mais rien de particulier. J'en prends note et dessins.\n\nGuideon réussi à l'étudier : langage géant la rune dessus. Contre nature : créé des chimères.\n\nDes géants ont détruit le marais de guideon.\n\nGlück se réveil.\nIl a vu des runes sililaires dans les mines proches de havre fer.\n\nGlück essaie de m'apprendre l'invisibilité mais je ne comprends pas.\n\nNuit.\nTour de garde il ne se passe rien. La manticore a foutu le bordel dans la zone\n\n\nOn est sur le retour, dans les plaines le 2e jour. On rencontre un gobelin avec un énorme sac à dos\n\nPp : predo potion. Il a plein de potion : souffle de feu, souffle de foudre\n\"En cas d'urgence brûlé cette carte\"\nJ'ai deux cartes de visite \nLes autres en ont une également \nIl arrive en qq minutes quand on la brûle. \nIl a été appelé a havre fer : ils ont achetes plein de potion dont 50 de poison\nPour 30 po il nous fait un geste commercial avec 4 potions\n\nJ'ai :\n2 potion soin majeure 4d4+4\n1 souffle\n1 poison dd 13 3d6\n\nOn est arrivé à havre fer. Rael nous a payé.\nOn va a la lanterne verte.\n\nOn va à l'étage. On écoute à une porte.\nPlan contre la gouverneur ?\nRévolte à la mine ?\n\nGuideon et shen rentre dans la pièce avec 3 autres\nElara et moi on va dans une autre\n\nVarik : l'un des perso\nGuideon lui a laisser la pierre pour éviter un combat\n\nShen est parti au temple\nNous 3 à la veine d'or \nOn discute avec des mineurs. Il ya eu une bagarre avec la milice\nAncien revendeur a Comptoir des 3 couronnes :  osint\nL'enclume rouillé ou c'est décoré avec ces runes similaires \n\nOn a va voir osint\nIls nous dit que notre pierre est plus récente et qu'elle ne sort pas de la mine\n\nJe les laisse et rentre vers chez moi.\nRdv le demain midi à la taverne.\n\nJe me suis fait intercepté par \"le fond\". Je lui ai donné une de mes copies du dessin de la rune. Il m'a dit de ne plus m'intéresser aux runes et ses activités.\nJ'ai toujours deux copies, j'en ferai une nouvelle en rentrant, dans le noir pour ne pas être observé.\n\nOn se revoit le lendemain à la taverne.  Je donne une des copies à Guideon.\n\nUne personne vient voir Shen pour discuter de son altercation car il est allé au temple se faire soigner.\nOn est tous conviés à aller au temple car on a tous eu la même rencontre.\n\nPeyas Morvaine. Il lutte contre la pègre/le fond. Il documente beaucoup de choses.\nIl nous pose des questions sur nos altercations.\nIl nous demande de retrouver le mec au nez cassé qui travaille pour le fond\n\nOn a combattu le gars au nez péter.\nOn la assommé et ligoter. On l'interroge.\n\nIl nous dit :\nLa gouverneure se laisse marcher dessus par les anciens royaumes.\n\nOn l'amène avec un nez pété à Peyas\n\nPedro aurait dit qu'Un lieu au nord ouest de la ville a 3-4j. Il a vu des gens ressemblant à la pègre. Près d'une grotte.\nPeyas nous donne la mission : 200po \n"
+      "text": "On reprend après le combat et Glück a été assommé par rael\n\nJ'etudie la deuxième pierre mais rien de particulier. J'en prends note et dessins.\n\nGuideon réussi à l'étudier : langage géant la rune dessus. Contre nature : créé des chimères.\n\nDes géants ont détruit le marais de guideon.\n\nGlück se réveil.\nIl a vu des runes sililaires dans les mines proches de havre fer.\n\nGlück essaie de m'apprendre l'invisibilité mais je ne comprends pas.\n\nNuit.\nTour de garde il ne se passe rien. La manticore a foutu le bordel dans la zone\n\n\nOn est sur le retour, dans les plaines le 2e jour. On rencontre un gobelin avec un énorme sac à dos\n\nPp : predo potion. Il a plein de potion : souffle de feu, souffle de foudre\n\"En cas d'urgence brûlé cette carte\"\nJ'ai deux cartes de visite \nLes autres en ont une également \nIl arrive en qq minutes quand on la brûle. \nIl a été appelé a havre fer : ils ont achetes plein de potion dont 50 de poison\nPour 30 po il nous fait un geste commercial avec 4 potions\n\nJ'ai :\n2 potion soin majeure 4d4+4\n1 souffle\n1 poison dd 13 3d6\n\nOn est arrivé à havre fer. Rael nous a payé.\nOn va a la lanterne verte.\n\nOn va à l'étage. On écoute à une porte.\nPlan contre la gouverneur ?\nRévolte à la mine ?\n\nGuideon et shen rentre dans la pièce avec 3 autres\nElara et moi on va dans une autre\n\nVarik : l'un des perso\nGuideon lui a laisser la pierre pour éviter un combat\n\nShen est parti au temple\nNous 3 à la veine d'or \nOn discute avec des mineurs. Il ya eu une bagarre avec la milice\nAncien revendeur a Comptoir des 3 couronnes :  osint\nL'enclume rouillé ou c'est décoré avec ces runes similaires \n\nOn a va voir osint\nIls nous dit que notre pierre est plus récente et qu'elle ne sort pas de la mine\n\nJe les laisse et rentre vers chez moi.\nRdv le demain midi à la taverne.\n\nJe me suis fait intercepté par \"le fond\". Je lui ai donné une de mes copies du dessin de la rune. Il m'a dit de ne plus m'intéresser aux runes et ses activités.\nJ'ai toujours deux copies, j'en ferai une nouvelle en rentrant, dans le noir pour ne pas être observé.\n\nOn se revoit le lendemain à la taverne.  Je donne une des copies à Guideon.\n\nUne personne vient voir Shen pour discuter de son altercation car il est allé au temple se faire soigner.\nOn est tous conviés à aller au temple car on a tous eu la même rencontre.\n\nPeyas Morvaine. Il lutte contre la pègre/le fond. Il documente beaucoup de choses.\nIl nous pose des questions sur nos altercations.\nIl nous demande de retrouver le mec au nez cassé qui travaille pour le fond\n\nOn a combattu le gars au nez péter.\nOn la assommé et ligoter. On l'interroge.\n\nIl nous dit :\nLa gouverneure se laisse marcher dessus par les anciens royaumes.\n\nOn l'amène avec un nez pété à Peyas\n\nPedro aurait dit qu'Un lieu au nord ouest de la ville a 3-4j. Il a vu des gens ressemblant à la pègre. Près d'une grotte.\nPeyas nous donne la mission : 200po/Perso \n"
     },
     {
       "date": "2026-06-07",
